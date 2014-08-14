@@ -31,16 +31,9 @@ var gh = (function() {
   'use strict';
 
   var access_token;
-  var User = {
-    id:'',
-    firstname:'',
-    familyname:'',
-    email:''
-  };
 
   var tokenFetcher = (function() {
-    var clientID = '';
-    var clientSecret = '';
+    var clientID = 'v009';
     var redirectUri = chrome.identity.getRedirectURL();
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     access_token = null;
@@ -51,24 +44,20 @@ var gh = (function() {
         var options;
 
         chrome.storage.sync.get({
-          clientID: '',
-          clientSecret: '',
           access_token: null,
         }, function(items) {
-          clientID = items.clientID;
-          clientSecret = items.clientSecret;
           access_token = items.access_token;
           options = {
-          'interactive': interactive,
-          url:'https://api.voxity.fr/api/v1/dialog/authorize?client_id=' + clientID +
-              '&response_type=code' +
-              '&redirect_uri=' + encodeURI(chrome.identity.getRedirectURL())
+            'interactive': interactive,
+            url:'https://api.voxity.fr/api/v1/dialog/authorize?client_id=' + clientID +
+                '&response_type=token' +
+                '&redirect_uri=' + redirectUri
           };
           if(access_token) {
             callback(null, access_token);
             return;
           }
-          chrome.identity.launchWebAuthFlow(options, function(redirectUri) {
+          chrome.identity.launchWebAuthFlow(options, function(responseUri) {
             if (chrome.runtime.lastError) {
               callback(new Error(chrome.runtime.lastError));
               return;
@@ -78,7 +67,7 @@ var gh = (function() {
             //     &refresh_token={value}
             // or:
             // https://{app_id}.chromiumapp.org/provider_cb#code={value}
-            var matches = redirectUri.match(redirectRe);
+            var matches = responseUri.match(redirectRe);
             if (matches && matches.length > 1)
               handleProviderResponse(parseRedirectFragment(matches[1]));
             else
@@ -99,28 +88,11 @@ var gh = (function() {
         }
 
         function handleProviderResponse(values) {
-          if (values.hasOwnProperty('access_token'))
+          if (values.hasOwnProperty('access_token')) {
             setAccessToken(values.access_token);
-          else if (values.hasOwnProperty('code'))
-            exchangeCodeForToken(values.code);
-          else callback(new Error('Neither access_token nor code avialable.'));
-        }
-
-        function exchangeCodeForToken(code) {
-          var xhr = new XMLHttpRequest();
-          var parameters = 'redirect_uri='+ chrome.identity.getRedirectURL() + '&client_id=' + clientID + '&client_secret=' + clientSecret + '&code=' + code + '&grant_type=authorization_code';
-          var requestBody = encodeURI(parameters);
-          xhr.open('POST', 'https://api.voxity.fr/api/v1/oauth/token');
-          xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-          xhr.setRequestHeader('Accept', 'application/json');
-          xhr.onload = function () {
-            if (this.status === 200) {
-              var response = JSON.parse(this.responseText);
-              setAccessToken(response.access_token);
-              access_token = response.access_token;
-            }
-          };
-          xhr.send(requestBody);
+          } else {
+            callback(new Error('No access_token available.'));
+          }
         }
 
         function setAccessToken(token) {
