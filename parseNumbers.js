@@ -34,8 +34,10 @@ function replaceInElement(element, find, replace) {
     var child = element.childNodes[i];
     if (child.nodeType == 1) { // ELEMENT_NODE
       var tag = child.nodeName.toLowerCase();
-      if (tag !== 'style' && tag !== 'script' && tag !== 'textarea'){ // special case, don't touch CDATA elements
-        replaceInElement(child, find, replace);
+      var exclude_elem = Array('style','script', 'textarea')
+      if(exclude_elem.indexOf(tag) == -1){
+	console.log(tag);
+	replaceInElement(child, find, replace);
       }
     } else if (child.nodeType == 3) { // TEXT_NODE
       replaceInText(child, find, replace);
