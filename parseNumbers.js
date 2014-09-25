@@ -36,7 +36,6 @@ function replaceInElement(element, find, replace) {
       var tag = child.nodeName.toLowerCase();
       var exclude_elem = Array('style','script', 'textarea')
       if(exclude_elem.indexOf(tag) == -1){
-	console.log(tag);
 	replaceInElement(child, find, replace);
       }
     } else if (child.nodeType == 3) { // TEXT_NODE
