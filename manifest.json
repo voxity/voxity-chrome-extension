@@ -4,7 +4,6 @@
   "name": "Voxity Click-to-call",
   "description": "Allow you to click on any phonenumber contained in a web page to launch a call using your Voxity telephony system.",
   "version": "1.4",
-  "default_locale": "fr",
   "author": "Maël Lavault",
   "icons": {
     "16": "icon16.png",
