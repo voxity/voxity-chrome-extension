@@ -131,7 +131,7 @@ var gh = (function() {
       var xhr = new XMLHttpRequest();
       var requestBody = params;
       xhr.open(method, url);
-      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+      xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
       xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
       xhr.onload = requestComplete;
       xhr.send(requestBody);
@@ -163,22 +163,60 @@ var gh = (function() {
       var message = {
         action: 'https://api.voxity.fr/api/v1/channel',
         method: "POST",
-        parameters: 'exten=' + exten
+        parameters: JSON.stringify({'exten': exten})
       };
-      function onCallSuccess(req) {
-        
+      function onCallSuccess(val, status, response) {
+        response = JSON.parse(response);
+        var title = null;
+        var message = null;
+
+        if(response.status === 1){
+          title = 'Demande validée';
+          message = 'Votre téléphone va sonner d\'ici quelques instants.';
+        }else{
+          title = response.data.title;
+          message = response.data.message;
+        }
+
+        var notification_vars = {
+          type: 'basic', 
+          iconUrl: 'icon128.png',
+          title: title, 
+          message: message 
+          }
+
+        chrome.notifications.getAll(function(notifications){
+          if(notifications.clicktocall){
+            chrome.notifications.clear('clicktocall', function(e){});
+          }
+        })
+
+        chrome.notifications.create(
+          'clicktocall',
+          notification_vars,
+          function(n) {} );
       }
       xhrWithAuth(message.method, message.action, message.parameters, true, onCallSuccess);
     }
   };
 })();
 
-chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
-  if (message.exten) {
-    gh.makeCall(message.exten);
-  }
+chrome.runtime.onInstalled.addListener(function() {
+  var context = "selection";
+  var title = "Appeler le numéro <%s>";
+  var id = chrome.contextMenus.create({"title": title, "contexts":[context],
+                                         "id": "context" + context});  
+});
 
-  if (message.credentialsChanged) {
+chrome.contextMenus.onClicked.addListener(onClickHandler);
+
+function onClickHandler(info, tab) {
+  try{
+    if (info.selectionText) {
+      gh.makeCall(info.selectionText);
+    }
+  } catch(ex){
+    console.log(ex);
     gh.signIn();
   }
-});
+};
