@@ -46,10 +46,10 @@ var gh = (function() {
         chrome.storage.sync.get({
           access_token: null,
         }, function(items) {
-          access_token = items.access_token;
+          access_token = items.access_token; 
           options = {
             'interactive': interactive,
-            url:'https://api.voxity.fr/api/v1/dialog/authorize?client_id=' + clientID +
+            url:'http://localhost:3000/api/v1/dialog/authorize?client_id=' + clientID +
                 '&response_type=token' +
                 '&redirect_uri=' + redirectUri
           };
@@ -107,6 +107,7 @@ var gh = (function() {
 
       removeCachedToken: function(token_to_remove) {
         if (access_token == token_to_remove)
+          chrome.storage.sync.remove("access_token");
           access_token = null;
       }
     };
@@ -161,7 +162,7 @@ var gh = (function() {
     },
     makeCall: function (exten) {
       var message = {
-        action: 'https://api.voxity.fr/api/v1/channel',
+        action: 'http://localhost:3000/api/v1/channel',
         method: "POST",
         parameters: JSON.stringify({'exten': exten})
       };
