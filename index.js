@@ -106,9 +106,10 @@ var gh = (function() {
       },
 
       removeCachedToken: function(token_to_remove) {
-        if (access_token == token_to_remove)
-          chrome.storage.sync.remove("access_token");
+        if (access_token == token_to_remove) {
+          chrome.storage.sync.remove("access_token"); //when the token is expired we must delete it from the storage in goal to ask a new one
           access_token = null;
+        }
       }
     };
   })();
