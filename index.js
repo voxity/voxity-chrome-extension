@@ -27,6 +27,9 @@
  *
  */
 
+// var base_url = 'http://localhost:3000';
+var base_url = 'https://api.voxity.fr'; 
+
 var gh = (function() {
   'use strict';
 
@@ -49,7 +52,7 @@ var gh = (function() {
           access_token = items.access_token; 
           options = {
             'interactive': interactive,
-            url:'http://localhost:3000/api/v1/dialog/authorize?client_id=' + clientID +
+            url: base_url+'/api/v1/dialog/authorize?client_id=' + clientID +
                 '&response_type=token' +
                 '&redirect_uri=' + redirectUri
           };
@@ -163,7 +166,7 @@ var gh = (function() {
     },
     makeCall: function (exten) {
       var message = {
-        action: 'http://localhost:3000/api/v1/channel',
+        action: base_url+'/api/v1/channel',
         method: "POST",
         parameters: JSON.stringify({'exten': exten})
       };
