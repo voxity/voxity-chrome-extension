@@ -27,7 +27,6 @@
  *
  */
 
-// var base_url = 'http://localhost:3000';
 var base_url = 'https://api.voxity.fr'; 
 
 var gh = (function() {
@@ -36,7 +35,7 @@ var gh = (function() {
   var access_token;
 
   var tokenFetcher = (function() {
-    var clientID = 'v009';
+    var clientID = 'ch2NtN3S25ImoYHaSDsr';
     var redirectUri = chrome.identity.getRedirectURL();
     var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
     access_token = null;
@@ -49,10 +48,10 @@ var gh = (function() {
         chrome.storage.sync.get({
           access_token: null,
         }, function(items) {
-          access_token = items.access_token; 
+          access_token = items.access_token;
           options = {
             'interactive': interactive,
-            url: base_url+'/api/v1/dialog/authorize?client_id=' + clientID +
+            url: base_url + '/api/v1/dialog/authorize?client_id=' + clientID +
                 '&response_type=token' +
                 '&redirect_uri=' + redirectUri
           };
@@ -109,7 +108,7 @@ var gh = (function() {
       },
 
       removeCachedToken: function(token_to_remove) {
-        if (access_token == token_to_remove) {
+        if (access_token === token_to_remove) {
           chrome.storage.sync.remove("access_token"); //when the token is expired we must delete it from the storage in goal to ask a new one
           access_token = null;
         }
@@ -143,7 +142,8 @@ var gh = (function() {
     }
 
     function requestComplete() {
-      if (this.status != 200 && retry) {
+      // if ( && this.response === "Unauthorized")
+      if (this.status == 401 && retry) {
         retry = false;
         tokenFetcher.removeCachedToken(access_token);
         access_token = null;
@@ -166,7 +166,7 @@ var gh = (function() {
     },
     makeCall: function (exten) {
       var message = {
-        action: base_url+'/api/v1/channel',
+        action: base_url + '/api/v1/channel',
         method: "POST",
         parameters: JSON.stringify({'exten': exten})
       };
