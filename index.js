@@ -225,3 +225,7 @@ function onClickHandler(info, tab) {
     gh.signIn();
   }
 };
+
+chrome.browserAction.onClicked.addListener(function (tab) { //Fired when User Clicks ICON
+  chrome.tabs.update({url: "https://client.voxity.fr"});
+});
