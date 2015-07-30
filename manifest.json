@@ -1,5 +1,5 @@
 {
-  "manifest_version": 3,
+  "manifest_version": 2,
   "name": "Voxity Click-to-call",
   "description": "Allow you to click on any phonenumber contained in a web page to launch a call using your Voxity telephony system.",
   "version": "1.5",
