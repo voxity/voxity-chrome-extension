@@ -4,8 +4,7 @@
   "name": "Voxity Click-to-call",
   "description": "Allow you to click on any phonenumber contained in a web page to launch a call using your Voxity telephony system.",
   "version": "1.4",
-  "author": "Maël Lavault",
-  //"contributors" : ["Loic Charbert", "Malek Mammar"],
+  "author": ["Maël Lavault", "Loic Chabert", "Malek Mammar"],
   "icons": {
     "16": "icon16.png",
     "32": "icon16.png",

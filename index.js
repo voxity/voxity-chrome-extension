@@ -135,7 +135,6 @@ var gh = (function() {
         }
 
         function requestComplete() {
-            console.log(this);
             // if ( && this.response === "Unauthorized")
             if (this.status == 401 && retry) {
                 retry = false;
@@ -143,8 +142,11 @@ var gh = (function() {
                 access_token = null;
                 getToken();
             } else if (this.status == 429) {
-                console.log("429 code error");
-                //notify();
+                // var resp  = JSON.parse(this.response);
+                notify('Trop de requêtes !', "Veuillez réessayer dans quelques secondes", null);
+            } else if (this.status == 400) {
+                var resp  = JSON.parse(this.response);
+                notify('Une erreur est survenue', resp.error);
             } else {
                 callback(null, this.status, this.response);
             }
@@ -168,31 +170,7 @@ var gh = (function() {
             };
             function onCallSuccess(val, status, response) {
                 response = JSON.parse(response);
-                var title = null;
-                var message = null;
-
-                if(response.status === 1){
-                  title = 'Demande validée';
-                  message = 'Votre téléphone va sonner d\'ici quelques instants.';
-                }else{
-                  title = response.data.title;
-                  message = response.data.message;
-                }
-
-                var notification_vars = {
-                  type: 'basic', 
-                  iconUrl: 'icon128.png',
-                  title: title, 
-                  message: message 
-                }
-
-                chrome.notifications.getAll(function(notifications){
-                    if(notifications.clicktocall){
-                        chrome.notifications.clear('clicktocall', function(e){});
-                    }
-                });
-
-                chrome.notifications.create('clicktocall', notification_vars, function(n) {});
+                notify('Click-to-call', "Votre téléphone va sonner d\'ici quelques instants.", null)
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, onCallSuccess);
         }
@@ -220,55 +198,51 @@ function onClickHandler(info, tab) {
 
 // Redirection listener
 chrome.browserAction.onClicked.addListener(function (tab) { //Fired when User Clicks ICON
-    // chrome.tabs.update({url: "https://client.voxity.fr"});
-    notify('ringing', "un appel .. un appel")
+    chrome.tabs.update({url: "https://client.voxity.fr"});
 });
 
 // callto: click listener for sellsy integration
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
     if(sender.id !== chrome.runtime.id) return;
     gh.makeCall(message.exten);
-  
-    console.log(message)  
-    console.log(sender)
-    console.log(sendResponse)
 })
 
 // Events listener
-var socket = io.connect('http://localhost:3000/', {
-    query:"access_token=acmSFwLNfuT6REzttvoY5A8SO7cDcwiZ0UKv872wPJFEHpGZ9H4dukwNsPJJuyWNZvf6cYc0F1zkoGk0baIOHpznCv72Nc8gYlazwewn0ycAQgTmAFmNM76dqE4DEfNqGWqKF5fwraDwEgtIqbyOS7LO9xE6zhIZr3EFhbPrAf6aK1Lf8LmBAUUcPb76oj3BZHJlm8oH4A6YDEIv3NGW3V6KhCBhtsfc5ECIbrAvGzTDNuHnG4ReSieyiFhLuTK"
-    // query:"access_token="+access_token
+var socket;
+gh.tokenFetcher.getToken(true, function(err, token){
+    // console.log(token);
+    access_token = token;
+    socket = io.connect('http://localhost:3000/', {
+        query:"access_token="+access_token
+    });
+    
+    socket.on('error', function(data){
+        // console.log('errors', data);
+        data = JSON.parse(data);
+        if (data.status == 401 && data.error === "invalid_token") {
+            gh.tokenFetcher.removeCachedToken(access_token);
+            gh.tokenFetcher.getToken(true, function(err, token){
+                access_token = token;
+                socket.disconnect();
+                socket.io.opts.query = "access_token="+access_token; 
+                socket.connect();
+            });
+        }
+    })
+
+    socket.on('calls.ringing', function(data){
+        if (data.calleridname !== 'Click-to-call')
+            notify('ringing', data.connectedlinename, data.connectedlinenum);
+    })
+
+    socket.on('calls.bridged', function(data){
+        notify('bridged', data.callerid1, data.callerid2);
+    })
+
+    socket.on('calls.hangup', function(data){
+        notify('hangup', data.connectedlinename, data.connectedlinenum);
+    })
 });
-
-socket.on('error', function(data){
-    console.log('errors', data);
-    if (data.status == 401 && data.error === "invalid_token") {
-        gh.tokenFetcher.removeCachedToken(access_token);
-        gh.tokenFetcher.getToken(true, function(err, token){
-            access_token = token;
-        });
-    }
-})
-
-socket.on('calls.ringing', function(data){
-    console.log('RINGING', data);
-    notify('ringing', data.calleridname, data.calleridnum);
-})
-
-socket.on('calls.ring', function(data){
-    console.log('HANGUP', data);
-    notify('ring', data.calleridname, data.calleridnum);
-})
-
-socket.on('calls.bridged', function(data){
-    console.log('BRIDGED', data);
-    notify('bridged', data.calleridname, data.calleridnum);
-})
-
-socket.on('calls.hangup', function(data){
-    console.log('HANGUP', data);
-    notify('hangup', data.calleridname, data.calleridnum);
-})
 
 function notify(type, msg, context) {
     var title;
@@ -276,34 +250,28 @@ function notify(type, msg, context) {
         type: 'basic', 
         iconUrl: 'icon128.png',
         title: title || "", 
-        message: msg || "Unknown",
+        message: msg || "",
         contextMessage: context || "",
     }
     switch (type){
         case "ringing" :    
             opts.title = "Appel entrant"; 
-            opts.iconUrl = 'incomming_call128.png'; 
-            break;
-        case "ring" :       
-            opts.title = "Appel sortant"; 
-            opts.iconUrl = 'icon128.png'; 
+            opts.iconUrl = 'ringing.png'; 
             break;
         case "hangup" :     
             opts.title = "Raccroché"; 
-            opts.iconUrl = 'hangup_call128.png'; 
+            opts.iconUrl = 'hangup.png'; 
             break;
         case "bridged" :    
-            opts.title = "Communication établie"; 
-            opts.iconUrl = 'icon128.png'; 
+            opts.title = "Communication établie entre"; 
+            opts.iconUrl = 'bridged.png'; 
             break;
         default :           
             opts.title = type; 
             break;
     }
-    chrome.notifications.getAll(function(notifications){
-        if(notifications[type]){
-            chrome.notifications.clear(type, function(err){console.log('error', err)});
-        }
+ 
+    chrome.notifications.clear(type, function(wasCleared){
+        chrome.notifications.create(type, opts, function(n) {});
     });
-    chrome.notifications.create(type, opts, function(n) {});
 }
