@@ -211,19 +211,25 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 })
 
 // Events listener
-var socket;
+var socket, is_second_try = false;
 gh.tokenFetcher.getToken(true, function(err, token){
     console.log(token);
     access_token = token;
-    socket = io.connect(base_url, {
+    socket = io.connect(base_url+'/', {
         path : '/event/v1',
         query:"access_token="+access_token
     });
     
+    socket.on('connected', function(data){
+        console.log('connected', data);
+        is_second_try = false;
+    })
+
     socket.on('error', function(data){
         console.log('errors', data);
         data = JSON.parse(data);
-        if (data.status == 401 && data.error === "invalid_token") {
+        if (data.status == 401 && data.error === "invalid_token" && ! is_second_try) {
+            is_second_try = true;
             gh.tokenFetcher.removeCachedToken(access_token);
             gh.tokenFetcher.getToken(true, function(err, token){
                 console.log(token)
