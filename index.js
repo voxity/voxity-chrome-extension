@@ -28,7 +28,8 @@
  */
 
 // var base_url = 'https://api.voxity.fr'; 
-var base_url = 'http://localhost:3000'; 
+// var base_url = 'http://localhost:3000'; 
+var base_url = 'http://192.168.16.161'; 
 
 var access_token;
 var gh = (function() {
@@ -136,14 +137,16 @@ var gh = (function() {
 
         function requestComplete() {
             // if ( && this.response === "Unauthorized")
+            console.log(this)
             if (this.status == 401 && retry) {
                 retry = false;
                 tokenFetcher.removeCachedToken(access_token);
                 access_token = null;
                 getToken();
             } else if (this.status == 429) {
-                // var resp  = JSON.parse(this.response);
-                notify('Trop de requêtes !', "Veuillez réessayer dans quelques secondes", null);
+                var resp  = JSON.parse(this.response);
+                console.log(resp)
+                notify('Trop de requêtes !', "Veuillez réessayer dans quelques secondes", res.error);
             } else if (this.status == 400) {
                 var resp  = JSON.parse(this.response);
                 notify('Une erreur est survenue', resp.error);
@@ -210,18 +213,20 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 // Events listener
 var socket;
 gh.tokenFetcher.getToken(true, function(err, token){
-    // console.log(token);
+    console.log(token);
     access_token = token;
-    socket = io.connect('http://localhost:3000/', {
+    socket = io.connect(base_url, {
+        path : '/event/v1',
         query:"access_token="+access_token
     });
     
     socket.on('error', function(data){
-        // console.log('errors', data);
+        console.log('errors', data);
         data = JSON.parse(data);
         if (data.status == 401 && data.error === "invalid_token") {
             gh.tokenFetcher.removeCachedToken(access_token);
             gh.tokenFetcher.getToken(true, function(err, token){
+                console.log(token)
                 access_token = token;
                 socket.disconnect();
                 socket.io.opts.query = "access_token="+access_token; 
@@ -231,15 +236,18 @@ gh.tokenFetcher.getToken(true, function(err, token){
     })
 
     socket.on('calls.ringing', function(data){
+        console.log('RINGING', data);
         if (data.calleridname !== 'Click-to-call')
             notify('ringing', data.connectedlinename, data.connectedlinenum);
     })
 
     socket.on('calls.bridged', function(data){
+        console.log('BRIDGED', data);
         notify('bridged', data.callerid1, data.callerid2);
     })
 
     socket.on('calls.hangup', function(data){
+        console.log('HANGUP', data);
         notify('hangup', data.connectedlinename, data.connectedlinenum);
     })
 });
