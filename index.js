@@ -87,9 +87,10 @@ var gh = (function() {
                 }
 
                 function handleProviderResponse(values) {
-                    if (values.hasOwnProperty('access_token'))
+                    if (values.hasOwnProperty('access_token')){
+                        if (! values.access_token) return callback(new Error('Authentication failed'));
                         setAccessToken(values.access_token);
-                    else
+                    } else
                         callback(new Error('No access_token available.'));
                 }
 
@@ -173,7 +174,7 @@ var gh = (function() {
             };
             function onCallSuccess(val, status, response) {
                 response = JSON.parse(response);
-                notify('Click-to-call', "Votre téléphone va sonner d\'ici quelques instants.", null)
+                notify('Click-to-call', 'Click-to-call', "Votre téléphone va sonner d\'ici quelques instants.")
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, onCallSuccess);
         }
@@ -213,6 +214,8 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 // Events listener
 var socket, is_second_try = false;
 gh.tokenFetcher.getToken(true, function(err, token){
+    if (err) return console.error('Authentication failed', err);
+
     console.log(token);
     access_token = token;
     socket = io.connect(base_url+'/', {
@@ -279,6 +282,9 @@ function notify(type, msg, context) {
         case "bridged" :    
             opts.title = "Communication établie entre"; 
             opts.iconUrl = 'bridged.png'; 
+            break;
+        case "Click-to-call" :    
+            opts.iconUrl = 'ringing.png'; 
             break;
         default :           
             opts.title = type; 
