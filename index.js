@@ -27,9 +27,9 @@
  *
  */
 
-// var base_url = 'https://api.voxity.fr'; 
+var base_url = 'https://api.voxity.fr'; 
 // var base_url = 'http://localhost:3000'; 
-var base_url = 'http://192.168.16.161'; 
+// var base_url = 'http://192.168.16.161'; 
 
 var access_token;
 var gh = (function() {
