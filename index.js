@@ -138,7 +138,7 @@ var gh = (function() {
 
         function requestComplete() {
             // if ( && this.response === "Unauthorized")
-            console.log(this)
+            // console.log(this)
             if (this.status == 401 && retry) {
                 retry = false;
                 tokenFetcher.removeCachedToken(access_token);
@@ -146,7 +146,7 @@ var gh = (function() {
                 getToken();
             } else if (this.status == 429) {
                 var resp  = JSON.parse(this.response);
-                console.log(resp)
+                // console.log(resp)
                 notify('Trop de requêtes !', "Veuillez réessayer dans quelques secondes", res.error);
             } else if (this.status == 400) {
                 var resp  = JSON.parse(this.response);
@@ -216,7 +216,7 @@ var socket, is_second_try = false;
 gh.tokenFetcher.getToken(true, function(err, token){
     if (err) return console.error('Authentication failed', err);
 
-    console.log(token);
+    // console.log(token);
     access_token = token;
     socket = io.connect(base_url+'/', {
         path : '/event/v1',
@@ -229,13 +229,13 @@ gh.tokenFetcher.getToken(true, function(err, token){
     })
 
     socket.on('error', function(data){
-        console.log('errors', data);
+        console.error('errors', data);
         data = JSON.parse(data);
         if (data.status == 401 && data.error === "invalid_token" && ! is_second_try) {
             is_second_try = true;
             gh.tokenFetcher.removeCachedToken(access_token);
             gh.tokenFetcher.getToken(true, function(err, token){
-                console.log(token)
+                // console.log(token)
                 access_token = token;
                 socket.disconnect();
                 socket.io.opts.query = "access_token="+access_token; 
@@ -245,18 +245,18 @@ gh.tokenFetcher.getToken(true, function(err, token){
     })
 
     socket.on('calls.ringing', function(data){
-        console.log('RINGING', data);
+        // console.log('RINGING', data);
         if (data.calleridname !== 'Click-to-call')
             notify('ringing', data.connectedlinename, data.connectedlinenum);
     })
 
     socket.on('calls.bridged', function(data){
-        console.log('BRIDGED', data);
+        // console.log('BRIDGED', data);
         notify('bridged', data.callerid1, data.callerid2);
     })
 
     socket.on('calls.hangup', function(data){
-        console.log('HANGUP', data);
+        // console.log('HANGUP', data);
         notify('hangup', data.connectedlinename, data.connectedlinenum);
     })
 });
