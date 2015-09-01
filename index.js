@@ -27,9 +27,9 @@
  *
  */
 
-var base_url = 'https://api.voxity.fr'; 
+//var base_url = 'https://api.voxity.fr'; 
 // var base_url = 'http://localhost:3000'; 
-// var base_url = 'http://192.168.16.161'; 
+var base_url = 'http://192.168.16.161'; 
 
 var access_token;
 var gh = (function() {
@@ -66,7 +66,7 @@ var gh = (function() {
                         // https://{app_id}.chromiumapp.org/provider_cb#access_token={value}&refresh_token={value}
                         // or:
                         // https://{app_id}.chromiumapp.org/provider_cb#code={value}
-                        var matches = responseUri.match(redirectRe);
+                        var matches = responseUri.match(redirectRe);    
                         if (matches && matches.length > 1)
                             handleProviderResponse(parseRedirectFragment(matches[1]));
                         else
@@ -161,11 +161,58 @@ var gh = (function() {
         tokenFetcher.getToken(true, function(error, access_token) {});
     }
 
+    function signOut(callback){
+        var retry = true;
+        var access_token;
+        getToken(false);
+
+        function getToken(interactive) {
+            tokenFetcher.getToken(false, function(error, token) {
+            if (error) return callback("Aucun token à supprimer.", null, null);;
+
+            if(token){
+                access_token = token;
+                requestStart();
+            }
+          });
+        }
+
+        function requestStart() {
+            var url = base_url + "/api/v1/logout";
+            var xhr = new XMLHttpRequest();
+            var requestBody = "";
+            xhr.open("GET", url);
+            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            xhr.onload = requestComplete;
+            xhr.send(requestBody);
+        }
+
+        function requestComplete() {
+            if (this.status == 401) {
+                retry = false;
+                tokenFetcher.removeCachedToken(access_token);
+                access_token = null;
+                getToken(true);
+            } else if (this.status == 429) {
+                var resp  = JSON.parse(this.response);
+                callback(null, this.status, "Trop de requete. Veuillez réessayer dans quelques secondes");
+            } else if (this.status == 200) {
+                tokenFetcher.removeCachedToken(access_token);
+                access_token = null;
+                callback(null, this.status, "Token supprimé. Déconnection validée.");
+            } else {
+                callback("Une erreur est survenue lors de la déconnection.", this.status, this.response);
+            }
+        }
+    }
+
     return {
         tokenFetcher: tokenFetcher,
         signIn: function () {
           interactiveSignIn();
         },
+        signOut: signOut,
         makeCall: function (exten) {
             var message = {
                 action: base_url + '/api/v1/channel',
@@ -212,54 +259,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 })
 
 // Events listener
-var socket, is_second_try = false;
-gh.tokenFetcher.getToken(true, function(err, token){
-    if (err) return console.error('Authentication failed', err);
-
-    // console.log(token);
-    access_token = token;
-    socket = io.connect(base_url+'/', {
-        path : '/event/v1',
-        query:"access_token="+access_token
-    });
-    
-    socket.on('connected', function(data){
-        console.log('connected', data);
-        is_second_try = false;
-    })
-
-    socket.on('error', function(data){
-        console.error('errors', data);
-        data = JSON.parse(data);
-        if (data.status == 401 && data.error === "invalid_token" && ! is_second_try) {
-            is_second_try = true;
-            gh.tokenFetcher.removeCachedToken(access_token);
-            gh.tokenFetcher.getToken(true, function(err, token){
-                // console.log(token)
-                access_token = token;
-                socket.disconnect();
-                socket.io.opts.query = "access_token="+access_token; 
-                socket.connect();
-            });
-        }
-    })
-
-    socket.on('calls.ringing', function(data){
-        // console.log('RINGING', data);
-        if (data.calleridname !== 'Click-to-call')
-            notify('ringing', data.connectedlinename, data.connectedlinenum);
-    })
-
-    socket.on('calls.bridged', function(data){
-        // console.log('BRIDGED', data);
-        notify('bridged', data.callerid1, data.callerid2);
-    })
-
-    socket.on('calls.hangup', function(data){
-        // console.log('HANGUP', data);
-        notify('hangup', data.connectedlinename, data.connectedlinenum);
-    })
+var socket_client = new socketClient();
+chrome.storage.sync.get({get_event_option:false}, function(items){
+    if(items.get_event_option){ socket_client.connect(); }
 });
+
+chrome.storage.onChanged.addListener(function(changes, areaName){
+    if(changes.hasOwnProperty('get_event_option') && changes.get_event_option.newValue === false){
+        socket_client.disconnect();
+    }
+    if(changes.hasOwnProperty('get_event_option') && changes.get_event_option.newValue === true){
+        socket_client.connect();
+    }
+})
 
 function notify(type, msg, context) {
     var title;

@@ -1,0 +1,8 @@
+.panel-primary>.panel-heading {
+    background: rgb(255, 115, 55);
+    border-color: rgb(255, 115, 55);
+}
+
+.panel-primary {
+	border-color: rgb(255, 115, 55);
+}

@@ -2,7 +2,7 @@
   "manifest_version": 2,
   "name": "Voxity Click-to-call",
   "description": "Allow you to click on any phonenumber contained in a web page to launch a call using your Voxity telephony system.",
-  "version": "1.5",
+  "version": "1.6",
   "author": ["Maël Lavault", "Loic Chabert", "Malek Mammar"],
   "icons": {
     "16": "icon16.png",
@@ -18,8 +18,17 @@
     }
   ],
   "background": { 
-    "scripts": ["socket.io-1.3.5.js", "index.js"],
+    "scripts": ["socket.io-1.3.5.js", "socket.js", "index.js"],
     "persistent": false
+  },
+  "options_ui": {
+    // Required.
+    "page": "options.html",
+    // Recommended.
+    "chrome_style": true
+    // Not recommended; only provided for backwards compatibility,
+    // and will be unsupported in a future version of Chrome (TBD).
+    //"open_in_tab": true
   },
   "minimum_chrome_version": "29.0",
   "offline_enabled": false,
@@ -29,6 +38,7 @@
     "storage",
     "notifications",
     "contextMenus",
+    "sessions",
     "https://api.voxity.fr/api/*"
   ],
   "browser_action": {
