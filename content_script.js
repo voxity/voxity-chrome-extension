@@ -23,5 +23,3 @@ for(i=0; i<list.length; i++){
         window.postMessage({ type:'callto', exten: exten}, "*");
     }, false);      
 }
-
-

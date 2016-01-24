@@ -39,15 +39,30 @@ function socketClient(){
 
             socket.on('calls.ringing', function(data){
                 if (data.calleridname !== 'Click-to-call')
-                    notify('ringing', data.connectedlinename, data.connectedlinenum);
+                    notify('calls.ringing', {title: "Appel entrant", iconUrl:'libs/assets/icons/ringing.png', message: data.connectedlinename, context: data.connectedlinenum});
             })
 
             socket.on('calls.bridged', function(data){
-                notify('bridged', data.callerid1, data.callerid2);
+                notify('calls.bridged', {title: "Communication établie entre", iconUrl:'libs/assets/icons/bridged.png', message: data.callerid1, context: data.callerid2});
             })
 
             socket.on('calls.hangup', function(data){
-                notify('hangup', data.connectedlinename, data.connectedlinenum);
+                notify('calls.hangup', {title: "Raccroché", iconUrl:'libs/assets/icons/hangup.png', message: data.connectedlinename, context:data.connectedlinenum});
+            })
+
+            socket.on('sms.response', function(data){
+                // ["id", "phone_number", "send_date", "content"]
+                notify('sms.response', {title: "Vous avez reçu un SMS", message: data.phone_number, context: data.content});
+            })
+            
+            socket.on('sms.delivered', function(data){
+                // ["id", "phone_number", "send_date"]
+                notify('sms.delivered', {title: "Votre SMS a été délivré", message: data.phone_number, context: data.send_date});
+            })
+            
+            socket.on('vms.delivered', function(data){
+                // ["id", "phone_number"]
+                notify('vms.delivered', {title: "Votre VMS a été délivré", message: data.phone_number, context: data.id});
             })
 		});
 	}

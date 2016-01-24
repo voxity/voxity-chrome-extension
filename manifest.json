@@ -5,10 +5,10 @@
   "version": "1.6",
   "author": ["Maël Lavault", "Loic Chabert", "Malek Mammar"],
   "icons": {
-    "16": "icon16.png",
-    "32": "icon16.png",
-    "48": "icon48.png",
-    "128": "icon128.png"
+    "16": "libs/assets/icons/icon16.png",
+    "32": "libs/assets/icons/icon16.png",
+    "48": "libs/assets/icons/icon48.png",
+    "128": "libs/assets/icons/icon128.png"
   },
   "content_scripts":[
     {
@@ -33,6 +33,7 @@
   "minimum_chrome_version": "29.0",
   "offline_enabled": false,
   "permissions": [
+    "tabs",
     "webNavigation",
     "identity",
     "storage",
@@ -42,6 +43,7 @@
     "https://api.voxity.fr/api/*"
   ],
   "browser_action": {
-    "default_icon": "icon16.png"
+    "default_icon": "libs/assets/icons/icon16.png" 
+    //, "default_popup": "sms.html"
   }
 }

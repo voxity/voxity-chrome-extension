@@ -27,12 +27,12 @@
  *
  */
 
-var base_url = 'https://api.voxity.fr'; 
+//var base_url = 'https://api.voxity.fr';
+var base_url = 'http://localhost:3000';
 
 var access_token;
 var gh = (function() {
     'use strict';
-
 
     var tokenFetcher = (function() {
         var clientID = 'ch2NtN3S25ImoYHaSDsr';
@@ -135,8 +135,6 @@ var gh = (function() {
         }
 
         function requestComplete() {
-            // if ( && this.response === "Unauthorized")
-            // console.log(this)
             if (this.status == 401 && retry) {
                 retry = false;
                 tokenFetcher.removeCachedToken(access_token);
@@ -144,14 +142,9 @@ var gh = (function() {
                 getToken();
             } else if (this.status == 429) {
                 var resp  = JSON.parse(this.response);
-                // console.log(resp)
-                notify('Trop de requêtes !', "Veuillez réessayer dans quelques secondes", res.error);
-            } else if (this.status == 400) {
-                var resp  = JSON.parse(this.response);
-                notify('Une erreur est survenue', resp.error);
-            } else {
-                callback(null, this.status, this.response);
-            }
+                notify("http.429", {title:'Trop de requêtes !', message:"Veuillez réessayer dans quelques secondes", context:resp.error});
+            } else 
+                callback(this.status < 200 || this.status >= 300, this.status, this.response); 
         }
     }
 
@@ -217,27 +210,61 @@ var gh = (function() {
                 method: "POST",
                 parameters: JSON.stringify({'exten': exten})
             };
-            function onCallSuccess(val, status, response) {
-                response = JSON.parse(response);
-                notify('Click-to-call', 'Click-to-call', "Votre téléphone va sonner d\'ici quelques instants.")
+            function callback(err, status, response) {
+                if (status === 200) 
+                {
+                    response = JSON.parse(response);
+                    notify('make.call', {title:'Click-to-call', message:'Click-to-call', context:"Votre téléphone va sonner d\'ici quelques instants."});
+                } else 
+                {
+                    notify('make.call', {title:'Click-to-call', message:'Une erreur est survenue', context:response.error});
+                }
             }
-            xhrWithAuth(message.method, message.action, message.parameters, true, onCallSuccess);
+            xhrWithAuth(message.method, message.action, message.parameters, true, callback);
+        },
+        makeSms: function (exten, content, done) {
+            var message = {
+                action: base_url + '/api/v1/sms',
+                method: "POST",
+                parameters: JSON.stringify({'phone_number': exten, "content":content})
+            };
+            function callback(err, status, response) {
+                response = JSON.parse(response);
+                done(status !== 200, status, response)
+            }
+            xhrWithAuth(message.method, message.action, message.parameters, true, callback);
         }
       };
 })();
 
 // Adding context item
 chrome.runtime.onInstalled.addListener(function() {
-    var context = "selection";
-    var title = "Appeler le numéro <%s>";
-    var id = chrome.contextMenus.create({"title": title, "contexts":[context], "id": "context" + context});  
+    var contextType = "selection";
+    chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
+    chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
 });
 chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 function onClickHandler(info, tab) {
     try{
         if (info.selectionText) {
-            gh.makeCall(info.selectionText);
+            if (info.menuItemId == "context_click_to_call")
+                gh.makeCall(info.selectionText);
+           else if (info.menuItemId == "context_sms") {
+                chrome.tabs.create({
+                    url: chrome.extension.getURL('sms.html?phone_number='+info.selectionText),
+                    active: false
+                }, function(tab) {
+                    chrome.windows.create({
+                        tabId: tab.id,
+                        type: 'popup',
+                        focused: true,
+                        //state: "normal"
+                        width: 335,
+                        height: 400 //350
+                    });
+                });
+           }
         }
     } catch(ex){
         console.log(ex);
@@ -246,9 +273,10 @@ function onClickHandler(info, tab) {
 };
 
 // Redirection listener
-chrome.browserAction.onClicked.addListener(function (tab) { //Fired when User Clicks ICON
+function browserActionRedirection (tab, code) { //Fired when User Clicks ICON
     chrome.tabs.update({url: "https://client.voxity.fr"});
-});
+};
+chrome.browserAction.onClicked.addListener(browserActionRedirection);
 
 // callto: click listener for sellsy integration
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
@@ -271,37 +299,26 @@ chrome.storage.onChanged.addListener(function(changes, areaName){
     }
 })
 
-function notify(type, msg, context) {
-    var title;
+/**
+ * The data argument should contain takes a title
+ * @param  {String} event               A type of event
+ * @param  {Object} data                Object that contains 
+ * @param  {String} data.title          The notification title
+ * @param  {String} data.iconUrl        An icon path
+ * @param  {String} data.message        The notification message bold
+ * @param  {String} data.context        The notification message light
+ */
+function notify(event, data) {
+
     var opts = {
         type: 'basic', 
-        iconUrl: 'icon128.png',
-        title: title || "", 
-        message: msg || "",
-        contextMessage: context || "",
-    }
-    switch (type){
-        case "ringing" :    
-            opts.title = "Appel entrant"; 
-            opts.iconUrl = 'ringing.png'; 
-            break;
-        case "hangup" :     
-            opts.title = "Raccroché"; 
-            opts.iconUrl = 'hangup.png'; 
-            break;
-        case "bridged" :    
-            opts.title = "Communication établie entre"; 
-            opts.iconUrl = 'bridged.png'; 
-            break;
-        case "Click-to-call" :    
-            opts.iconUrl = 'ringing.png'; 
-            break;
-        default :           
-            opts.title = type; 
-            break;
+        iconUrl: data.iconUrl || 'libs/assets/icons/icon128.png',
+        title: data.title || "", 
+        message: data.message || "",
+        contextMessage: data.context || "",
     }
  
-    chrome.notifications.clear(type, function(wasCleared){
-        chrome.notifications.create(type, opts, function(n) {});
+    chrome.notifications.clear(event, function(wasCleared){
+        chrome.notifications.create(event, opts, function(n) {});
     });
 }
