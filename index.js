@@ -27,8 +27,8 @@
  *
  */
 
-var base_url = 'https://api.voxity.fr'; 
-// var base_url = 'http://localhost:3000'; 
+// var base_url = 'https://api.voxity.fr'; 
+var base_url = 'http://localhost:3000'; 
 
 /**
  * Makes an Oauth2 Implicit grant authentication
@@ -46,18 +46,12 @@ var oauth2 = function(opts, callback) {
     oauth_callback = callback;
     if (interactive) 
     {
-        chrome.tabs.create({
+        chrome.windows.create({
             url: url,
-            active: false
-        }, function(tab) {
-            chrome.windows.create({
-                tabId: tab.id,
-                url: url,
-                type: 'popup',
-                focused: true,
-                width: 500,
-                height: 500
-            });
+            type: 'popup',
+            focused: true,
+            width: 500,
+            height: 500
         });
     }
     else 
@@ -66,17 +60,12 @@ var oauth2 = function(opts, callback) {
         // loaded and we cannot access to the full response url parameters neither
         // It should be possible to inject an iframe in the background page in goal to avoid 
         // opening a tab, since there no other way to hide a tab opening.
-        chrome.tabs.create({
+        chrome.windows.create({
             url: url,
-            active: false
-        }, function(tab) {
-            chrome.windows.create({
-                tabId: tab.id,
-                type: 'popup',
-                focused: false,
-                width: 1,
-                height: 1
-            });
+            type: 'popup',
+            focused: false,
+            width: 1,
+            height: 1
         });
     }
 }
@@ -306,18 +295,12 @@ function onClickHandler(info, tab) {
             if (info.menuItemId == "context_click_to_call")
                 gh.makeCall(info.selectionText);
            else if (info.menuItemId == "context_sms") {
-                chrome.tabs.create({
+                chrome.windows.create({
                     url: chrome.extension.getURL('sms.html?phone_number='+info.selectionText),
-                    active: false
-                }, function(tab) {
-                    chrome.windows.create({
-                        tabId: tab.id,
-                        type: 'popup',
-                        focused: true,
-                        //state: "normal"
-                        width: 335,
-                        height: 400 //350
-                    });
+                    type: 'popup',
+                    focused: true,
+                    width: 335,
+                    height: 400 //350
                 });
            }
         }
