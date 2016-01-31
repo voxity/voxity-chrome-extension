@@ -27,8 +27,59 @@
  *
  */
 
-//var base_url = 'https://api.voxity.fr';
-var base_url = 'http://localhost:3000';
+var base_url = 'https://api.voxity.fr'; 
+// var base_url = 'http://localhost:3000'; 
+
+/**
+ * Makes an Oauth2 Implicit grant authentication
+ * It replaces chrome.identity.launchWebAuth() that uses a cookie that is not accessible from the BackgroundPage
+ * @param  {Function} callback Gives in parameter callback(err, responseUri)
+ *
+ * Redirect_uri : chrome-extension://{app_id}/oauth.html/
+ */
+var oauth_callback = null; // Global variable for being notified (by the oauth.html page) of the <redirect_uri> redirection
+var oauth2 = function(opts, callback) {
+    var interactive = (opts.interactive !== undefined)? opts.interactive : true;
+    var url = opts.url || "";
+
+    //Active OAuth2 Implicit Grant
+    oauth_callback = callback;
+    if (interactive) 
+    {
+        chrome.tabs.create({
+            url: url,
+            active: false
+        }, function(tab) {
+            chrome.windows.create({
+                tabId: tab.id,
+                url: url,
+                type: 'popup',
+                focused: true,
+                width: 500,
+                height: 500
+            });
+        });
+    }
+    else 
+    {
+        // we cannot do a normal xmlHtpRequest because the script in the page wouldn't be 
+        // loaded and we cannot access to the full response url parameters neither
+        // It should be possible to inject an iframe in the background page in goal to avoid 
+        // opening a tab, since there no other way to hide a tab opening.
+        chrome.tabs.create({
+            url: url,
+            active: false
+        }, function(tab) {
+            chrome.windows.create({
+                tabId: tab.id,
+                type: 'popup',
+                focused: false,
+                width: 1,
+                height: 1
+            });
+        });
+    }
+}
 
 var access_token;
 var gh = (function() {
@@ -36,7 +87,7 @@ var gh = (function() {
 
     var tokenFetcher = (function() {
         var clientID = 'ch2NtN3S25ImoYHaSDsr';
-        var redirectUri = chrome.identity.getRedirectURL();
+        var redirectUri = chrome.extension.getURL("oauth.html"); //chrome.identity.getRedirectURL();
         var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
         access_token = null;
 
@@ -58,12 +109,10 @@ var gh = (function() {
                             '&redirect_uri=' + redirectUri
                     };
                         
-                    chrome.identity.launchWebAuthFlow(options, function(responseUri) {
-                        if (chrome.runtime.lastError) return callback(new Error(chrome.runtime.lastError))
+                    oauth2(options, function(err, responseUri) {
+                        if (err) return callback(new Error(err))
                         // Upon success the response is appended to redirectUri, e.g.
-                        // https://{app_id}.chromiumapp.org/provider_cb#access_token={value}&refresh_token={value}
-                        // or:
-                        // https://{app_id}.chromiumapp.org/provider_cb#code={value}
+                        // chrome-extension://{app_id}/oauth.html#access_token={value}&expires_in=3600&token_type=Bearer
                         var matches = responseUri.match(redirectRe);    
                         if (matches && matches.length > 1)
                             handleProviderResponse(parseRedirectFragment(matches[1]));
@@ -116,12 +165,18 @@ var gh = (function() {
         getToken();
 
         function getToken() {
-            tokenFetcher.getToken(interactive, function(error, token) {
-            if (error) return callback(error);
+            // chrome.cookies.get({url: base_url, name:"api-voxity"}, function(cookie){
+                // if the cookie doesn't exist or has expired then we launch an interative OAuth
+                // var interactive = ! cookie || Date.now() > (new Date(cookie.expirationDate*1000)).getTime();
+                var interactive = true;
+                // console.log(cookie, interactive, new Date(cookie.expirationDate*1000))
+                tokenFetcher.getToken(interactive, function(error, token) {
+                    if (error) return callback(error);
 
-            access_token = token;
-            requestStart();
-          });
+                    access_token = token;
+                    requestStart();
+                });
+            // });
         }
 
         function requestStart() {

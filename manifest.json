@@ -35,15 +35,20 @@
   "permissions": [
     "tabs",
     "webNavigation",
-    "identity",
+    // "identity",
     "storage",
     "notifications",
     "contextMenus",
     "sessions",
+    // "cookies",
     "https://api.voxity.fr/api/*"
+    // "http://localhost:3000/*"
   ],
   "browser_action": {
     "default_icon": "libs/assets/icons/icon16.png" 
     //, "default_popup": "sms.html"
-  }
+  },
+  "web_accessible_resources": [
+    "oauth.*"
+  ]
 }
