@@ -6,3 +6,13 @@
 .panel-primary {
 	border-color: rgb(255, 115, 55);
 }
+
+.panel-primary>.panel-body {
+	width: 300px;
+}
+
+img {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
