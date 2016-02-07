@@ -60,13 +60,18 @@ var oauth2 = function(opts, callback) {
         // loaded and we cannot access to the full response url parameters neither
         // It should be possible to inject an iframe in the background page in goal to avoid 
         // opening a tab, since there no other way to hide a tab opening.
-        chrome.windows.create({
-            url: url,
-            type: 'popup',
-            focused: false,
-            width: 1,
-            height: 1
-        });
+        gh.isConnected.isSessionValid(function(err, isAuthenticated){
+            // if the user session is not authenticated, there is no point to do a non-interactive 
+            // sign-on since it won't be visible to the user
+            if (isAuthenticated)
+                chrome.windows.create({ 
+                    url: url,
+                    type: 'popup',
+                    focused: false,
+                    width: 1,
+                    height: 1
+                });
+        })        
     }
 }
 
@@ -148,7 +153,59 @@ var gh = (function() {
             }
         };
     })();
-
+    var isConnected = (function () {
+            function isTokenValid(done) {
+                    // we retreive the cached token
+                    chrome.storage.sync.get({
+                      access_token: null,
+                    }, function(items) {
+                        access_token = items.access_token;
+                        if(access_token) 
+                        {
+                            // we check to tken validity
+                            var url = base_url + "/api/v1/oauth/status";
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("GET", url);
+                            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                            xhr.onload = function (){
+                                // if the token expired
+                                if (this.status == 401) done(null, false);
+                                // if the token is still valid
+                                else if (this.status == 200) done(null, access_token);
+                                // if an error occured
+                                else done(this.response, null);
+                            };
+                            xhr.send(null);
+                        }
+                        else 
+                        {
+                            done(null, false);
+                        }
+                    });
+            };
+    
+            function isSessionValid(done) {
+                var url = base_url + "/api/v1/login/status";
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", url);
+                xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                xhr.onload = function (){
+                    // if the session is not valid or the user is not authenticated
+                    if (this.status == 401) done(null, false);
+                    // if the session is valid and user is authenticated
+                    else if (this.status == 200) done(null, true);
+                    else done(this.response, null);
+                };
+                xhr.send(null);
+            }
+    
+            return {
+                isTokenValid: isTokenValid,
+                isSessionValid: isSessionValid
+            }
+    })();
+    
     function xhrWithAuth(method, url, params, interactive, callback) {
         var retry = true;
         getToken();
@@ -184,11 +241,8 @@ var gh = (function() {
                 tokenFetcher.removeCachedToken(access_token);
                 access_token = null;
                 getToken();
-            } else if (this.status == 429) {
-                var resp  = JSON.parse(this.response);
-                notify("http.429", {title:'Trop de requêtes !', message:"Veuillez réessayer dans quelques secondes", context:resp.error});
             } else 
-                callback(this.status < 200 || this.status >= 300, this.status, this.response); 
+                callback(this.response, this.status, this.response); 
         }
     }
 
@@ -197,48 +251,64 @@ var gh = (function() {
     }
 
     function signOut(callback){
-        var retry = true;
-        var access_token;
-        getToken(false);
+        invalidate_token();
 
-        function getToken(interactive) {
-            tokenFetcher.getToken(false, function(error, token) {
-            if (error) return callback("Aucun token à supprimer.", null, null);;
-
-            if(token){
-                access_token = token;
+        function invalidate_token() {
+            isConnected.isTokenValid(function(err, access_token){
+                if (err) callback("Une erreur est survenue lors de la déconnection.");
+                // if there is no token we check the session status 
+                if (! access_token) return invalidate_session();
+                // we invalidate the token along with the session
                 requestStart();
-            }
-          });
+                function requestStart() {
+                    var url = base_url + "/api/v1/logout";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("GET", url);
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    xhr.onload = requestComplete;
+                    xhr.send(null);
+                }
+
+                function requestComplete() {
+                    // if the token we are trying to invalidate is already expired, or not the job is done
+                    if (this.status == 401 || this.status == 200) {
+                        tokenFetcher.removeCachedToken(access_token);
+                        access_token = null;
+                        callback(null, this.status, "Déconnexion réussie !");
+                    } else {
+                        callback(this.response, this.status, this.response);
+                    }
+                }
+            });
         }
 
-        function requestStart() {
-            var url = base_url + "/api/v1/logout";
-            var xhr = new XMLHttpRequest();
-            var requestBody = "";
-            xhr.open("GET", url);
-            xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
-            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-            xhr.onload = requestComplete;
-            xhr.send(requestBody);
-        }
+        function invalidate_session() {
+            isConnected.isSessionValid(function(err, isAuthenticated){
+                if (err) callback("Une erreur est survenue lors de la déconnection.");
+                // if there is a token
+                if (isAuthenticated) 
+                    return requestStart();
+                // the user session is not authenticated
+                callback(null);
+                
+                function requestStart() {
+                    var url = base_url + "/api/v1/logout";
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", url);
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                    xhr.onload = requestComplete;
+                    xhr.send(null);
+                }
 
-        function requestComplete() {
-            if (this.status == 401) {
-                retry = false;
-                tokenFetcher.removeCachedToken(access_token);
-                access_token = null;
-                getToken(true);
-            } else if (this.status == 429) {
-                var resp  = JSON.parse(this.response);
-                callback(null, this.status, "Trop de requete. Veuillez réessayer dans quelques secondes");
-            } else if (this.status == 200) {
-                tokenFetcher.removeCachedToken(access_token);
-                access_token = null;
-                callback(null, this.status, "Token supprimé. Déconnection validée.");
-            } else {
-                callback("Une erreur est survenue lors de la déconnection.", this.status, this.response);
-            }
+                function requestComplete() {
+                    if (this.status == 200) {
+                        callback(null, this.status, "Déconnexion réussie !");
+                    } else {
+                        callback(this.response, this.status, this.response);
+                    }
+                }            
+            });
         }
     }
 
@@ -247,6 +317,7 @@ var gh = (function() {
         signIn: function () {
           interactiveSignIn();
         },
+        isConnected: isConnected,
         signOut: signOut,
         makeCall: function (exten) {
             var message = {
@@ -257,11 +328,10 @@ var gh = (function() {
             function callback(err, status, response) {
                 if (status === 200) 
                 {
-                    response = JSON.parse(response);
-                    notify('make.call', {title:'Click-to-call', message:'Click-to-call', context:"Votre téléphone va sonner d\'ici quelques instants."});
+                    notify('make.call', {title:'Click-to-call', message:"Appel vers "+exten, context:"Votre téléphone va sonner d\'ici quelques instants."});
                 } else 
                 {
-                    notify('make.call', {title:'Click-to-call', message:'Une erreur est survenue', context:response.error});
+                    notify('make.call', {title:'Click-to-call', message:'Une erreur est survenue', context:response});
                 }
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, callback);
@@ -273,7 +343,13 @@ var gh = (function() {
                 parameters: JSON.stringify({'phone_number': exten, "content":content})
             };
             function callback(err, status, response) {
-                response = JSON.parse(response);
+                try {
+                    // if the response is a correct formated JSON string, not always the case when rate limiter block requests
+                    response = JSON.parse(response);
+                } catch (e) {
+                    response = {error: response};
+                }
+                
                 done(status !== 200, status, response)
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, callback);

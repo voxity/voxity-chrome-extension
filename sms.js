@@ -43,7 +43,7 @@ function sendSms() {
       else 
       {
         var item = document.createElement("LI");
-        item.appendChild(document.createTextNode("Une erreur s'est produite"));
+        item.appendChild(document.createTextNode("Une erreur s'est produite : "+JSON.stringify(response.error)));
         ul.appendChild(item);
       }
     }

@@ -13,7 +13,7 @@ function save_options() {
   });
 }
 
-function erase_token_api(){
+function sign_out(){
   var bkg = chrome.extension.getBackgroundPage();
   bkg.gh.signOut(function(err, http_status, reponse){
     var status = document.getElementById('status');
@@ -24,6 +24,8 @@ function erase_token_api(){
         status.textContent = reponse;
         var tokenapi = document.getElementById('tokenapi');
         tokenapi.textContent = "Aucun token, veuillez vous connecter."
+        var btn_deconnection = document.getElementById('btn_deconnection');
+        btn_deconnection.style.display = "none";
       }
     }
     setTimeout(function() {
@@ -39,7 +41,7 @@ function restore_options() {
     access_token: null,
     get_event_option: false,
   }, function(items) {
-    access_token = "Aucun token, veuillez vous connecter."
+    access_token = "Aucun token, veuillez vous connecter en effectuant un click-to-call."
     if(items.access_token){
       access_token = items.access_token.substring(0,40);
       access_token = access_token + "..."
@@ -50,6 +52,45 @@ function restore_options() {
     }
   });
 }
+
+function check_sign_in() {
+  var bkg = chrome.extension.getBackgroundPage();
+  check_token();
+
+  function check_token() {
+    bkg.gh.isConnected.isTokenValid(function(err, access_token){
+      var status = document.getElementById('status');
+      if (err) 
+      {
+        status.textContent = err;
+        setTimeout(function() {
+          status.textContent = '';
+        }, 7500);
+        return;
+      }
+      if (! access_token) return check_session();
+      var btn_deconnection = document.getElementById('btn_deconnection');
+      btn_deconnection.style.display = "block";
+    })
+  }
+
+  function check_session() {
+    bkg.gh.isConnected.isSessionValid(function(err, isAuthenticated){
+      var status = document.getElementById('status');
+      if(err){
+        status.textContent = err;
+        setTimeout(function() {
+          status.textContent = '';
+        }, 7500);
+      }else{
+        if (! isAuthenticated) return;
+        var btn_deconnection = document.getElementById('btn_deconnection');
+        btn_deconnection.style.display = "block";
+      }
+    })
+  }
+}
 document.addEventListener('DOMContentLoaded', restore_options);
-document.getElementById('deltokenapi').addEventListener('click', erase_token_api);
+document.addEventListener('DOMContentLoaded', check_sign_in);
+document.getElementById('btn_deconnection').addEventListener('click', sign_out);
 document.getElementById('save').addEventListener('click', save_options);
