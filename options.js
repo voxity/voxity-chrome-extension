@@ -14,7 +14,7 @@ function save_options() {
 }
 
 function sign_out(){
-  var bkg = chrome.extension.getBackgroundPage();
+  chrome.runtime.getBackgroundPage(function(bkg){
   bkg.gh.signOut(function(err, http_status, reponse){
     var status = document.getElementById('status');
     if(err){
@@ -32,6 +32,7 @@ function sign_out(){
       status.textContent = '';
     }, 7500);
   })
+  });
 }
 
 // Restores select box and checkbox state using the preferences
@@ -54,7 +55,7 @@ function restore_options() {
 }
 
 function check_sign_in() {
-  var bkg = chrome.extension.getBackgroundPage();
+  chrome.runtime.getBackgroundPage(function(bkg){
   check_token();
 
   function check_token() {
@@ -89,6 +90,7 @@ function check_sign_in() {
       }
     })
   }
+  });
 }
 document.addEventListener('DOMContentLoaded', restore_options);
 document.addEventListener('DOMContentLoaded', check_sign_in);
