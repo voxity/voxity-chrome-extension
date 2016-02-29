@@ -1,6 +1,7 @@
 function sendSms() {
-  var bkg = chrome.extension.getBackgroundPage();
+  chrome.runtime.getBackgroundPage(function(bkg){
   var phone_number = document.getElementById('sms-phone-number');
+  var emitter = document.getElementById('sms-emitter');
   var content = document.getElementById('sms-content');
   var status_error = document.getElementById('status-error');
   var status_success = document.getElementById('status-success');
@@ -11,7 +12,7 @@ function sendSms() {
   var ul = document.getElementById("list-errors");
   ul.innerHTML = ""; // we trash the content
   
-  bkg.gh.makeSms(phone_number.value, content.value, function(err, http_status, response){
+  bkg.gh.makeSms(phone_number.value, emitter.value, content.value, function(err, http_status, response){
     loading.style.display = "none";
 
     //bkg.console.log("the response", response)
@@ -32,7 +33,7 @@ function sendSms() {
             else if (value.param === "content")
               text = "Le contenu du message ne doit pas être vide";
             else if (value.param === "emitter")
-              text = "Le label <Emetteur> doit faire une longueur entre 4 et 11 caractères";
+              text = "Le champ <Émetteur> doit avoir une longueur entre 4 et 11 caractères";
             else 
               text = "Une erreur s'est produite";
 
@@ -58,18 +59,21 @@ function sendSms() {
       {
         status_success.style.display = "none";
         phone_number.value = "";
+        emitter.value = "";
         content.value = "";
       }
 
     }, 7500);
   });
+  });
 }
 
 // prefilling the phone_number field
 chrome.tabs.getCurrent(function (tab){
-  var bkg = chrome.extension.getBackgroundPage();
+  chrome.runtime.getBackgroundPage(function(bkg){
   var phone_number = document.getElementById('sms-phone-number');
   if (tab) phone_number.value = tab.url.split("?")[1].split("=")[1];
+  });
 })
 // adding a listener on the Send button 
 document.getElementById('send-sms').addEventListener('click', sendSms);

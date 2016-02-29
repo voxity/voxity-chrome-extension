@@ -331,16 +331,25 @@ var gh = (function() {
                     notify('make.call', {title:'Click-to-call', message:"Appel vers "+exten, context:"Votre téléphone va sonner d\'ici quelques instants."});
                 } else 
                 {
-                    notify('make.call', {title:'Click-to-call', message:'Une erreur est survenue', context:response});
+                    // if the response is a correct formated JSON string
+                    try {
+                        response = JSON.parse(response);
+                    } catch (e) {
+                        response = {error: response};
+                    }
+                    notify('make.call', {title:'Click-to-call', message:'Une erreur est survenue', context:response.error});
                 }
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, callback);
         },
-        makeSms: function (exten, content, done) {
+        makeSms: function (exten, emitter, content, done) {
+            var parameters = {'phone_number': exten, "content":content}
+            if (emitter) parameters.emitter = emitter;
+
             var message = {
                 action: base_url + '/api/v1/sms',
                 method: "POST",
-                parameters: JSON.stringify({'phone_number': exten, "content":content})
+                parameters: JSON.stringify(parameters)
             };
             function callback(err, status, response) {
                 try {
@@ -358,11 +367,13 @@ var gh = (function() {
 })();
 
 // Adding context item
-chrome.runtime.onInstalled.addListener(function() {
+function setUpContextMenu() {
     var contextType = "selection";
     chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
     chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
-});
+}
+chrome.runtime.onInstalled.addListener(setUpContextMenu);
+chrome.runtime.onStartup.addListener(setUpContextMenu);
 chrome.contextMenus.onClicked.addListener(onClickHandler);
 
 function onClickHandler(info, tab) {
@@ -376,7 +387,7 @@ function onClickHandler(info, tab) {
                     type: 'popup',
                     focused: true,
                     width: 335,
-                    height: 400 //350
+                    height: 450 //350
                 });
            }
         }
