@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html ng-app="voxityChromeApp">
+<html lang="fr" ng-app="voxityChromeApp" ng-csp="">
     <head>
         <title>Voxity Chrome extension</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -14,8 +14,8 @@
                 <!-- sidebar -->
                 <div class="col-xs-2 sidebar" ng-controller="activeItemCtrl">
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': activeItem === 'devices'}"><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
-                        <li><a href="#"><i class="fa fa-users"></i></a></li>
+                        <li ng-class="{'active': activeItem === 'devices'}" tooltip-placement="right" uib-tooltip="Téléphones"tooltip-placement="right" uib-tooltip="Téléphones"><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
+                        <li ng-class="{'active': activeItem === 'contacts'}" tooltip-placement="right" uib-tooltip="Contacts"><a href="#/contacts/"><i class="fa fa-users"></i></a></li>
                     </ul>
                 </div>
                 <!-- /sidebar -->
@@ -41,10 +41,15 @@
         
 
     </body>
-    <script src="/index.js"></script>
     <script src="/libs/assets/angular/angular.min.js"></script>
+    <script src="/libs/assets/angular-i18n/fr-fr.js"></script>
+    <script src="/libs/assets/angular-i18n/angular-locale_fr-fr.js"></script>
     <script src="/libs/assets/angular-route/angular-route.min.js"></script>
     <script src="/libs/assets/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/libs/assets/angular-animate/angular-animate.min.js"></script>
+    <script src="/libs/assets/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+
+
     <script src="app.js"></script>
     <script src="services/voxityApi.js"></script>
     <script src="services/devices.js"></script>

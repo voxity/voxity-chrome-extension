@@ -1,6 +1,8 @@
 
 angular.module('voxityChromeApp', [
     'ngRoute',
+    'ui.bootstrap',
+    'ui.bootstrap.tpls',
 ])
 
 
@@ -61,3 +63,7 @@ angular.module('voxityChromeApp').controller('activeItemCtrl', [
 
     }
 ]);
+
+angular.module('voxityChromeApp').config( function ($compileProvider) {
+   $compileProvider.aHrefSanitizationWhitelist (/^\s*(https?|ftp|mailto|file|tel|chrome-extension):/);
+});
