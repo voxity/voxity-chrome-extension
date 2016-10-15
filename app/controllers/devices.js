@@ -1,6 +1,6 @@
 angular.module('voxityChromeApp').controller('devicesListCtrl', [
-    '$scope', 'api', 'apiDevices', 
-    function ($scope, api, apiDevices) {
+    '$scope', 'api', 'apiDevices', 'apiChannels',
+    function ($scope, api, apiDevices, apiChannels) {
         $scope.loading = true;
         $scope.devices = [];
         $scope.errors = {err: false,mess:''};
@@ -9,6 +9,7 @@ angular.module('voxityChromeApp').controller('devicesListCtrl', [
 
         $scope.getClass = apiDevices.getIconClassStatus;
         $scope.getDescription = apiDevices.frDescription;
+        $scope.getName = apiDevices.getName;
 
         $scope.init = function(){
             $scope.errors = {err: false,mess:''};
@@ -27,6 +28,12 @@ angular.module('voxityChromeApp').controller('devicesListCtrl', [
                })
             }
         };$scope.init();
+
+        $scope.call = function(exten){
+            apiChannels.post(exten, function(err, data){
+
+            })
+        }
 
 
         $scope.$on('api:TOKEN_SET', $scope.init);
