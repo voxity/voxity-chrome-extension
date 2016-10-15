@@ -70,7 +70,6 @@ angular.module('voxityChromeApp').service('apiDevices', ['api', function(api){
 
     devices.frDescription = function(desc){
         if(angular.isString(desc)){
-            console.log(devices._DESCRIPTIONS)
             try {return devices._DESCRIPTIONS[desc.toLowerCase()] || 'Inconnue';}
             catch(e){return 'Inconnue'}
         } else {

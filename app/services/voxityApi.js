@@ -40,7 +40,6 @@ angular.module('voxityChromeApp').service('api', [
                     'Authorization': 'Bearer ' + this.token,
                 }
             }
-            console.log(url)
             return $http({
                 'url': url,
                 'method': method.toUpperCase(),
