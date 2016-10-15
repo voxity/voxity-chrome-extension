@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-xs-9 col-xs-offset-3">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="Recherche" ng-model="search.all">
+            <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+    </div>
+</div>
+<br>
+<div class="list-group" ng-if="!loading">
+    <div class="list-group-item" ng-repeat="d in devices | filter:search.all" ng-class="{'disabled': !d.id}">
+        <div class="row">
+            <div class="col-xs-1">
+                <i ng-class="getClass(d.state)"></i>
+            </div>
+            <div class="col-xs-9">
+                {{d.callerid}}
+            </div>
+            <div class="col-xs-1 text-right">
+                <a href="#/devices/{{d.id}}" class="btn btn-link btn-xs" ng-if="d.id"><i class="fa fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>

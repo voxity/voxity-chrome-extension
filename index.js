@@ -26,9 +26,8 @@
  * for the JavaScript code in this page.
  *
  */
-
-// var base_url = 'https://api.voxity.fr'; 
-var base_url = 'http://localhost:3000'; 
+var base_url = 'https://api.voxity.fr'; 
+// var base_url = 'http://localhost:3000'; 
 
 /**
  * Makes an Oauth2 Implicit grant authentication
@@ -80,7 +79,7 @@ var gh = (function() {
     'use strict';
 
     var tokenFetcher = (function() {
-        var clientID = 'ch2NtN3S25ImoYHaSDsr';
+        var clientID = '2kmgWiNQrBKbO6mECklv';
         var redirectUri = chrome.extension.getURL("oauth.html"); //chrome.identity.getRedirectURL();
         var redirectRe = new RegExp(redirectUri + '[#\?](.*)');
         access_token = null;
@@ -362,7 +361,45 @@ var gh = (function() {
                 done(status !== 200, status, response)
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, callback);
-        }
+        },
+        whoami: function(done, force){
+
+            force = force || false;
+            chrome.storage.sync.get('user', function(user) {
+                if (!user || force) {
+                    xhrWithAuth('GET', '/api/v1/users/self', {}, true, function(err,status, user){
+                        try {
+                            // if the response is a correct formated JSON string, not always the case when rate limiter block requests
+                            user = JSON.parse(user);
+                        } catch (e) {
+                            user = null;
+                        }
+                        chrome.storage.sync.set({
+                            user: user
+                        }, function() {
+                            done(null, user);
+                        });
+                    
+                        done(status !== 200, user)
+                    });
+                } else {
+                    done(null, user)
+                }
+            })
+            
+        },
+        request: function(reqParams, done){
+            var method = reqParams.method || 'GET';
+            if (method){ method = method.toUpperCase()};
+            var apiVersionPath = reqParams.apiVersionPath || '/api/v1';
+            var url = apiVersionPath + reqParams.url;
+            var params = reqParams.params || {};
+            if (typeof done !== 'function'){var done = function(){}}
+            var interactive = reqParams.interactive || true
+            xhrWithAuth(method, url, params, interactive, done);
+
+        },
+        baseUrl: base_url
       };
 })();
 
@@ -398,10 +435,10 @@ function onClickHandler(info, tab) {
 };
 
 // Redirection listener
-function browserActionRedirection (tab, code) { //Fired when User Clicks ICON
-    chrome.tabs.update({url: "https://client.voxity.fr"});
-};
-chrome.browserAction.onClicked.addListener(browserActionRedirection);
+// function browserActionRedirection (tab, code) { //Fired when User Clicks ICON
+//     chrome.tabs.update({url: "https://client.voxity.fr"});
+// };
+// chrome.browserAction.onClicked.addListener(browserActionRedirection);
 
 // callto: click listener for sellsy integration
 chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
@@ -410,19 +447,19 @@ chrome.runtime.onMessage.addListener(function(message, sender, sendResponse) {
 })
 
 // Events listener
-var socket_client = new socketClient();
-chrome.storage.sync.get({get_event_option:false}, function(items){
-    if(items.get_event_option){ socket_client.connect(); }
-});
+// var socket_client = new socketClient();
+// chrome.storage.sync.get({get_event_option:false}, function(items){
+//     if(items.get_event_option){ socket_client.connect(); }
+// });
 
-chrome.storage.onChanged.addListener(function(changes, areaName){
-    if(changes.hasOwnProperty('get_event_option') && changes.get_event_option.newValue === false){
-        socket_client.disconnect();
-    }
-    if(changes.hasOwnProperty('get_event_option') && changes.get_event_option.newValue === true){
-        socket_client.connect();
-    }
-})
+// chrome.storage.onChanged.addListener(function(changes, areaName){
+//     if(changes.hasOwnProperty('get_event_option') && changes.get_event_option.newValue === false){
+//         socket_client.disconnect();
+//     }
+//     if(changes.hasOwnProperty('get_event_option') && changes.get_event_option.newValue === true){
+//         socket_client.connect();
+//     }
+// })
 
 /**
  * The data argument should contain takes a title

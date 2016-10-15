@@ -1,0 +1,46 @@
+html {
+  min-height: 400px;
+  width: 500px;
+}
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 1000;
+  display: block;
+  padding: 20px;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  background-color: #fafafa;
+  border-right: 1px solid #eee;
+  display: block;
+}
+
+/* Sidebar navigation */
+.nav-sidebar {
+  margin-right: -21px; /* 20px padding + 1px border */
+  margin-bottom: 20px;
+  margin-left: -20px;
+}
+.nav-sidebar > li > a {
+  padding-right: 20px;
+  padding-left: 20px;
+  text-align: center;
+  color: #FF4400;
+}
+.nav-sidebar > .active > a,
+.nav-sidebar > .active > a:hover,
+.nav-sidebar > .active > a:focus {
+  background-color: #FF4400;
+  color: #fafafa;
+}
+
+
+/*
+ * Main content
+ */
+
+.main-body {
+  padding-top: 20px;
+}
