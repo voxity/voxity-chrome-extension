@@ -2,6 +2,8 @@ html {
   min-height: 400px;
   width: 500px;
 }
+
+.nav, .pagination, .carousel, .panel-title a, .pointer { cursor: pointer; }
 .sidebar {
   position: fixed;
   top: 0;

@@ -9,6 +9,10 @@ angular.module('voxityChromeApp').config(['$routeProvider',
             templateUrl: 'views/devices/list.html',
             controller: 'devicesListCtrl'
         })
+        rp.when('/contacts', {
+            templateUrl: 'views/contacts/list.html',
+            controller: 'contactsCtrl'
+        })
         
         rp.otherwise({templateUrl: 'views/err/404.html'});
     }
