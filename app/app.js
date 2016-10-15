@@ -22,6 +22,9 @@ angular.module('voxityChromeApp').factory('authInterceptorService', ['$q','$root
 angular.module('voxityChromeApp').controller('bannerCallCtrl', ['$scope', 'apiChannels', function ($scope, apiChannels) {
     $scope.call = function(){
         apiChannels.post($scope.phoneNumber, function(err, channel){
+            if(!err){
+                $scope.phoneNumber = undefined;
+            }
             console.log(err,status)
         })
     }
