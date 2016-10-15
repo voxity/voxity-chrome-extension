@@ -16,6 +16,7 @@ html {
   border-right: 1px solid #eee;
   display: block;
   padding-top: 0;
+  padding-bottom: 0;
 }
 
 /* Sidebar navigation */
@@ -23,6 +24,12 @@ html {
   margin-right: -21px; /* 20px padding + 1px border */
   margin-bottom: 20px;
   margin-left: -20px;
+}
+
+.nav-sidebar-bottom{
+  position: absolute;
+  bottom: 0;
+  margin-bottom: 0;
 }
 .nav-sidebar > li > a {
   padding-right: 20px;

@@ -27,6 +27,12 @@
                         <li ng-class="{'active': activeItem === 'devices'}" tooltip-placement="right" uib-tooltip="Téléphones"><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
                         <li ng-class="{'active': activeItem === 'contacts'}" tooltip-placement="right" uib-tooltip="Contacts"><a href="#/contacts/"><i class="fa fa-users"></i></a></li>
                     </ul>
+
+                    <ul class="nav nav-sidebar nav-sidebar-bottom">
+                        <li><a ng-click="open('https://client.voxity.fr/')"><small>client</small></a></li>
+                        <li><a ng-click="open('https://octopus.voxity.fr/')"><small>octopus</small></a></li>
+                        <li ng-class="{'active': activeItem === 'settings'}" tooltip-placement="right" uib-tooltip="Paramètres"><a href="#/settings/"><i class="fa fa-cog"></i></a></li>
+                    </ul>
                 </div>
                 <!-- /sidebar -->
 

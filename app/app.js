@@ -48,6 +48,10 @@ angular.module('voxityChromeApp').controller('activeItemCtrl', [
             }
         }
         $scope.change = function(item){$scope.activeItem = item;}
+        $scope.open = function(link){
+            chrome.tabs.create({url: link});
+            window.close()
+        }
 
         $scope.$on('$locationChangeStart', function(e, next, curent){
             if (next.indexOf('#') > -1) {
