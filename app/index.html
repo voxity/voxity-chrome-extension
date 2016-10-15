@@ -12,9 +12,9 @@
         <div class="container-fluid">
             <div class="row">
                 <!-- sidebar -->
-                <div class="col-xs-2 sidebar">
+                <div class="col-xs-2 sidebar" ng-controller="activeItemCtrl">
                     <ul class="nav nav-sidebar">
-                        <li><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
+                        <li ng-class="{'active': activeItem === 'devices'}"><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
                         <li><a href="#"><i class="fa fa-users"></i></a></li>
                     </ul>
                 </div>
@@ -24,7 +24,7 @@
                 <div class="col-xs-10 col-xs-offset-2 main-body">
                     <form id="bannercall" ng-submit="call()" ng-controller="bannerCallCtrl">
                         <div class="input-group form-group">
-                            <input type="tel" class="form-control" placeholder="Numéro de téléphone" name="phonenumber" autofocus="autofocus" id="phonenumber" ng-model="phoneNumber">
+                            <input type="tel" class="form-control" placeholder="Numéro de téléphone" name="phonenumber" id="phonenumber" ng-model="phoneNumber" autofocus>
                             <span class="input-group-btn">
                                 <button class="btn btn-success" type="submit"><i class="fa fa-volume-control-phone"></i></button>
                             </span>
