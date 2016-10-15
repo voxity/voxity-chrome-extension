@@ -51,7 +51,7 @@ angular.module('voxityChromeApp').controller('activeItemCtrl', [
                 var nextAng = next.split('#')[1].split("/");                
                 var curentAng = curent.split('#')[1].split("/");
                 if (nextAng.length > 2) {
-                    $scope.goBackPage = '#'+curentAng.join('/');
+                    $scope.goBackPage = '#' + curentAng.join('/');
                 } else {
                     $scope.goBackPage = undefined;
                 }
