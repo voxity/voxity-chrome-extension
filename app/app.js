@@ -27,14 +27,6 @@ angular.module('voxityChromeApp').controller('bannerCallCtrl', ['$scope', 'apiCh
     }
 }])
 
-angular.module('voxityChromeApp').controller('bannerCallCtrl', ['$scope', 'apiChannels', function ($scope, apiChannels) {
-    $scope.call = function(){
-        apiChannels.post($scope.phoneNumber, function(err, channel){
-            console.log(err,status)
-        })
-    }
-}])
-
 angular.module('voxityChromeApp').controller('activeItemCtrl', [
     '$scope', '$location',
     function ($scope, $location, djangoAuth) {
@@ -54,8 +46,17 @@ angular.module('voxityChromeApp').controller('activeItemCtrl', [
         }
         $scope.change = function(item){$scope.activeItem = item;}
 
-
         $scope.$on('$locationChangeStart', function(e, next, curent){
+            if (next.indexOf('#') > -1) {
+                var nextAng = next.split('#')[1].split("/");                
+                var curentAng = curent.split('#')[1].split("/");
+                if (nextAng.length > 2) {
+                    $scope.goBackPage = '#'+curentAng.join('/');
+                } else {
+                    $scope.goBackPage = undefined;
+                }
+            } else { $scope.goBackPage = undefined;}
+
             var main = getMainEndpoint(next);
             $scope.change(main);
 

@@ -14,7 +14,9 @@
                 <!-- sidebar -->
                 <div class="col-xs-2 sidebar" ng-controller="activeItemCtrl">
                     <ul class="nav nav-sidebar">
-                        <li ng-class="{'active': activeItem === 'devices'}" tooltip-placement="right" uib-tooltip="Téléphones"tooltip-placement="right" uib-tooltip="Téléphones"><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
+                        <li class="go-back"><a ng-if="goBackPage" href="{{goBackPage}}"><i class="fa fa-angle-left"></i></a></li>
+
+                        <li ng-class="{'active': activeItem === 'devices'}" tooltip-placement="right" uib-tooltip="Téléphones"><a href="#/devices/"><i class="fa fa-phone"></i></a></li>
                         <li ng-class="{'active': activeItem === 'contacts'}" tooltip-placement="right" uib-tooltip="Contacts"><a href="#/contacts/"><i class="fa fa-users"></i></a></li>
                     </ul>
                 </div>

@@ -29,6 +29,10 @@ html {
   text-align: center;
   color: #fd7341;
 }
+
+.nav-sidebar > li.go-back {
+  height: 40px;
+}
 .nav-sidebar > .active > a,
 .nav-sidebar > .active > a:hover,
 .nav-sidebar > .active > a:focus {
