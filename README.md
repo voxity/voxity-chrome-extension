@@ -1,6 +1,6 @@
-# Plugin Chrome Voxity <small>click2call</small>
+# Plugin Chrome Voxity click2call
 
-# install small(Utilisateur)
+# install <small>(Utilisateur)</small>
 Version non disponible
 <!-- 1. Aller dans le [Chrome Web Store](https://chrome.google.com/webstore/detail/voxity-click-to-call/dclmglagehopkegbnobbpkdcbdoiijcg)
 2. *(si le plugin ne s'affiche pas)* rechercher **Voxity Click-to-call**
