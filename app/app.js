@@ -9,7 +9,8 @@ angular.module('voxityChromeApp', [
 angular.module('voxityChromeApp').factory('authInterceptorService', ['$q','$rootScope', function ($q, $rootScope){
     var responseError = function (rejection) {
         if (rejection.status === 401) {
-            $rootScope.$broadcast("APP.auth.401");
+            console.log("err 401 emited")
+            $rootScope.$broadcast("API:err.401");
         }
         return $q.reject(rejection);
     };

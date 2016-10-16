@@ -85,7 +85,7 @@ var gh = (function() {
         access_token = null;
 
         return {
-            getToken: function(interactive, callback) {
+            getToken: function(interactive, callback, force) {
                 // In case we already have an access_token cached, simply return it.
                 var options;
 
@@ -93,7 +93,7 @@ var gh = (function() {
                   access_token: null,
                 }, function(items) {
                     access_token = items.access_token;
-                    if(access_token) return callback(null, access_token);
+                    if(access_token && !force) return callback(null, access_token);
                     
                     options = {
                         'interactive': interactive,

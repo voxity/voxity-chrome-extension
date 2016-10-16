@@ -7,9 +7,11 @@ angular.module('voxityChromeApp').service('api', [
         api.user = null;
         api.baseUrl = null;
         api.versionPath = '/api/v1';
+        api.refreshProcess = 0
 
-        api.init = function(){
+        api.init = function(force){
             chrome.runtime.getBackgroundPage(function(bkg){
+                api.signIn = bkg.gh.signIn
                 api.baseUrl = bkg.gh.baseUrl;
                 bkg.gh.tokenFetcher.getToken(true, function(err, token){
                     if (token){
@@ -18,13 +20,22 @@ angular.module('voxityChromeApp').service('api', [
                         $rootScope.$broadcast('api:TOKEN_SET', token)
                     }
                     api.isInit += 1;
-                });
+                }, force);
                 bkg.gh.whoami(function(err, user){
                     api.user = user
                     api.isInit += 1;
                 })
 
             })
+        }
+
+        api.refresh = function(){
+            api.refreshProcess += 1
+            api.isInit -= 1;
+            api.token = null;
+            if (api.refreshProcess < 2) {
+                api.init(true);
+            }
         }
 
         api.request = function(args, done){
@@ -48,6 +59,8 @@ angular.module('voxityChromeApp').service('api', [
                 'headers':headers
             })
         }
+
+        $rootScope.$on('API:err.401', api.refresh)
 
         // -----
         return api;
