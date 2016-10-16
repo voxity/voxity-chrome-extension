@@ -1,0 +1,60 @@
+<form  ng-submit="create()" class="row">
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label class="control-label" for="name">Nom</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="text" class="form-control" id="name" ng-model="contact.cn">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-8">
+        <div class="form-group">
+            <label class="control-label" for="phone">Téléphone</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                <input type="tel" class="form-control" id="phone" ng-model="contact.telephoneNumber">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+            <label class="control-label" for="phone-shortcut">Raccourci</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th"></i></span>
+                <input type="tel" class="form-control" id="phone-shortcut" ng-model="contact.phoneNumberRaccourci" ng-change="contact.phoneNumberRaccourci = checkSortCut(contact.phoneNumberRaccourci)">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="form-group">
+            <label class="control-label" for="mobile">Mobile</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-mobile"></i></span>
+                <input type="tel" class="form-control" id="mobile" ng-model="contact.mobile">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+            <label class="control-label" for="mobile-shortcut">Raccourci</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th"></i></span>
+                <input type="tel" class="form-control" id="mobile-shortcut" ng-model="contact.employeeNumber" ng-change="contact.employeeNumber = checkSortCut(contact.employeeNumber)">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label class="control-label" for="mail">Mail</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                <input type="mail" class="form-control" id="mail" ng-model="contact.mail">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4 col-xs-offset-4">
+        <button class="btn btn-success btn-block"><i class="fa fa-plus"></i></button>
+    </div>
+</form>

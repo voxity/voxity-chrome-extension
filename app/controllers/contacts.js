@@ -24,6 +24,19 @@ angular.module('voxityChromeApp').controller('contactsCtrl', [
             }
         };$scope.init();
 
+        $scope.checkSortCut = function(shortcut){
+            if(angular.isString(shortcut) && shortcut.trim().length > 0){
+                shortcut = shortcut.trim();
+                if(shortcut[0] !== '*') {
+                    return '*' + shortcut;
+                } else {
+                    return shortcut
+                }
+            } else {
+                return undefined;
+            }
+        }
+
         $scope.call = function(phoneNumber){
             apiChannels.post(phoneNumber, function(err, data){
 

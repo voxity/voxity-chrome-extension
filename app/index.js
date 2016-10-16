@@ -13,6 +13,19 @@ angular.module('voxityChromeApp').config(['$routeProvider',
             templateUrl: 'views/contacts/list.html',
             controller: 'contactsCtrl'
         })
+        rp.when('/contacts/add', {
+            templateUrl: 'views/contacts/form.html',
+            controller: 'contactsCtrl'
+        })
+        rp.when('/contact/:contactId/edit', {
+            templateUrl: 'views/contacts/form.html',
+            controller: 'contactsCtrl'
+        })
+        rp.when('/contact/:contactId', {
+            templateUrl: 'views/contacts/detail.html',
+            controller: 'contactsCtrl'
+        })
+        
         
         rp.otherwise({templateUrl: 'views/err/404.html'});
     }
