@@ -28,7 +28,6 @@ angular.module('voxityChromeApp').controller('devicesListCtrl', [
                 })
                 apiUsers.getUser(function(err, usr){
                     $scope.user = usr;
-                    console.log(usr)
                 })
             }
         };$scope.init();
