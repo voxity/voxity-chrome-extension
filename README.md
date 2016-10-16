@@ -21,3 +21,8 @@ Version non disponible
 6. cliquer sur *Charger l'extension non empaquetée...*
 7. Ajouter le dossier du projet
 8. modifier le fichier ``index.js``:83, la variable ```clientID```
+
+# Todo
+[ ] Cache 
+[ ] Configuration des services via des provider
+[ ] Gestion des droits admin
