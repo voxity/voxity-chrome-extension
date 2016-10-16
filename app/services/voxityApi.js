@@ -4,28 +4,21 @@ angular.module('voxityChromeApp').service('api', [
         var api = {};
         api.token = null;
         api.isInit = -1;
-        api.user = null;
         api.baseUrl = null;
         api.versionPath = '/api/v1';
         api.refreshProcess = 0
 
         api.init = function(force){
             chrome.runtime.getBackgroundPage(function(bkg){
-                api.signIn = bkg.gh.signIn
                 api.baseUrl = bkg.gh.baseUrl;
                 bkg.gh.tokenFetcher.getToken(true, function(err, token){
                     if (token){
                         api.token = token;
                         $http.defaults.headers.common.Authorization = 'Bearer ' + api.token;
-                        $rootScope.$broadcast('api:TOKEN_SET', token)
+                        $rootScope.$broadcast('api:TOKEN_SET', token);
                     }
                     api.isInit += 1;
                 }, force);
-                bkg.gh.whoami(function(err, user){
-                    api.user = user
-                    api.isInit += 1;
-                })
-
             })
         }
 

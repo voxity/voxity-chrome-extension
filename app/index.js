@@ -25,6 +25,10 @@ angular.module('voxityChromeApp').config(['$routeProvider',
             templateUrl: 'views/contacts/detail.html',
             controller: 'contactCtrl'
         })
+        rp.when('/settings/',{
+            templateUrl: 'views/settings/index.html',
+            controller: 'settingsCtrl'
+        })
         
         
         rp.otherwise({templateUrl: 'views/err/404.html'});
