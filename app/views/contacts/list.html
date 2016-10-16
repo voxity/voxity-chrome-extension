@@ -24,11 +24,11 @@
     </h5>
     <div class="list-group-item-text row">
         <div class="col-xs-6 text-info pointer" ng-if="c.telephoneNumber" ng-click="call(c.telephoneNumber)">
-            <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{c.telephoneNumber}}
+            <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{c.telephoneNumber | phoneNumber}}
         </div>
         <div class="col-xs-6 text-info pointer" ng-if="c.mobile" ng-click="call(c.mobile)">
-            <i class="fa fa-mobile text-muted" style="margin-right:10px;"></i> 
-            {{c.mobile}}
+            <i class="glyphicon glyphicon-phone text-muted" style="margin-right:10px;"></i> 
+            {{c.mobile | phoneNumber}}
         </div>
         <div class="col-xs-12 text-center small text-muted">
             {{c.mail}}

@@ -4,17 +4,18 @@
 </h4>
 <hr>
 <div class="row">
-    <div class="col-xs-8 text-info pointer" ng-if="contact.telephoneNumber" ng-click="call(contact.telephoneNumber)">
-        <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{contact.telephoneNumber}}
+    <div class="col-xs-8 pointer" ng-click="call(contact.telephoneNumber)" ng-class="contact.telephoneNumber ? 'text-info':'text-muted'">
+        <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{(contact.telephoneNumber | phoneNumber) || "N/A"}}
     </div>
     <div class="col-xs-4 text-right">{{contact.phoneNumberRaccourci}}</div>
-    <div class="col-xs-8 text-info pointer" ng-if="contact.mobile" ng-click="call(contact.mobile)">
+    <div class="col-xs-8" ng-click="call(contact.mobile)" ng-class="contact.mobile ? 'text-info pointer':'text-muted'">
         <i class="glyphicon glyphicon-phone text-muted" style="margin-right:10px;"></i> 
-        {{contact.mobile}}
+        {{(contact.mobile | phoneNumber) || "N/A"}}
     </div>
     <div class="col-xs-4 text-right">{{contact.employeeNumber}}</div>
 
-    <div class="col-xs-12 text-center text-muted">
+    <div class="col-xs-12 text-muted">
+        <i class="fa fa-envelope" style="margin-right:10px;"></i>
         {{contact.mail}}
     </div>
 </div>
