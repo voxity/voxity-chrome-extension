@@ -9,7 +9,6 @@ angular.module('voxityChromeApp', [
 angular.module('voxityChromeApp').factory('authInterceptorService', ['$q','$rootScope', function ($q, $rootScope){
     var responseError = function (rejection) {
         if (rejection.status === 401) {
-            console.log("err 401 emited")
             $rootScope.$broadcast("API:err.401");
         }
         return $q.reject(rejection);
@@ -21,13 +20,18 @@ angular.module('voxityChromeApp').factory('authInterceptorService', ['$q','$root
 }]);
 
 angular.module('voxityChromeApp').controller('bannerCallCtrl', ['$scope', 'apiChannels', function ($scope, apiChannels) {
+    $scope.callProcessing = false
     $scope.call = function(){
+        $scope.callProcessing = true;
         apiChannels.post($scope.phoneNumber, function(err, channel){
             if(!err){
                 $scope.phoneNumber = undefined;
-            }
-            console.log(err,status)
+            }else {console.log(err,status)}
+            $scope.callProcessing = false;
         })
+    }
+    $scope.checkNumber = function(){
+        $scope.phoneNumber = $scope.phoneNumber.replace(/[^\+\d\(\)]/g,'');
     }
 }])
 
