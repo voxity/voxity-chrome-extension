@@ -47,3 +47,45 @@ angular.module('voxityChromeApp').controller('contactsCtrl', [
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
 ])
+
+angular.module('voxityChromeApp').controller('contactCtrl', [
+    '$scope', 'api', 'apiContacts', 'apiChannels', '$routeParams',
+    function ($scope, api, apiContacts, apiChannels, $routeParams) {
+        $scope.loading = true;
+        $scope.contact = null;
+        $scope.errors = {err: false,mess:''};
+        $scope.search = {};
+
+        $scope.init = function(){
+            $scope.errors = {err: false,mess:''};
+            $scope.loading = true;
+            if (!api.token){
+                return null;
+            } else {
+                apiContacts.getId($routeParams.contactId, function(err, contact){
+                    if(err){
+                        if (err.status === 404) {
+                            $scope.errors.err = true;
+                            $scope.errors.notFound = true;
+                        } else {
+                            $scope.errors.err = true;
+                            $scope.errors.mess = 'Une erreur est survenu lors du chargement du contact. err' + err.status;
+                        }
+                    } else {
+                        $scope.contact = contact;
+                    }
+                    $scope.loading = false;
+               })
+            }
+        };$scope.init();
+
+        $scope.call = function(phoneNumber){
+            apiChannels.post(phoneNumber, function(err, data){
+
+            })
+        }
+
+
+        $scope.$on('api:TOKEN_SET', $scope.init);
+    }
+])

@@ -20,7 +20,7 @@
   <div class="list-group-item" ng-repeat="c in contacts | filter:search.all">
     <h5 class="list-group-item-heading">
         {{c.cn}}
-        <a href="#/contact/{{c.id}}/edit" class="btn-link pull-right disabled" disabled><i class="fa fa-edit"></i></a>
+        <a href="#/contact/{{c.uid}}/edit" class="btn-link pull-right disabled" disabled><i class="fa fa-edit"></i></a>
     </h5>
     <div class="list-group-item-text row">
         <div class="col-xs-6 text-info pointer" ng-if="c.telephoneNumber" ng-click="call(c.telephoneNumber)">
@@ -32,7 +32,7 @@
         </div>
         <div class="col-xs-12 text-center small text-muted">
             {{c.mail}}
-            <a href="#/contact/{{c.id}}" class="btn btn-link btn-xs pull-right"><i class="fa fa-chevron-right"></i></a>
+            <a href="#/contact/{{c.uid}}" class="btn btn-link btn-xs pull-right"><i class="fa fa-chevron-right"></i></a>
         </div>
     </div>
   </div>

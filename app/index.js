@@ -15,15 +15,15 @@ angular.module('voxityChromeApp').config(['$routeProvider',
         })
         rp.when('/contacts/add', {
             templateUrl: 'views/contacts/form.html',
-            controller: 'contactsCtrl'
+            controller: 'contactFormCtrl'
         })
         rp.when('/contact/:contactId/edit', {
             templateUrl: 'views/contacts/form.html',
-            controller: 'contactsCtrl'
+            controller: 'contactFormCtrl'
         })
         rp.when('/contact/:contactId', {
             templateUrl: 'views/contacts/detail.html',
-            controller: 'contactsCtrl'
+            controller: 'contactCtrl'
         })
         
         
