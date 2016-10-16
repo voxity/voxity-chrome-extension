@@ -85,3 +85,6 @@ html {
   padding-left: 0;
   padding-right: 0;
 }
+
+a,.btn-link,.text-info{color: #fd7341}
+.btn-link:hover{color: #ca400e}
