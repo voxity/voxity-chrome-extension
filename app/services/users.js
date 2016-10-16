@@ -54,6 +54,12 @@ angular.module('voxityChromeApp').service('apiUsers', [
                 })
             })
         }
+
+        users.logout = function(done){
+            chrome.runtime.getBackgroundPage(function(bkg){
+                bkg.gh.signOut(done);
+            })
+        }
         
         $rootScope.$on('api:TOKEN_SET', function(){users.getUser();});
 

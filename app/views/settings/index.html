@@ -1,2 +1,5 @@
-<h4><i class="fa fa-user fa-fw"></i> {{user.name}}</h4>
+<h4>
+    <i class="fa fa-user fa-fw"></i> {{getUser().name}}
+    <button class="btn-link pull-right" ng-click="logout()" ng-disabled="logOutProcess"><i class="fa fa-power-off text-danger"></i></button>
+</h4>
 <hr>

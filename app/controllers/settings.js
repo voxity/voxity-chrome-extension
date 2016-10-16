@@ -3,11 +3,22 @@ angular.module('voxityChromeApp').controller('settingsCtrl', [
     function ($scope, api, apiUsers) {
         $scope.user = {};
 
+        $scope.getUser = function(){
+            return this.user;
+        }
+
+        $scope.logout = function(){
+            this.logOutProcess = true
+            apiUsers.logout(function(err){
+                if(!err) {
+                    window.close();
+                } else {this.logOutProcess = false;}
+            })
+        }
 
         $scope.init = function(){
             if(api.token){
                 apiUsers.getUser(function(err, usr){
-                    console.log(usr);
                     $scope.user = usr;
                 })
             }
