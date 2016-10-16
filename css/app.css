@@ -84,6 +84,7 @@ html {
   padding-top: 10px;
   padding-left: 0;
   padding-right: 0;
+  padding-bottom: 10px;
 }
 
 a,.btn-link,.text-info{color: #fd7341}

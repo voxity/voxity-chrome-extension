@@ -1,4 +1,6 @@
-<form  ng-submit="create()" class="row">
+<small class="text-muted small" ng-if="id"><span ng-if="!loading">Édition de </span> {{name || 'Chargement en cours'}}</small>
+<div class="alert alert-success small" ng-if="changeSave"><small>Contact mis à jour</small></div>
+<form  ng-submit="save()" class="row">
     <div class="col-xs-12">
         <div class="form-group">
             <label class="control-label" for="name">Nom</label>
@@ -54,7 +56,10 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-4 col-xs-offset-4">
-        <button class="btn btn-success btn-block"><i class="fa fa-plus"></i></button>
+    <div class="col-xs-4" ng-class="id ? '' : 'col-xs-offset-4'">
+        <button class="btn btn-success btn-block" ng-disabled="processing" type="submit"><i ng-class="getSubmitClass()"></i></button>
+    </div>
+    <div class="col-xs-4 col-xs-offset-4" ng-if="id">
+        <button class="btn btn-danger btn-block" ng-disabled="processing" type="button" ng-click="delete()"><i class="fa fa-trash-o"></i></button>
     </div>
 </form>

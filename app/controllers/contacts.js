@@ -15,13 +15,7 @@ angular.module('voxityChromeApp').filter('phoneNumber',function(){
         return cleanPhone;
     }
 });
-/*
 
-cleanPhone = '+33(0)481680110'
-cleanPhone.match(/^\+\d{2}\(\d\)\d{8}$/)
-cleanPhone.substring(0,3) + cleanPhone.substring(6, 7) + ' ' + cleanPhone.substring(7).replace(/(.{2})/g,"$1 ")
-
- */
 angular.module('voxityChromeApp').controller('contactsCtrl', [
     '$scope', 'api', 'apiContacts', 'apiChannels',
     function ($scope, api, apiContacts, apiChannels) {
@@ -47,19 +41,6 @@ angular.module('voxityChromeApp').controller('contactsCtrl', [
                })
             }
         };$scope.init();
-
-        $scope.checkSortCut = function(shortcut){
-            if(angular.isString(shortcut) && shortcut.trim().length > 0){
-                shortcut = shortcut.trim();
-                if(shortcut[0] !== '*') {
-                    return '*' + shortcut;
-                } else {
-                    return shortcut
-                }
-            } else {
-                return undefined;
-            }
-        }
 
         $scope.call = function(phoneNumber){
             apiChannels.post(phoneNumber, function(err, data){
@@ -108,6 +89,125 @@ angular.module('voxityChromeApp').controller('contactCtrl', [
                 apiChannels.post(phoneNumber, function(err, data){
 
                 })
+            }
+        }
+
+
+        $scope.$on('api:TOKEN_SET', $scope.init);
+    }
+])
+
+angular.module('voxityChromeApp').controller('contactFormCtrl', [
+    '$scope', 'api', 'apiContacts', '$routeParams', '$location', '$interval',
+    function ($scope, api, apiContacts, $routeParams, $location, $interval) {
+        $scope.loading = true;
+        $scope.contact = null;
+        $scope.errors = {err: false,mess:''};
+
+        $scope.checkSortCut = function(shortcut){
+            if(angular.isString(shortcut) && shortcut.trim().length > 0){
+                shortcut = shortcut.trim();
+                if(shortcut[0] !== '*') {
+                    return '*' + shortcut;
+                } else {
+                    return shortcut
+                }
+            } else {
+                return undefined;
+            }
+        }
+
+        $scope.save = function(){
+            this.processing = true;
+            this.id ? this.update() : this.create();
+        }
+
+        $scope.update = function(){
+            this.processing = true;
+            apiContacts.update(this.contact, function(err, result){
+                if (!err) {
+                    $scope.changeSave = true;
+                    $interval(function(){$scope.changeSave = false}, 5000, 1)
+                } else {
+                    $scope.errors.err = true;
+                    $scope.errors.mess = 'Une erreur est survenue lors de la mise à jour du contact. err' + err.status;
+                }
+                $scope.processing = false;
+            })
+        }
+
+        $scope.create = function(){
+            this.processing = true;
+            apiContacts.create(this.contact, function(err, uid){
+                if(!err){
+                    $location.path('/contact/'+uid)
+                } else {
+                    $scope.errors.err = true;
+                    $scope.errors.mess = 'Une erreur est survenue lors de la création du contact. err' + err.status;
+                }
+                $scope.processing = false;
+            })
+        }
+
+        $scope.delete = function(){
+            if(this.id){
+                this.processing = true;
+                apiContacts.delete(this.id, function(err, uid){
+                    if(!err){
+                        $location.path('/contacts/')
+                    } else {
+                        $scope.errors.err = true;
+                        $scope.errors.mess = 'Une erreur est survenue lors de ma suppresion du contact. err' + err.status;
+                    }
+                    this.processing = false;
+                })
+            }
+
+        }
+
+        $scope.init = function(){
+            $scope.errors = {err: false,mess:''};
+            $scope.loading = true;
+            if (!api.token){
+                return null;
+            } else {
+                if($routeParams.contactId){
+                    $scope.id = $routeParams.contactId;
+                    $scope.name = null;
+                    apiContacts.getId($routeParams.contactId, function(err, contact){
+                        if(err){
+                            if (err.status === 404) {
+                                $scope.errors.err = true;
+                                $scope.errors.notFound = true;
+                            } else {
+                                $scope.errors.err = true;
+                                $scope.errors.mess = 'Une erreur est survenue lors du chargement du contact. err' + err.status;
+                            }
+                        } else {
+                            $scope.name = contact.cn;
+                            $scope.contact = contact;
+                        }
+                        $scope.loading = false;
+                   })
+                } else {$scope.id = null;}
+            }
+        };$scope.init();
+
+        $scope.call = function(phoneNumber){
+            if(phoneNumber){
+                apiChannels.post(phoneNumber, function(err, data){
+
+                })
+            }
+        }
+
+        $scope.getSubmitClass = function(){
+            if(this.processing){
+                return 'fa fa-spin fa-circle-o-notch';
+            } else if(this.id){
+                return 'fa fa-check';
+            } else {
+                return 'fa fa-plus';
             }
         }
 

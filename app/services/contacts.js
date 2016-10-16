@@ -25,6 +25,17 @@
         return contactObj
     }
 
+    function preSave(contactObj){
+        if(angular.isObject(contactObj)){
+            contactObj.telephoneNumber = contactObj.telephoneNumber ||''
+            contactObj.phoneNumberRaccourci = contactObj.phoneNumberRaccourci || ''
+            contactObj.employeeNumber = contactObj.employeeNumber || ''
+            contactObj.mobile = contactObj.mobile || ''
+            contactObj.mail = contactObj.mail || ''
+        }
+        return contactObj
+    }
+
     contacts.get = function(done){
         api.request({
             url: contacts.base_uri,
@@ -59,6 +70,83 @@
                 'statusText': statusText
             })
         })
+    }
+
+
+    contacts.create = function(contactObj, done){
+
+        if(!angular.isObject(contactObj)){
+            return done({'data': {'errors': {'g': 'Aucun contact à mettre à jours'}}})
+        } 
+        if (contactObj.uid) {
+            return done({'data': {'errors': {'g': 'Le contact possède un identifiant, il faut le mettr à jour'}}})
+        }
+        api.request({
+            method: 'POST',
+            url: contacts.base_uri,
+            data: contactObj
+        }).success(function(d){
+            //return uid
+            done(!d.result.uid, d.result.uid)
+        }).error(function(d, status, head, config, statusText){
+            done({
+                'data': d,
+                'status': status,
+                'head': head,
+                'config': config,
+                'statusText': statusText
+            })
+        })
+
+    }
+
+    contacts.update = function(contactObj, done){
+        contactObj = angular.extend({}, contactObj);
+
+        if(!angular.isObject(contactObj)){
+            return done({'data': {'errors': {'g': 'Aucun contact à mettre à jours'}}});
+        } 
+        if (!contactObj.uid) {
+            return done({'data': {'errors': {'g': 'Aucun identifiant pour le contact, il faut le creer'}}});
+        }
+        uid = contactObj.uid;
+        delete contactObj.uid;
+        api.request({
+            method: 'PUT',
+            url: contacts.base_uri + '/' + uid,
+            data: preSave(contactObj)
+        }).success(function(d){
+            // return {uid:'', change: []}
+            done(!d.result.uid, d.result)
+        }).error(function(d, status, head, config, statusText){
+            done({
+                'data': d,
+                'status': status,
+                'head': head,
+                'config': config,
+                'statusText': statusText
+            })
+        })
+
+    }
+
+    contacts.delete = function(uid, done){
+        api.request({
+            method: 'DELETE',
+            url: contacts.base_uri + '/' + uid,
+        }).success(function(d){
+            // return {uid:'', change: []}
+            done(!d.result.uid, d.result.uid)
+        }).error(function(d, status, head, config, statusText){
+            done({
+                'data': d,
+                'status': status,
+                'head': head,
+                'config': config,
+                'statusText': statusText
+            })
+        })
+
     }
 
     return contacts;
