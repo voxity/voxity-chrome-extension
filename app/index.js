@@ -9,22 +9,6 @@ angular.module('voxityChromeApp').config(['$routeProvider',
             templateUrl: 'views/devices/list.html',
             controller: 'devicesListCtrl'
         })
-        rp.when('/contacts', {
-            templateUrl: 'views/contacts/list.html',
-            controller: 'contactsCtrl'
-        })
-        rp.when('/contacts/add', {
-            templateUrl: 'views/contacts/form.html',
-            controller: 'contactFormCtrl'
-        })
-        rp.when('/contact/:contactId/edit', {
-            templateUrl: 'views/contacts/form.html',
-            controller: 'contactFormCtrl'
-        })
-        rp.when('/contact/:contactId', {
-            templateUrl: 'views/contacts/detail.html',
-            controller: 'contactCtrl'
-        })
         rp.when('/settings/',{
             templateUrl: 'views/settings/index.html',
             controller: 'settingsCtrl'
