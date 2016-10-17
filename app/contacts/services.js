@@ -1,11 +1,11 @@
  angular.module('voxity.contacts').service('vxtApiContacts', [
     '$filter', 'vxtContactsConf', 'vxtCoreApi', 
-    function($filter, vxtContactsConf, api){
+    function($filter, contactsConf, api){
         var contacts = {};
         var lastUpdateData = null;
         contacts.data = [];
 
-        contacts.base_uri = '/contacts';
+        contacts.base_uri = contactsConf.startPath;
 
         /**
          * Check if contacts.data is expired
@@ -14,7 +14,7 @@
         function experedData(){
             if (!lastUpdateData){return true;}
             var now = new Date();
-            return (now - lastUpdateData ) > vxtContactsConf.storedDataTime * 60000;
+            return (now - lastUpdateData ) > contactsConf.storedDataTime * 60000;
         }
 
         /**
