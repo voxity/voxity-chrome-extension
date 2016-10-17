@@ -1,5 +1,5 @@
-angular.module('voxityChromeApp').service('apiUsers', [
-    'api', '$rootScope', 
+angular.module('voxity.users').service('vxtApiUsers', [
+    'vxtCoreApi', '$rootScope', 
     function(api, $rootScope){
         var EXPIRED_USER_TIME = 2 * 60 * 60 * 1000 
         var users = {};

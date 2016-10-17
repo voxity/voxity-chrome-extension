@@ -1,39 +1,22 @@
-
 angular.module('voxityChromeApp', [
     'ngRoute',
     'ui.bootstrap',
     'ui.bootstrap.tpls',
+    'voxity.core',
+    'voxity.users',
+    'voxity.channels',
+    'voxity.devices',
+    'voxity.contacts',
 ])
 
-
 angular.module('voxityChromeApp').factory('authInterceptorService', ['$q','$rootScope', function ($q, $rootScope){
-    var responseError = function (rejection) {
-        if (rejection.status === 401) {
-            $rootScope.$broadcast("API:err.401");
-        }
-        return $q.reject(rejection);
-    };
-
     return {
-        responseError: responseError
+        responseError: function (rejection) {
+            if (rejection.status === 401) {$rootScope.$broadcast("API:err.401");}
+            return $q.reject(rejection);
+        }
     };
 }]);
-
-angular.module('voxityChromeApp').controller('bannerCallCtrl', ['$scope', 'apiChannels', function ($scope, apiChannels) {
-    $scope.callProcessing = false
-    $scope.call = function(){
-        $scope.callProcessing = true;
-        apiChannels.post($scope.phoneNumber, function(err, channel){
-            if(!err){
-                $scope.phoneNumber = undefined;
-            }else {console.log(err,status)}
-            $scope.callProcessing = false;
-        })
-    }
-    $scope.checkNumber = function(){
-        $scope.phoneNumber = $scope.phoneNumber.replace(/[^\+\d\(\)]/g,'');
-    }
-}])
 
 angular.module('voxityChromeApp').controller('activeItemCtrl', [
     '$scope', '$location',
@@ -45,17 +28,19 @@ angular.module('voxityChromeApp').controller('activeItemCtrl', [
             if (hashTab.length == 2) {
                 var main = hashTab[1];
                 if (main[0] === '/'){
-                    main = main.substring(1)
+                    main = main.substring(1);
                 }
-                return main.split('/')[0]
+                return main.split('/')[0];
             } else {
-                return null
+                return null;
             }
         }
+
         $scope.change = function(item){$scope.activeItem = item;}
+
         $scope.open = function(link){
             chrome.tabs.create({url: link});
-            window.close()
+            window.close();
         }
 
         $scope.$on('$locationChangeStart', function(e, next, curent){

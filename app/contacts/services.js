@@ -1,5 +1,5 @@
  angular.module('voxity.contacts').service('vxtApiContacts', [
-    'vxtContactsConf', 'coreApi', 
+    'vxtContactsConf', 'vxtCoreApi', 
     function(vxtContactsConf, api){
         var contacts = {};
         contacts.base_uri = '/contacts';

@@ -1,5 +1,5 @@
-angular.module('voxityChromeApp').controller('settingsCtrl', [
-    '$scope', 'api', 'apiUsers',
+angular.module('voxity.core').controller('coreSettingsCtrl', [
+    '$scope', 'vxtCoreApi', 'vxtApiUsers',
     function ($scope, api, apiUsers) {
         $scope.user = {};
 

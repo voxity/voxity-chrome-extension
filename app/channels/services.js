@@ -1,5 +1,6 @@
-angular.module('voxityChromeApp').service('apiChannels', ['api', function(api){
+angular.module('voxity.channels').service('vxtApiChannels', ['vxtCoreApi', function(api){
     var channels = {};
+
     channels.baseUri = '/channels';
 
     channels.get = function(exten, done){

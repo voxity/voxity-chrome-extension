@@ -1,5 +1,5 @@
-angular.module('voxityChromeApp').controller('devicesListCtrl', [
-    '$scope', 'api', 'apiDevices', 'apiChannels', 'apiUsers',
+angular.module('voxity.devices').controller('devicesCtrl', [
+    '$scope', 'vxtCoreApi', 'vxtApiDevices', 'vxtApiChannels', 'vxtApiUsers',
     function ($scope, api, apiDevices, apiChannels, apiUsers) {
         $scope.loading = true;
         $scope.devices = [];
@@ -43,9 +43,9 @@ angular.module('voxityChromeApp').controller('devicesListCtrl', [
 ])
 
 
-angular.module('voxityChromeApp').controller('deviceCtrl', [
-    '$scope', 'api', 'apiDevices', '$routeParams',
-    function ($scope, api, apiDevices, $routeParams) {
+angular.module('voxity.devices').controller('deviceCtrl', [
+    '$scope', '$routeParams', 'vxtCoreApi', 'vxtApiDevices',
+    function ($scope, $routeParams, api, apiDevices) {
         $scope.loading = true;
         $scope.device = null;
         $scope.errors = {err: false,mess:''};

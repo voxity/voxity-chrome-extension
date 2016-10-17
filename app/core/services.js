@@ -1,4 +1,4 @@
-angular.module('voxityChromeApp').service('api', [
+angular.module('voxity.core').service('vxtCoreApi', [
     '$http', '$rootScope',
     function($http, $rootScope) {
         var api = {};

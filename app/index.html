@@ -10,7 +10,7 @@
     </head>
     <body>
         <div class="container">
-            <form id="bannercall" ng-submit="call()" ng-controller="bannerCallCtrl">
+            <form id="bannercall" ng-submit="call()" ng-controller="makeCallCtrl">
                 <div class="input-group form-group">
                     <input type="tel" class="form-control" placeholder="Numéro de téléphone" id="phonenumber" ng-model="phoneNumber" autofocus ng-disabled="callProcessing" ng-change="checkNumber()">
                     <span class="input-group-btn">
@@ -57,24 +57,33 @@
     <script src="/libs/assets/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
 
 
-    <script src="app.js"></script>
-
-    <script src="services/voxityApi.js"></script>
-    <script src="services/devices.js"></script>
-    <script src="services/channels.js"></script>
-    <script src="services/users.js"></script>
-    <script src="controllers/dashboard.js"></script>
-    <script src="controllers/devices.js"></script>
-    <script src="controllers/settings.js"></script>
     <!-- Core -->
     <script src="core/core.js"></script>
+    <script src="./core/services.js"></script>
     <script src="core/filters.js"></script>
+    <script src="./core/controllers.js"></script>
 
+    <!-- channels -->
+    <script src="./channels/channels.js"></script>
+    <script src="./channels/services.js"></script>
+    <script src="./channels/controllers.js"></script>
+
+    <!-- devices -->
+    <script src="./devices/devices.js"></script>
+    <script src="./devices/services.js"></script>
+    <script src="./devices/controllers.js"></script>
+
+
+    <!-- users -->
+    <script src="./users/users.js"></script>
+    <script src="./users/services.js"></script>
+    
     <!-- contacts -->
     <script src="contacts/contacts.js"></script>
     <script src="contacts/services.js"></script>
     <script src="contacts/controllers.js"></script>
 
+    <script src="app.js"></script>
     <script src="index.js"></script>
 
 </html>

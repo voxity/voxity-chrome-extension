@@ -1,4 +1,4 @@
-angular.module('voxityChromeApp').service('apiDevices', ['api', function(api){
+angular.module('voxity.devices').service('vxtApiDevices', ['vxtCoreApi', function(api){
     var devices = {};
     devices.base_uri = '/devices';
     devices._DESCRIPTIONS = {

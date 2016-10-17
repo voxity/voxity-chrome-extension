@@ -1,6 +1,6 @@
 
 angular.module('voxity.contacts').controller('vxtContactsCtrl', [
-    '$scope', 'api', 'vxtApiContacts', 'apiChannels', 'apiUsers',
+    '$scope', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiChannels', 'vxtApiUsers',
     function ($scope, api, apiContacts, apiChannels, apiUsers) {
         $scope.loading = true;
         $scope.contacts = [];
@@ -35,14 +35,13 @@ angular.module('voxity.contacts').controller('vxtContactsCtrl', [
             })
         }
 
-
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
 ])
 
 angular.module('voxity.contacts').controller('vxtContactCtrl', [
-    '$scope', 'api', 'vxtApiContacts', 'apiChannels', '$routeParams', 'apiUsers',
-    function ($scope, api, apiContacts, apiChannels, $routeParams, apiUsers) {
+    '$scope', '$routeParams', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiChannels', 'vxtApiUsers',
+    function ($scope, $routeParams, api, apiContacts, apiChannels, apiUsers) {
         $scope.loading = true;
         $scope.contact = null;
         $scope.errors = {err: false,mess:''};
@@ -86,8 +85,8 @@ angular.module('voxity.contacts').controller('vxtContactCtrl', [
 ])
 
 angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
-    '$scope', 'api', 'vxtApiContacts', '$routeParams', '$location', '$interval', 'apiUsers',
-    function ($scope, api, apiContacts, $routeParams, $location, $interval, apiUsers) {
+    '$scope', '$routeParams', '$location', '$interval', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiUsers',
+    function ($scope, $routeParams, $location, $interval, api, apiContacts, apiUsers) {
         $scope.loading = true;
         $scope.contact = null;
         $scope.errors = {err: false,mess:''};
