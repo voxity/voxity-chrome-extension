@@ -1,6 +1,6 @@
 angular.module('voxity.devices').controller('devicesCtrl', [
-    '$scope', 'vxtCoreApi', 'vxtApiDevices', 'vxtApiChannels', 'vxtApiUsers',
-    function ($scope, api, apiDevices, apiChannels, apiUsers) {
+    '$scope', '$interval', 'vxtDeviceConf', 'vxtCoreApi', 'vxtApiDevices', 'vxtApiChannels', 'vxtApiUsers',
+    function ($scope, $interval, deviceConf, api, apiDevices, apiChannels, apiUsers) {
         $scope.loading = true;
         $scope.devices = [];
         $scope.errors = {err: false,mess:''};
@@ -37,6 +37,15 @@ angular.module('voxity.devices').controller('devicesCtrl', [
 
             })
         }
+
+        if (deviceConf.autoRefreshList) {
+            $interval(function(){
+                apiDevices.get(function(err,devices){
+                    if(!err){$scope.devices = devices;}
+                })
+            }, deviceConf.refreshListInterval * 1000);
+        }
+            
 
         $scope.$on('api:TOKEN_SET', $scope.init);
     }

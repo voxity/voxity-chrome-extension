@@ -1,4 +1,4 @@
-<div class="panel row" ng-repeat="d in devices | filter:{extension: user.internalExtension}">
+<div class="panel row" ng-repeat="d in devices | filter:{extension: user.internalExtension}" ng-if="user">
     <div class="col-xs-1">
         <i ng-class="getClass(d.state)"></i>
     </div>
