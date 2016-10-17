@@ -1,6 +1,6 @@
 <p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
 <div class="row">
-    <div class="col-xs-3" ng-if="contacts.length > 0">
+    <div class="col-xs-3" ng-if="contacts.length > 0 && user.is_admin">
         <a href="#/contacts/add" class="btn btn-default" tooltip-placement="right" uib-tooltip="Ajouter"><i class="fa fa-edit text-info"></i></a>
     </div>
     <div class="col-xs-9" ng-if="contacts.length > 0">
@@ -20,7 +20,7 @@
   <div class="list-group-item" ng-repeat="c in contacts | filter:search.all">
     <h5 class="list-group-item-heading">
         {{c.cn}}
-        <a href="#/contact/{{c.uid}}/edit" class="btn-link pull-right"><i class="fa fa-edit"></i></a>
+        <a href="#/contact/{{c.uid}}/edit" class="btn-link pull-right" ng-if="user.is_admin"><i class="fa fa-edit"></i></a>
     </h5>
     <div class="list-group-item-text row">
         <div class="col-xs-6 text-info pointer" ng-if="c.telephoneNumber" ng-click="call(c.telephoneNumber)">

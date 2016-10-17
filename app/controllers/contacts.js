@@ -17,8 +17,8 @@ angular.module('voxityChromeApp').filter('phoneNumber',function(){
 });
 
 angular.module('voxityChromeApp').controller('contactsCtrl', [
-    '$scope', 'api', 'apiContacts', 'apiChannels',
-    function ($scope, api, apiContacts, apiChannels) {
+    '$scope', 'api', 'apiContacts', 'apiChannels', 'apiUsers',
+    function ($scope, api, apiContacts, apiChannels, apiUsers) {
         $scope.loading = true;
         $scope.contacts = [];
         $scope.errors = {err: false,mess:''};
@@ -38,8 +38,12 @@ angular.module('voxityChromeApp').controller('contactsCtrl', [
                         $scope.contacts = contacts;
                     }
                     $scope.loading = false;
-               })
+                })
+                apiUsers.getUser(function(err, usr){
+                    $scope.user = usr;
+                })
             }
+
         };$scope.init();
 
         $scope.call = function(phoneNumber){
@@ -54,8 +58,8 @@ angular.module('voxityChromeApp').controller('contactsCtrl', [
 ])
 
 angular.module('voxityChromeApp').controller('contactCtrl', [
-    '$scope', 'api', 'apiContacts', 'apiChannels', '$routeParams',
-    function ($scope, api, apiContacts, apiChannels, $routeParams) {
+    '$scope', 'api', 'apiContacts', 'apiChannels', '$routeParams', 'apiUsers',
+    function ($scope, api, apiContacts, apiChannels, $routeParams, apiUsers) {
         $scope.loading = true;
         $scope.contact = null;
         $scope.errors = {err: false,mess:''};
@@ -80,7 +84,8 @@ angular.module('voxityChromeApp').controller('contactCtrl', [
                         $scope.contact = contact;
                     }
                     $scope.loading = false;
-               })
+                })
+                apiUsers.getUser(function(err, usr){$scope.user = usr;})
             }
         };$scope.init();
 
@@ -98,8 +103,8 @@ angular.module('voxityChromeApp').controller('contactCtrl', [
 ])
 
 angular.module('voxityChromeApp').controller('contactFormCtrl', [
-    '$scope', 'api', 'apiContacts', '$routeParams', '$location', '$interval',
-    function ($scope, api, apiContacts, $routeParams, $location, $interval) {
+    '$scope', 'api', 'apiContacts', '$routeParams', '$location', '$interval', 'apiUsers',
+    function ($scope, api, apiContacts, $routeParams, $location, $interval, apiUsers) {
         $scope.loading = true;
         $scope.contact = null;
         $scope.errors = {err: false,mess:''};
@@ -190,6 +195,12 @@ angular.module('voxityChromeApp').controller('contactFormCtrl', [
                         $scope.loading = false;
                    })
                 } else {$scope.id = null;}
+                apiUsers.getUser(function(err, usr){
+                    $scope.user = usr;
+                    if(!usr.is_admin){
+                        $location.path('/err/403');
+                    }
+                })
             }
         };$scope.init();
 

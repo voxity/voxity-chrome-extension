@@ -1,6 +1,6 @@
 <h4>
     <i class="fa fa-user fa-fw"></i> &nbsp; {{contact.cn}}
-    <a href="#/contact/{{contact.uid}}/edit" class="btn-link pull-right"><i class="fa fa-edit"></i></a>
+    <a href="#/contact/{{contact.uid}}/edit" class="btn-link pull-right" ng-if="user.is_admin"><i class="fa fa-edit"></i></a>
 </h4>
 <hr>
 <div class="row">

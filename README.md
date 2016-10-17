@@ -25,4 +25,4 @@ Version non disponible
 # Todo
  - [ ] Cache 
  - [ ] Configuration des services via des provider
- - [ ] Gestion des droits admin
+ - [X] Gestion des droits admin
