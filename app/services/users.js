@@ -12,7 +12,6 @@ angular.module('voxityChromeApp').service('apiUsers', [
         function setUser(user){
             if(angular.isObject(user)){
                 users.user = user;
-                // users.user.is_admin=0;
                 $rootScope.$broadcast('api:user.updated', user)
             }
 
