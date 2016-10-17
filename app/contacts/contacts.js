@@ -26,7 +26,7 @@ angular.module('voxity.contacts').provider('vxtContactsConf', [function () {
     
     //Temps de stockage dans l'application en secondes
     // par défaut 5 minutes
-    this.storedDataTime = 5 * 60;
+    this.storedDataTime = 5 ; // minutes
 
     this.startPath = '/contacts';
 
