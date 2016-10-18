@@ -1,5 +1,39 @@
-<h4>
-    <i class="fa fa-user fa-fw"></i> {{getUser().name}}
-    <button class="btn-link pull-right" ng-click="logout()" ng-disabled="logOutProcess"><i class="fa fa-power-off text-danger"></i></button>
-</h4>
-<hr>
+<p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
+<div ng-if="isInit">
+    
+    <h4>
+        <i class="fa fa-user fa-fw"></i> {{getUser().name}}
+        <button class="btn-link pull-right" ng-click="logout()" ng-disabled="logOutProcess"><i class="fa fa-power-off text-danger"></i></button>
+    </h4>
+    <hr>
+
+    <h2><small>Téléphones</small></h2>
+    <div class="row">
+        <div class="col-xs-12">
+            <label for="device-autoRefreshList">Actualisation des etat des téléphone</label>
+            <button type="button" class="btn btn-block" ng-class="{'active btn-success': device.autoRefreshList, 'btn-danger': !device.autoRefreshList}" ng-model="device.autoRefreshList" uib-btn-checkbox id="device-autoRefreshList">
+                <i class="fa" ng-class="{'fa-square-o': !device.autoRefreshList, 'fa-check-square-o': device.autoRefreshList}"></i>
+            </button>
+        </div>
+        <div class="col-xs-12" ng-if="device.autoRefreshList">
+            <label for="device-autoRefreshList">Intervale</label>
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="ex : 10" for="device-refreshListInterval" ng-model="device.refreshListInterval" id="device-refreshListInterval">
+                <span class="input-group-addon">Secondes</span>
+            </div>
+        </div>
+    </div>
+        
+
+    <hr>
+
+    <div class="row">
+        <div class="col-xs-2 col-xs-offset-5">
+            <button class="btn btn-success btn-block" ng-click="save()" uib-tooltip="Enregistrer" tooltip-placement="top"><i class="fa fa-save"></i></button>
+        </div>
+    </div>
+</div>
+<br>
+<p class="small text-muted text-center" ng-if="updated">
+    Les modifications seront prise en compte lors du prochain lancement de l'application
+</p>

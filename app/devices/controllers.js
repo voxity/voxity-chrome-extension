@@ -5,6 +5,7 @@ angular.module('voxity.devices').controller('devicesCtrl', [
         $scope.devices = [];
         $scope.errors = {err: false,mess:''};
         $scope.search = {};
+        var refreshInterval = null;
 
 
         $scope.getClass = apiDevices.getIconClassStatus;
@@ -39,12 +40,16 @@ angular.module('voxity.devices').controller('devicesCtrl', [
         }
 
         if (deviceConf.autoRefreshList) {
-            $interval(function(){
+            refreshInterval = $interval(function(){
                 apiDevices.get(function(err,devices){
                     if(!err){$scope.devices = devices;}
                 })
             }, deviceConf.refreshListInterval * 1000);
         }
+
+        $scope.$on("$destroy", function() {
+            if (refreshInterval) {$interval.cancel(refreshInterval);}
+        });
             
 
         $scope.$on('api:TOKEN_SET', $scope.init);

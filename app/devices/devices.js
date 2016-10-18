@@ -16,12 +16,45 @@ angular.module('voxity.devices').config(['$routeProvider',
         })
     }
 ]);
-angular.module('voxity.devices').provider('vxtDeviceConf', [function () {
+angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
     
-    // interva to refresh list (in secondes)
-    this.refreshListInterval = 7;    //seccondes
+    /**
+     * Auto refresh list of device in device list
+     * @type {Boolean}
+     */
+    this.autoRefreshList = false;
 
-    this.autoRefreshList = true;
+    /**
+     * interval to refresh list (in secondes) in Téléphone page **(min = 5Second)** **(if autoRefreshList = ture)**
+     * @type {Number}
+     */
+    this.refreshListInterval = 7.5;
+
+    this.checkValue = function(){
+        var updatedValue = []
+        if (typeof this.autoRefreshList !== 'boolean') {
+            updatedValue.push('autoRefreshList');
+            this.initDefault('autoRefreshList')
+        }
+
+        if (!angular.isNumber(this.refreshListInterval) ||  this.refreshListInterval <= 5 ) {
+            updatedValue.push('refreshListInterval');
+            this.initDefault('refreshListInterval');
+        }
+
+        if (updatedValue.length > 0) {
+
+        }
+    }
+
+    this.initDefault = function(attribut){
+        if (!attribut || attribut === 'autoRefreshList') {
+            this.autoRefreshList = false;
+        }
+        if (!attribut || attribut === 'refreshListInterval') {
+            this.refreshListInterval = 7.5;
+        }
+    }
 
     this.startPath = '/devices';
 

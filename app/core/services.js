@@ -59,3 +59,62 @@ angular.module('voxity.core').service('vxtCoreApi', [
         return api;
     }
 ])
+
+angular.module('voxity.core').service('settingsService', ['$rootScope', function($rootScope){
+
+    var settings = {};
+
+    settings.defaults = {
+        'device': {
+            'autoRefresh': {
+                'type': 'boolean',
+                'default': false
+            },
+            'refreshListInterval':{
+                'type': 'number',
+                'min': 5,
+                'max': null,
+                'default': 7.5
+            }
+        }
+    }
+
+    settings.values = {};
+    settings.valuesUpdated = true;
+
+    function getMainDefault(){
+        return {
+            'device': {
+                'autoRefresh': settings.defaults.device.autoRefresh.default,
+                'refreshListInterval': settings.defaults.device.refreshListInterval.default,
+            }
+        }
+    }
+
+    settings.get = function(done){
+        if (this.valuesUpdated) {
+            chrome.storage.sync.get({'wAppConf': null}, function(item){
+                var wAppConf = item.wAppConf
+                if (!wAppConf) {
+                    settings.set(getMainDefault());
+                    return done(null, getMainDefault())
+                } else {
+                    return done(null, wAppConf);
+                }
+            })
+
+        } else {
+            done(err, this.values)
+        }
+    }
+
+    settings.set = function(data, section){
+        if(section){
+            this.values[section] = data;
+        }
+        chrome.storage.sync.set({'wAppConf': settings.values});
+    }
+
+    return settings;
+}])
+
