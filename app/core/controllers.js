@@ -40,6 +40,12 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         $scope.$on('api:user.updated', function(evt, usr){
             $scope.user = usr;
         });
+
+        $scope.checkDeviceInterval = function(){
+            if ($scope.device.refreshListInterval < 5) {
+                $scope.device.refreshListInterval = 5
+            }
+        }
         
     }
 ])

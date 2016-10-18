@@ -1,6 +1,5 @@
 <p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
 <div ng-if="isInit">
-    
     <h4>
         <i class="fa fa-user fa-fw"></i> {{getUser().name}}
         <button class="btn-link pull-right" ng-click="logout()" ng-disabled="logOutProcess"><i class="fa fa-power-off text-danger"></i></button>
@@ -15,10 +14,10 @@
                 <i class="fa" ng-class="{'fa-square-o': !device.autoRefreshList, 'fa-check-square-o': device.autoRefreshList}"></i>
             </button>
         </div>
-        <div class="col-xs-12" ng-if="device.autoRefreshList">
-            <label for="device-autoRefreshList">Intervale</label>
+        <div class="col-xs-12 form-group " ng-if="device.autoRefreshList">
+            <label class="control-label" for="device-autoRefreshList">Intervale</label>
             <div class="input-group">
-                <input type="number" class="form-control" placeholder="ex : 10" for="device-refreshListInterval" ng-model="device.refreshListInterval" id="device-refreshListInterval">
+                <input type="number" class="form-control" placeholder="ex : 10" for="device-refreshListInterval" ng-model="device.refreshListInterval" id="device-refreshListInterval" min='5' ng-change="checkDeviceInterval()">
                 <span class="input-group-addon">Secondes</span>
             </div>
         </div>
