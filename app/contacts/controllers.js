@@ -117,7 +117,12 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                     $interval(function(){$scope.changeSave = false}, 5000, 1)
                 } else {
                     $scope.errors.err = true;
-                    $scope.errors.mess = 'Une erreur est survenue lors de la mise à jour du contact. err' + err.status;
+                    if (err.status == 400) {
+                        $scope.errors.mess = 'Une erreur est présent dans le formulaire';
+
+                    } else {
+                        $scope.errors.mess = 'Une erreur est survenue lors de la mise à jour du contact. err' + err.status;
+                    }
                 }
                 $scope.processing = false;
             })
@@ -130,7 +135,12 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                     $location.path('/contact/'+uid)
                 } else {
                     $scope.errors.err = true;
-                    $scope.errors.mess = 'Une erreur est survenue lors de la création du contact. err' + err.status;
+                    if (err.status == 400) {
+                        $scope.errors.mess = 'Une erreur est présent dans le formulaire';
+
+                    } else {
+                        $scope.errors.mess = 'Une erreur est survenue lors de la mise à jour du contact. err' + err.status;
+                    }
                 }
                 $scope.processing = false;
             })

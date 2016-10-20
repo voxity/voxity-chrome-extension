@@ -1,5 +1,6 @@
 <small class="text-muted small" ng-if="id"><span ng-if="!loading">Édition de </span> {{name || 'Chargement en cours'}}</small>
 <div class="alert alert-success small" ng-if="changeSave"><small>Contact mis à jour</small></div>
+<div class="alert alert-danger small" ng-if="errors.err"><small>{{errors.mess}}</small></div>
 <form  ng-submit="save()" class="row">
     <div class="col-xs-12">
         <div class="form-group">
