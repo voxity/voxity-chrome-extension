@@ -1,3 +1,82 @@
+var settingsService = {};
+
+    settingsService.defaults = {
+        'device': {
+            'autoRefresh': {
+                'type': 'boolean',
+                'default': false
+            },
+            'refreshListInterval':{
+                'type': 'number',
+                'min': 5,
+                'max': null,
+                'default': 7.5
+            }
+        },
+        'contact': {
+            'cacheDuration': {
+                'type': 'number',
+                'min': 2,
+                'max': null,
+                'default': 5
+            }
+        }
+    }
+
+    settingsService.checkValue = function(section, varname, value){
+        if (this.defaults[section] && this.defaults[section][varname]) {    
+            if (this.defaults[section][varname].type === 'number') {
+                if (!angular.isNumber(value)) {return 0}
+                if (this.defaults[section][varname].min && this.defaults[section][varname].min > value) {return 0}
+                if (this.defaults[section][varname].max && this.defaults[section][varname].max < value) {return 0}
+                return 1
+            }
+            return 1
+        } else {
+            console.log('settingsService.checkValue : error, section ['+ section +']['+varname+'] not found in default' )
+            return -1;
+        }
+    }
+
+    settingsService.values = {};
+    settingsService.valuesUpdated = true;
+
+    function getMainDefault(){
+        return {
+            'device': {
+                'autoRefresh': settingsService.defaults.device.autoRefresh.default,
+                'refreshListInterval': settingsService.defaults.device.refreshListInterval.default,
+            }
+        }
+    }
+
+    settingsService.get = function(done){
+        if (this.valuesUpdated) {
+            chrome.storage.sync.get({'wAppConf': null}, function(item){
+                var wAppConf = item.wAppConf
+                if (!wAppConf) {
+                    settingsService.set(getMainDefault());
+                    return done(null, getMainDefault())
+                } else {
+                    return done(null, wAppConf);
+                }
+            })
+
+        } else {
+            done(err, this.values)
+        }
+    }
+
+    settingsService.set = function(data, section){
+        this.get(function(err, conf){
+            if (section) {
+                conf[section] = data;
+            } else {conf = data;}
+            chrome.storage.sync.set({'wAppConf': conf});
+            settingsService.values = conf;
+
+        })
+    }
 angular.module('voxity.core').service('vxtCoreApi', [
     '$http', '$rootScope',
     function($http, $rootScope) {
@@ -61,60 +140,6 @@ angular.module('voxity.core').service('vxtCoreApi', [
 ])
 
 angular.module('voxity.core').service('settingsService', ['$rootScope', function($rootScope){
-
-    var settings = {};
-
-    settings.defaults = {
-        'device': {
-            'autoRefresh': {
-                'type': 'boolean',
-                'default': false
-            },
-            'refreshListInterval':{
-                'type': 'number',
-                'min': 5,
-                'max': null,
-                'default': 7.5
-            }
-        }
-    }
-
-    settings.values = {};
-    settings.valuesUpdated = true;
-
-    function getMainDefault(){
-        return {
-            'device': {
-                'autoRefresh': settings.defaults.device.autoRefresh.default,
-                'refreshListInterval': settings.defaults.device.refreshListInterval.default,
-            }
-        }
-    }
-
-    settings.get = function(done){
-        if (this.valuesUpdated) {
-            chrome.storage.sync.get({'wAppConf': null}, function(item){
-                var wAppConf = item.wAppConf
-                if (!wAppConf) {
-                    settings.set(getMainDefault());
-                    return done(null, getMainDefault())
-                } else {
-                    return done(null, wAppConf);
-                }
-            })
-
-        } else {
-            done(err, this.values)
-        }
-    }
-
-    settings.set = function(data, section){
-        if(section){
-            this.values[section] = data;
-        }
-        chrome.storage.sync.set({'wAppConf': settings.values});
-    }
-
-    return settings;
+    return settingsService;
 }])
 

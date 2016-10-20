@@ -14,7 +14,7 @@
         function experedData(){
             if (!lastUpdateData){return true;}
             var now = new Date();
-            return (now - lastUpdateData ) > contactsConf.storedDataTime * 60000;
+            return (now - lastUpdateData ) > contactsConf.cacheDuration * 60000;
         }
 
         /**

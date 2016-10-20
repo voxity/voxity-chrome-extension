@@ -3,8 +3,17 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
     function ($scope, api, settingsService, apiUsers, $window) {
         $scope.isInit = -1;
         $scope.user = {};
-        $scope.device = null;
+        $scope.contact = {};
+        $scope.device = {};
         $scope.updated = false;
+        $scope.conf = {
+            'device': {},
+            'contact': {}
+        }
+
+        $scope.getConf = function(){
+            return $scope.conf
+        }
 
         $scope.getUser = function(){
             return this.user;
@@ -22,7 +31,9 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         $scope.init = function(){
             if(api.token){
                 settingsService.get(function(err, conf){
-                    $scope.device = conf.device;
+                    $scope.conf = {}
+                    $scope.conf.device = conf.device;
+                    $scope.conf.contact = conf.contact;
                     $scope.isInit += 1;
                 })
                 apiUsers.getUser(function(err, usr){
@@ -33,13 +44,15 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         };$scope.init();
 
         $scope.save = function(){
-            settingsService.set($scope.device, 'device')
+            settingsService.set($scope.conf)
             $scope.updated = true;
         }
 
         $scope.$on('api:user.updated', function(evt, usr){
             $scope.user = usr;
         });
+        $scope.$on('api:TOKEN_SET', $scope.init);
+
 
         $scope.checkDeviceInterval = function(){
             if ($scope.device.refreshListInterval < 5) {

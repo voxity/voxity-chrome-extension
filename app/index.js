@@ -10,15 +10,23 @@ angular.module('voxityChromeApp').config(['$routeProvider',
 ]);
 
 
-angular.module('voxity.devices').config(['vxtDeviceConfProvider',function(DeviceConf) {
-    chrome.storage.sync.get({'wAppConf': null}, function(item){
-        var conf = item.wAppConf;
+angular.module('voxity.devices').config(['vxtDeviceConfProvider',function(deviceConf) {
+    settingsService.get(function(err, conf){
+            if(angular.isObject(conf.device) && Object.keys(conf.device).length > 0){
+                deviceConf.refreshListInterval = conf.device.refreshListInterval;
+                deviceConf.autoRefreshList = conf.device.autoRefreshList;
+                deviceConf.checkValue()
+        } else {console.log('init device');deviceConf.initDefault();}
+    })
+}]);
 
-        if(angular.isObject(conf.device) && Object.keys(conf.device).length > 0){
-            DeviceConf.refreshListInterval = conf.device.refreshListInterval;
-            DeviceConf.autoRefreshList = conf.device.autoRefreshList;
-            DeviceConf.checkValue()
-        } else {DeviceConf.initDefault();}
+angular.module('voxity.contacts').config(['vxtContactsConfProvider',function(contact) {
+    settingsService.get(function(err, conf){
+        var conf = conf.contact;
+        if(angular.isObject(conf) && Object.keys(conf).length > 0){
+            contact.cacheDuration = conf.cacheDuration;
+            contact.checkValue()
+        } else {console.log('init contact');contact.initDefault();}
     });
 }]);
 

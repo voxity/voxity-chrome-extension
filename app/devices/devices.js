@@ -30,6 +30,12 @@ angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
      */
     this.refreshListInterval = 7.5;
 
+    this.getConf = function(){
+        return {
+            'refreshListInterval': this.refreshListInterval,
+            'autoRefreshList': this.autoRefreshList
+        }
+    }
     this.checkValue = function(){
         var updatedValue = []
         if (typeof this.autoRefreshList !== 'boolean') {
@@ -43,17 +49,23 @@ angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
         }
 
         if (updatedValue.length > 0) {
-
+            angular.forEach(updatedValue, function(i, attr){
+                contactConf.initDefault(i)
+            }, function(){
+                settingsService.set(contactConf.getConf(), 'device')
+            })
         }
     }
 
     this.initDefault = function(attribut){
+        console.log('default value')
         if (!attribut || attribut === 'autoRefreshList') {
             this.autoRefreshList = false;
         }
         if (!attribut || attribut === 'refreshListInterval') {
             this.refreshListInterval = 7.5;
         }
+        settingsService.set(this.getConf(), 'device')
     }
 
     this.startPath = '/devices';
@@ -62,7 +74,7 @@ angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
         return {
             'refreshListInterval': this.refreshListInterval,
             'autoRefreshList': this.autoRefreshList,
-            'startPath': this.startPath
+            'startPath': this.startPath,
         };
     }];
 }])
