@@ -3,10 +3,14 @@ angular.module('voxity.channels').service('vxtApiChannels', ['vxtCoreApi', funct
 
     channels.baseUri = '/channels';
 
-    channels.get = function(exten, done){
+    /**
+     * get all curent channels
+     * @param  {Function} done  (err, channels)
+     */
+    channels.get = function(done){
         api.request({'url': channels.baseUri, data: {'exten': exten}}).
         success(function(d, status){
-            done(null, d.data);
+            done(status === 200, d.data.result.channel_id);
         }).error(function(d, status, head, config, statusText){
             done({
                 'data': d,
@@ -19,6 +23,12 @@ angular.module('voxity.channels').service('vxtApiChannels', ['vxtCoreApi', funct
 
     }
 
+    /**
+     * Create channels, like click2call
+     * @param  {String}   exten Exten to call
+     * @param  {Function} done  (err, channelsID)
+     * @return {[type]}         [description]
+     */
     channels.post = function(exten, done){
         if(angular.isNumber(exten)){
             exten = ('' + exten).trim();
