@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "grunt-cli": "^1.2.0",
-    "grunt": "^1.0.1"
+    "grunt": "^1.0.1",
+    "grunt-contrib-concat": "^1.0.1"
   }
 }
