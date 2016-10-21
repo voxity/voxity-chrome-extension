@@ -26,12 +26,16 @@ angular.module('voxity.users').service('vxtApiUsers', [
                 return done(null, this.user)
             } else {
                 chrome.runtime.getBackgroundPage(function(bkg){
-                    chrome.storage.sync.get('user', function(item){
-                        setUser(item.user);
-                        if (expiredUser()) {
-                            init(done)
+                    chrome.storage.sync.get({'user': null}, function(item){
+                        if (item.user) {
+                            setUser(item.user);
+                            if (expiredUser()) {
+                                init(done)
+                            } else {
+                                done(null, users.user)
+                            }
                         } else {
-                            done(null, users.user)
+                            users.init(done)
                         }
                     }); 
 
@@ -40,18 +44,16 @@ angular.module('voxity.users').service('vxtApiUsers', [
         }
 
         users.init = function(done){
-            chrome.runtime.getBackgroundPage(function(bkg){
-                api.request({
-                    url: '/users/self',
-                }).success(function(d){
-                    var user = d.result
-                    user.last_syc = new Date();
-                    setUser(user)
-                    chrome.storage.sync.set({'user': user});
-                    if (angular.isFunction(done)) {done(null, user)}
-                }).error(function(d, status){
-                    console.log('Cant get user. err'+status)
-                })
+            api.request({
+                url: '/users/self',
+            }).success(function(d){
+                var user = d.result
+                user.last_syc = new Date();
+                setUser(user)
+                chrome.storage.sync.set({'user': user});
+                if (angular.isFunction(done)) {done(null, user)}
+            }).error(function(d, status){
+                console.log('Cant get user. err'+status)
             })
         }
 
