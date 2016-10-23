@@ -9,18 +9,21 @@ angular.module('voxityChromeApp', [
     'voxity.contacts',
 ])
 
-angular.module('voxityChromeApp').factory('authInterceptorService', ['$q','$rootScope', function ($q, $rootScope){
-    return {
-        responseError: function (rejection) {
-            if (rejection.status === 401) {$rootScope.$broadcast("API:err.401");}
-            return $q.reject(rejection);
-        }
-    };
-}]);
+angular.module('voxityChromeApp').factory('authInterceptorService', [
+    '$q','$rootScope',
+    function ($q, $rootScope){
+        return {
+            responseError: function (rejection) {
+                if (rejection.status === 401) {$rootScope.$broadcast("API:err.401");}
+                return $q.reject(rejection);
+            }
+        };
+    }
+]);
 
 angular.module('voxityChromeApp').controller('activeItemCtrl', [
     '$scope', '$location',
-    function ($scope, $location, djangoAuth) {
+    function ($scope, $location) {
         $scope.activeItem = null;
 
         function getMainEndpoint(uri){
@@ -62,6 +65,6 @@ angular.module('voxityChromeApp').controller('activeItemCtrl', [
     }
 ]);
 
-angular.module('voxityChromeApp').config( function ($compileProvider) {
+angular.module('voxityChromeApp').config(['$compileProvider', function($compileProvider) {
    $compileProvider.aHrefSanitizationWhitelist (/^\s*(https?|ftp|mailto|file|tel|chrome-extension):/);
-});
+}]);

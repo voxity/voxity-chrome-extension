@@ -47,4 +47,4 @@ grunt
 6. cliquer sur *Charger l'extension non empaquetée...*
 7. Ajouter le dossier du projet **(/dist/)**
 8. modifier le fichier ``index.js``:83, la variable ```clientID```
-9. ```grunt```
+9. ```grunt``
