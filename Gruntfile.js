@@ -24,13 +24,13 @@ module.exports = function(grunt) {
         concat: {
             templates:{
                 src: [
-                    '<%= dirs.dstAngApp %>/index.min.js',
+                    '<%= dirs.dest %>/index.min.js',
                     '<%= ngtemplates.contacts.dest %>',
                     '<%= ngtemplates.err.dest %>',
                     '<%= ngtemplates.settings.dest %>',
                     '<%= ngtemplates.devices.dest %>'
                 ],
-                dest:'<%= dirs.dstAngApp %>/index.min.js'
+                dest:'<%= dirs.dest %>/index.min.js'
             }
         },
         ngtemplates:{
@@ -78,7 +78,7 @@ module.exports = function(grunt) {
         },
         clean: {
             dist: ['<%= dirs.dest %>/*'],
-            templates: ['<%= dirs.dstAngApp %>/*.tpl.js']
+            templates: ['<%= dirs.dstAngApp %>/*.tpl.js', '<%= dirs.dest %>/index.min.js']
         },
         useminPrepare: {
             html: '<%= dirs.srcAngApp %>/index.html',
@@ -97,7 +97,8 @@ module.exports = function(grunt) {
         cssmin: {
             css: {
                 files:{
-                    '<%= dirs.dest %>/css/options.css': '<%= dirs.src %>/css/options.css'
+                    '<%= dirs.dest %>/css/options.css': '<%= dirs.src %>/css/options.css',
+                    '<%= dirs.dest %>/css/app.css': '<%= dirs.src %>/css/app.css'
                 }
             }
         },
@@ -118,7 +119,7 @@ module.exports = function(grunt) {
                     },
                 ]
             },
-            angularApp: {
+            angular: {
                 files: [
                     {
                         cwd:'<%= dirs.src %>/libs/assets/bootstrap/dist/',
@@ -127,7 +128,7 @@ module.exports = function(grunt) {
                             '!css/bootstrap-theme*',
                             '!js/**'
                         ],
-                        dest: '<%= dirs.dest %>/libs/assets/bootstrap/',
+                        dest: '<%= dirs.dest %>/libs/assets/bootstrap/dist/',
                         expand: true
                     },{
                         cwd: '<%= dirs.src %>/libs/assets/font-awesome/',
@@ -138,10 +139,17 @@ module.exports = function(grunt) {
                         dest: '<%= dirs.dest %>/libs/assets/font-awesome/',
                         expand: true
 
-                    },
-                    {
+                    },{
                         src: ['<%= dirs.srcAngApp %>/index.html'],
                         dest: '<%= dirs.dstAngApp %>/index.html'
+                    }
+                ]
+            },
+            finaly: {
+                files: [
+                    {
+                        src: ['<%= dirs.dest %>/index.min.js'],
+                        dest: '<%= dirs.dstAngApp %>/index.min.js'
                     }
                 ]
             }
@@ -160,7 +168,8 @@ module.exports = function(grunt) {
     // Default task(s).
     grunt.registerTask('default', [
         'clean:dist',
-        'copy',
+        'copy:main',
+        'copy:angular',
         'useminPrepare',
         'concat:generated',
         'uglify:generated',
@@ -169,6 +178,7 @@ module.exports = function(grunt) {
         'ngtemplates',
         'concat:templates',
         'uglify:templates',
-        'clean:templates'
+        'copy:finaly',
+        'clean:templates',
     ]);
 };

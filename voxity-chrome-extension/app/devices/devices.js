@@ -11,7 +11,7 @@ angular.module('voxity.devices').config(['$routeProvider',
             controller: 'deviceCtrl'
         });
         rp.when('/devices', {
-            templateUrl: 'views/devices/list.html',
+            templateUrl: '/views/devices/list.html',
             controller: 'devicesCtrl'
         })
     }

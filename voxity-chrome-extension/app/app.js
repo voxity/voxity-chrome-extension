@@ -7,7 +7,7 @@ angular.module('voxityChromeApp', [
     'voxity.channels',
     'voxity.devices',
     'voxity.contacts',
-])
+]);
 
 angular.module('voxityChromeApp').factory('authInterceptorService', [
     '$q','$rootScope',
