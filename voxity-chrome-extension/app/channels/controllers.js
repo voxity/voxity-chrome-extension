@@ -16,4 +16,4 @@ angular.module('voxity.channels').controller('makeCallCtrl', [
             this.phoneNumber = $scope.phoneNumber.replace(/[^\+\d\(\)]/g,'');
         }
     }
-])
+]);

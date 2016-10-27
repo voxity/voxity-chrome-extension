@@ -7,20 +7,20 @@ angular.module('voxity.contacts', [
 angular.module('voxity.contacts').config(['$routeProvider',
     function(rp) {
         rp.when('/contacts', {
-            'templateUrl': 'views/contacts/list.html',
+            'templateUrl': '/views/contacts/list.html',
             'controller': 'vxtContactsCtrl'
         }).when('/contacts/add', {
-            'templateUrl': 'views/contacts/form.html',
+            'templateUrl': '/views/contacts/form.html',
             'controller': 'vxtContactFormCtrl'
         }).when('/contact/:contactId/edit', {
-            'templateUrl': 'views/contacts/form.html',
+            'templateUrl': '/views/contacts/form.html',
             'controller': 'vxtContactFormCtrl'
         }).when('/contact/:contactId', {
-            'templateUrl': 'views/contacts/detail.html',
+            'templateUrl': '/views/contacts/detail.html',
             'controller': 'vxtContactCtrl'
-        })
+        });
     }
-])
+]);
 
 angular.module('voxity.contacts').provider('vxtContactsConf', [function () {
     
@@ -41,17 +41,17 @@ angular.module('voxity.contacts').provider('vxtContactsConf', [function () {
 
         if (updatedValue.length > 0) {
             angular.forEach(updatedValue, function(i, attr){
-                contactConf.initDefault(i)
+                contactConf.initDefault(i);
             }, function(){
-                settingsService.set(contactConf.getConf(), 'contact')
-            })
+                settingsService.set(contactConf.getConf(), 'contact');
+            });
         }
     }
 
     this.initDefault = function(attribut){
         if (!attribut || attribut == 'cacheDuration') {}
         this.cacheDuration = settingsService.defaults.contact.cacheDuration.default;
-        settingsService.set(contactConf.getConf(), 'contact')
+        settingsService.set(contactConf.getConf(), 'contact');
     }
 
     this.startPath = '/contacts';
@@ -60,6 +60,6 @@ angular.module('voxity.contacts').provider('vxtContactsConf', [function () {
         return {
             'cacheDuration': this.cacheDuration,
             'startPath': this.startPath
-        }
+        };
     }];
-}])
+}]);

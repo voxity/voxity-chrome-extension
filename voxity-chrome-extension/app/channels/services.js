@@ -18,7 +18,7 @@ angular.module('voxity.channels').service('vxtApiChannels', ['vxtCoreApi', funct
                 'head': head,
                 'config': config,
                 'statusText': statusText
-            })
+            });
         });
 
     }
@@ -35,7 +35,7 @@ angular.module('voxity.channels').service('vxtApiChannels', ['vxtCoreApi', funct
         } else if(angular.isString(exten)){
             exten = exten.trim();
         } else {
-            return done({'errors': {'exten': 'type invalide'}})
+            return done({'errors': {'exten': 'type invalide'}});
         } 
 
         api.request({
@@ -51,9 +51,9 @@ angular.module('voxity.channels').service('vxtApiChannels', ['vxtCoreApi', funct
                 'head': head,
                 'config': config,
                 'statusText': statusText
-            })
+            });
         });
     }
 
-    return channels
-}])
+    return channels;
+}]);

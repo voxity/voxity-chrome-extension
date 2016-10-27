@@ -94,4 +94,4 @@ angular.module('voxity.devices').service('vxtApiDevices', [
 
         return devices;
     }
-])
+]);

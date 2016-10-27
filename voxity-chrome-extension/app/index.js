@@ -2,10 +2,10 @@ angular.module('voxityChromeApp').config(['$routeProvider',
     function(rp) {
         rp.when('/', {redirectTo: '/devices/'});
         rp.when('/settings/',{
-            templateUrl: 'views/settings/index.html',
+            templateUrl: '/views/settings/index.html',
             controller: 'coreSettingsCtrl'
         })
-        rp.otherwise({templateUrl: 'views/err/404.html'});
+        rp.otherwise({templateUrl: '/views/err/404.html'});
     }
 ]);
 
@@ -35,7 +35,7 @@ angular.module('voxityChromeApp').run([
     function(CoreApi, settingsService){
         CoreApi.init();
     }
-])
+]);
 
 angular.module('voxityChromeApp').config(['$httpProvider', function ($httpProvider) {$httpProvider.interceptors.push('authInterceptorService');}]);
-angular.module('voxityChromeApp').config(['$uibTooltipProvider', function($uibTooltipProvider){$uibTooltipProvider.options({appendToBody: true});}])
+angular.module('voxityChromeApp').config(['$uibTooltipProvider', function($uibTooltipProvider){$uibTooltipProvider.options({appendToBody: true});}]);

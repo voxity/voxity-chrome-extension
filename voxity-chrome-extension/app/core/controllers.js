@@ -9,10 +9,10 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         $scope.conf = {
             'device': {},
             'contact': {}
-        }
+        };
 
         $scope.getConf = function(){
-            return $scope.conf
+            return $scope.conf;
         }
 
         $scope.getUser = function(){
@@ -56,7 +56,7 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
 
         $scope.checkDeviceInterval = function(){
             if ($scope.device.refreshListInterval < 5) {
-                $scope.device.refreshListInterval = 5
+                $scope.device.refreshListInterval = 5;
             }
         }
         

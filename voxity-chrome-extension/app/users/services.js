@@ -67,5 +67,4 @@ angular.module('voxity.users').service('vxtApiUsers', [
 
         return users;
     }
-])
-
+]);

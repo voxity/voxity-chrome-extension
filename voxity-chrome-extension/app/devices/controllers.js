@@ -54,7 +54,7 @@ angular.module('voxity.devices').controller('devicesCtrl', [
 
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
-])
+]);
 
 
 angular.module('voxity.devices').controller('deviceCtrl', [
@@ -96,4 +96,4 @@ angular.module('voxity.devices').controller('deviceCtrl', [
 
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
-])
+]);

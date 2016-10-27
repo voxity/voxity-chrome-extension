@@ -1,4 +1,4 @@
- angular.module('voxity.contacts').service('vxtApiContacts', [
+angular.module('voxity.contacts').service('vxtApiContacts', [
     '$filter', 'vxtContactsConf', 'vxtCoreApi', 
     function($filter, contactsConf, api){
         var contacts = {};

@@ -142,6 +142,62 @@ module.exports = function(grunt) {
                     },{
                         src: ['<%= dirs.srcAngApp %>/index.html'],
                         dest: '<%= dirs.dstAngApp %>/index.html'
+                    },{
+                        src: ['<%= dirs.src %>/libs/assets/animate.css/animate.min.css'],
+                        dest: '<%= dirs.dest %>/libs/assets/animate.css/animate.min.css'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular/',
+                        src: [
+                            'angular.min.js',
+                            'angular.min.js.map',
+                            'LICENSE.md',
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular/'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular-i18n/',
+                        src: [
+                            'fr-fr.js',
+                            'LICENSE.md'
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular-i18n/'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular-route/',
+                        src: [
+                            'angular-route.min.js',
+                            'angular-route.min.js.map',
+                            'LICENSE.md'
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular-route/'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular-sanitize/',
+                        src: [
+                            'angular-sanitize.min.js',
+                            'angular-sanitize.min.js.map',
+                            'LICENSE.md'
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular-sanitize/'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular-animate/',
+                        src: [
+                            'angular-animate.min.js',
+                            'angular-animate.min.js.map',
+                            'LICENSE.md'
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular-animate/'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular-bootstrap/',
+                        src: [
+                            'ui-bootstrap-tpls.min.js',
+                            'angular-bootstrap.min.js.map',
+                            'LICENSE.md'
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular-bootstrap/'
                     }
                 ]
             },
@@ -150,6 +206,9 @@ module.exports = function(grunt) {
                     {
                         src: ['<%= dirs.dest %>/index.min.js'],
                         dest: '<%= dirs.dstAngApp %>/index.min.js'
+                    },{
+                        src: ['<%= dirs.dest %>/assets.min.js'],
+                        dest: '<%= dirs.dstAngApp %>/assets.min.js'
                     }
                 ]
             }

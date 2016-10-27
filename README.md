@@ -26,7 +26,7 @@ Version non disponible
  - [X] Cache 
  - [X] Configuration des services via des provider
  - [X] Gestion des droits admin
- - [ ] Grunt Integration, minimify, concat, ... *(objectif 2 fichier index.min.html & app.min.js)*
+ - [X] Grunt Integration, minimify, concat, ... *(objectif 2 fichier index.min.html & app.min.js)*
 
 # install <small>(test build)</small>
 ## Dépendance 

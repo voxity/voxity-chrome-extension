@@ -7,7 +7,7 @@ angular.module('voxity.devices', [
 angular.module('voxity.devices').config(['$routeProvider',
     function(rp) {
         rp.when('/devices/:phoneId', {
-            templateUrl: 'views/devices/detail.html',
+            templateUrl: '/views/devices/detail.html',
             controller: 'deviceCtrl'
         });
         rp.when('/devices', {
@@ -16,6 +16,7 @@ angular.module('voxity.devices').config(['$routeProvider',
         })
     }
 ]);
+
 angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
     
     /**
@@ -77,4 +78,4 @@ angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
             'startPath': this.startPath,
         };
     }];
-}])
+}]);
