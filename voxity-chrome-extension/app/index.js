@@ -2,8 +2,11 @@ angular.module('voxityChromeApp').config(['$routeProvider',
     function(rp) {
         rp.when('/', {redirectTo: '/devices/'});
         rp.when('/settings/',{
-            templateUrl: 'views/settings/index.html',
+            templateUrl: 'views/core/settings/index.html',
             controller: 'coreSettingsCtrl'
+        })
+        rp.when('/about/',{
+            templateUrl: 'views/core/about.html'
         })
         rp.otherwise({templateUrl: 'views/err/404.html'});
     }

@@ -1,7 +1,13 @@
 html {
-  min-height: 400px;
+  height: 600px;
   width: 500px;
 }
+body > .container{
+  min-height: 600px;
+  max-height: 600px;
+  height: 600px;
+  overflow: auto;
+} 
 
 .nav, .pagination, .carousel, .panel-title a, .pointer { cursor: pointer; }
 .sidebar {
@@ -84,8 +90,18 @@ html {
   padding-top: 10px;
   padding-left: 0;
   padding-right: 0;
-  padding-bottom: 10px;
+  padding-bottom: 40px;
 }
 
 a,.btn-link,.text-info{color: #fd7341}
 .btn-link:hover{color: #ca400e}
+
+.footer {
+  background-color: #fafafa;
+  border-top: 1px solid #eee;
+  position: fixed;
+  bottom: -1px;
+  width: 83.33333333%;
+  z-index: 1000;
+}
+}

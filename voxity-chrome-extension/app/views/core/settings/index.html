@@ -1,10 +1,8 @@
-<p class="text-center">
-    <a href="#/about.html" class="btn btn-link">À propos</a>
-</p>
+
 <p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
 <div ng-if="isInit">
     <h4>
-        <i class="fa fa-user fa-fw"></i> {{getUser().name}}
+        <i class="fa fa-user-circle-o fa-fw"></i> {{getUser().name}}
         <button class="btn-link pull-right" ng-click="logout()" ng-disabled="logOutProcess"><i class="fa fa-power-off text-danger"></i></button>
     </h4>
     <hr>
@@ -49,3 +47,15 @@
 <p class="small text-muted text-center" ng-if="updated">
     Les modifications seront prise en compte lors du prochain lancement de l'application
 </p>
+<div class="row footer small">
+    <div class="col-xs-4">
+        <a href="https://voxity.fr" class="btn btn-link" target="_NEW" tooltip-placement="top" uib-tooltip="Voxity"><img src="/libs/assets/icons/icon48.png" alt="Voxity-icon" style="margin-right:5px; height: 42px;"></a>
+    </div>
+    <div class="col-xs-4 text-center">
+        <a href="#/about/" class="btn btn-sm btn-link">À propos</a><br>
+        <small class="text-muted">Version 2.0.0</small>
+    </div>
+    <div class="col-xs-4 text-right">
+        <a href="https://github.com/voxity" class="btn btn-link" target="_NEW" tooltip-placement="top" uib-tooltip="GitHub"><i class="fa fa-github fa-3x"></i></a>
+    </div>
+</div>

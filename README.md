@@ -22,18 +22,15 @@ Version non disponible
 7. Ajouter le dossier du projet *(/voxity-chrome-extension/)*
 8. modifier le fichier ``index.js``:83, la variable ```clientID```
 
-# Todo
- - [X] Cache 
- - [X] Configuration des services via des provider
- - [X] Gestion des droits admin
- - [X] Grunt Integration, minimify, concat, ... *(objectif 2 fichier index.min.html & app.min.js)*
 
-# install <small>(test build)</small>
+# Install <small>(test build)</small>
 ## Dépendance 
 
 * Google Chrome
 * bower 
 * être Utilisateur de la solution Voxity
+* npm
+* Grunt
 
 1. Clonner le projet 
 2. ce mettre à la racine du projet
