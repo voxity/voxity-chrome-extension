@@ -40,7 +40,7 @@ module.exports = function(grunt) {
                 dest: '<%= dirs.dstAngApp %>/contacts.tpl.js',
                 options: {
                     module: 'voxity.contacts',
-                    prefix:'/views/contacts',
+                    prefix:'views/contacts/',
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
             },
@@ -50,7 +50,7 @@ module.exports = function(grunt) {
                 dest: '<%= dirs.dstAngApp %>/core.err.tpl.js',
                 options: {
                     module: 'voxity.core',
-                    prefix:'/views/err',
+                    prefix:'views/err/',
                     htmlmin: '<%= vars.htmlminOpt %>'
 
                 }
@@ -61,7 +61,7 @@ module.exports = function(grunt) {
                 dest: '<%= dirs.dstAngApp %>/core.settings.tpl.js',
                 options: {
                     module: 'voxity.core',
-                    prefix:'/views/settings',
+                    prefix:'views/settings/',
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
             },
@@ -71,7 +71,7 @@ module.exports = function(grunt) {
                 dest: '<%= dirs.dstAngApp %>/devices.tpl.js',
                 options: {
                     module: 'voxity.devices',
-                    prefix:'/views/devices',
+                    prefix:'views/devices/',
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
             }

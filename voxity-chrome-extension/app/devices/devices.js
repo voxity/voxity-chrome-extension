@@ -7,11 +7,11 @@ angular.module('voxity.devices', [
 angular.module('voxity.devices').config(['$routeProvider',
     function(rp) {
         rp.when('/devices/:phoneId', {
-            templateUrl: '/views/devices/detail.html',
+            templateUrl: 'views/devices/detail.html',
             controller: 'deviceCtrl'
         });
         rp.when('/devices', {
-            templateUrl: '/views/devices/list.html',
+            templateUrl: 'views/devices/list.html',
             controller: 'devicesCtrl'
         })
     }

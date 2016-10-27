@@ -7,16 +7,16 @@ angular.module('voxity.contacts', [
 angular.module('voxity.contacts').config(['$routeProvider',
     function(rp) {
         rp.when('/contacts', {
-            'templateUrl': '/views/contacts/list.html',
+            'templateUrl': 'views/contacts/list.html',
             'controller': 'vxtContactsCtrl'
         }).when('/contacts/add', {
-            'templateUrl': '/views/contacts/form.html',
+            'templateUrl': 'views/contacts/form.html',
             'controller': 'vxtContactFormCtrl'
         }).when('/contact/:contactId/edit', {
-            'templateUrl': '/views/contacts/form.html',
+            'templateUrl': 'views/contacts/form.html',
             'controller': 'vxtContactFormCtrl'
         }).when('/contact/:contactId', {
-            'templateUrl': '/views/contacts/detail.html',
+            'templateUrl': 'views/contacts/detail.html',
             'controller': 'vxtContactCtrl'
         });
     }
