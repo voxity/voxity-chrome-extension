@@ -26,8 +26,7 @@ module.exports = function(grunt) {
                 src: [
                     '<%= dirs.dest %>/index.min.js',
                     '<%= ngtemplates.contacts.dest %>',
-                    '<%= ngtemplates.err.dest %>',
-                    '<%= ngtemplates.settings.dest %>',
+                    '<%= ngtemplates.core.dest %>',
                     '<%= ngtemplates.devices.dest %>'
                 ],
                 dest:'<%= dirs.dest %>/index.min.js'
@@ -44,24 +43,13 @@ module.exports = function(grunt) {
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
             },
-            'err':{
-                cwd: '<%= dirs.srcAngApp %>/views/err/',
-                src: '**.html',
-                dest: '<%= dirs.dstAngApp %>/core.err.tpl.js',
+            'core': {
+                cwd: '<%= dirs.srcAngApp %>/views/core/',
+                src: ['**.html', '*/**.html'],
+                dest: '<%= dirs.dstAngApp %>/core.tpl.js',
                 options: {
                     module: 'voxity.core',
-                    prefix:'views/err/',
-                    htmlmin: '<%= vars.htmlminOpt %>'
-
-                }
-            },
-            'settings': {
-                cwd: '<%= dirs.srcAngApp %>/views/settings/',
-                src: '**.html',
-                dest: '<%= dirs.dstAngApp %>/core.settings.tpl.js',
-                options: {
-                    module: 'voxity.core',
-                    prefix:'views/settings/',
+                    prefix:'views/core/',
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
             },
