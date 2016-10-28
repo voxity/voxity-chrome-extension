@@ -23,7 +23,7 @@
 </div>
 <br>
 <div class="list-group" ng-if="!loading">
-    <div class="list-group-item" ng-repeat="d in devices | filter:search.all" ng-class="{'disabled': !d.id}" ng-if="d.extension != user.internalExtension">
+    <div class="list-group-item" ng-repeat="d in devices | filter:search.all | orderBy:'extension'" ng-class="{'disabled': !d.id}" ng-if="d.extension != user.internalExtension">
         <div class="row">
             <div class="col-xs-1">
                 <i ng-class="getClass(d.state)"></i>

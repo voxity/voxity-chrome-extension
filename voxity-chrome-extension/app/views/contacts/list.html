@@ -17,7 +17,7 @@
     </div>
 </div>
 <div class="list-group">
-  <div class="list-group-item" ng-repeat="c in contacts | filter:search.all">
+  <div class="list-group-item" ng-repeat="c in contacts | filter:search.all | orderBy:'cn'">
     <h5 class="list-group-item-heading">
         {{c.cn}}
         <a href="#/contact/{{c.uid}}/edit" class="btn-link pull-right" ng-if="user.is_admin"><i class="fa fa-edit"></i></a>
