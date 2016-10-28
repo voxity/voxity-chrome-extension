@@ -1,6 +1,6 @@
 angular.module('voxity.channels').controller('makeCallCtrl', [
-    '$scope', 'vxtCoreApi',
-    function ($scope, apiChannels) {
+    '$scope', 'vxtCoreApi', 'vxtApiChannels',
+    function ($scope, api, apiChannels) {
         $scope.callProcessing = false;
 
         $scope.call = function(){
