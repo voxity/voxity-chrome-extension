@@ -1,6 +1,6 @@
 angular.module('voxity.users').service('vxtApiUsers', [
-    'vxtCoreApi', '$rootScope', 
-    function(api, $rootScope){
+    'vxtCoreApi', '$rootScope', 'settingsService',
+    function(api, $rootScope, settings){
         var EXPIRED_USER_TIME = 2 * 60 * 60 * 1000 
         var users = {};
         users.user = null;
@@ -59,7 +59,18 @@ angular.module('voxity.users').service('vxtApiUsers', [
 
         users.logout = function(done){
             chrome.runtime.getBackgroundPage(function(bkg){
-                bkg.gh.signOut(done);
+                bkg.gh.signOut(function(err, status, message){
+                    if(!err){
+                        settings.set({});
+                        done(null, message);
+                    } else {
+                        done({
+                            'err': err,
+                            'status': status,
+                            'message': message
+                        })
+                    }
+                });
             })
         }
         

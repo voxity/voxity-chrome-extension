@@ -77,7 +77,7 @@ var oauth2 = function(opts, callback) {
 var access_token;
 var gh = (function() {
     'use strict';
-
+    var THIS = this;
     var tokenFetcher = (function() {
         var clientID = '2kmgWiNQrBKbO6mECklv';
         var redirectUri = chrome.extension.getURL("oauth.html"); //chrome.identity.getRedirectURL();
@@ -139,6 +139,7 @@ var gh = (function() {
                     chrome.storage.sync.set({
                         access_token: token
                     }, function() {
+                        THIS.whoami(function(){},true);
                         callback(null, access_token);
                     });
                 }
@@ -147,6 +148,7 @@ var gh = (function() {
             removeCachedToken: function(token_to_remove) {
                 if (access_token === token_to_remove) {
                   chrome.storage.sync.remove("access_token"); //when the token is expired we must delete it from the storage in goal to ask a new one
+                  chrome.storage.sync.remove("user");
                   access_token = null;
                 }
             }
