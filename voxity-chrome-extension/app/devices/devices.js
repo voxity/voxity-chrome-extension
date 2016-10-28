@@ -59,7 +59,6 @@ angular.module('voxity.devices').provider('vxtDeviceConf', [function() {
     }
 
     this.initDefault = function(attribut){
-        console.log('default value')
         if (!attribut || attribut === 'autoRefreshList') {
             this.autoRefreshList = false;
         }

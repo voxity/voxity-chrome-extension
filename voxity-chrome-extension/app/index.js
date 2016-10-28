@@ -19,7 +19,7 @@ angular.module('voxity.devices').config(['vxtDeviceConfProvider',function(device
                 deviceConf.refreshListInterval = conf.device.refreshListInterval;
                 deviceConf.autoRefreshList = conf.device.autoRefreshList;
                 deviceConf.checkValue()
-        } else {console.log('init device');deviceConf.initDefault();}
+        } else {deviceConf.initDefault();}
     })
 }]);
 
@@ -29,7 +29,7 @@ angular.module('voxity.contacts').config(['vxtContactsConfProvider',function(con
         if(angular.isObject(conf) && Object.keys(conf).length > 0){
             contact.cacheDuration = conf.cacheDuration;
             contact.checkValue()
-        } else {console.log('init contact');contact.initDefault();}
+        } else {contact.initDefault();}
     });
 }]);
 
