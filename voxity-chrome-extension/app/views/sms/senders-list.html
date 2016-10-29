@@ -1,0 +1,13 @@
+<p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
+<div class="row">
+    <a href="#/sms-send" class="btn btn-default" tooltip-placement="right" uib-tooltip="Nouveau SMS"><i class="fa fa-edit text-info"></i></a>
+    </div>
+    <div class="col-xs-9" ng-if="sms.length > 0 && !loading">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="Recherche" ng-model="search.all">
+            <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+    </div>
+</div>

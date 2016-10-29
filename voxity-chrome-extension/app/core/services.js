@@ -19,6 +19,14 @@ settingsService.defaults = {
             'max': null,
             'default': 5
         }
+    },
+    'sms': {
+        'cacheDuration': {
+            'type': 'number',
+            'min': 1,
+            'max': null,
+            'default': 3
+        }
     }
 }
 
