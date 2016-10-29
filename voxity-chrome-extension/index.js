@@ -413,7 +413,9 @@ function setUpContextMenu() {
     var contextType = "selection";
     chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
     chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
+    chrome.contextMenus.create({type:'separator'});
     chrome.contextMenus.create({"title": "Ajouter un contact <%s>", "contexts":[contextType], "id": "context_add_contact"});  
+    chrome.contextMenus.create({"title": "Rechercher <%s> dans les contacts", "contexts":[contextType], "id": "context_find_contact"});  
 
 }
 chrome.runtime.onInstalled.addListener(setUpContextMenu);
@@ -436,6 +438,14 @@ function onClickHandler(info, tab) {
            } else if(info.menuItemId == "context_add_contact"){
                chrome.windows.create({
                     url: chrome.extension.getURL('app/index.html#/contacts/add?phone_number='+info.selectionText),
+                    type: 'panel',
+                    focused: true,
+                    width: 450,
+                    height: 485
+                });
+           } else if(info.menuItemId == "context_find_contact"){
+                chrome.windows.create({
+                    url: chrome.extension.getURL('app/index.html#/contacts?search='+info.selectionText),
                     type: 'panel',
                     focused: true,
                     width: 450,

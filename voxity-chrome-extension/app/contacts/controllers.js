@@ -1,7 +1,7 @@
 
 angular.module('voxity.contacts').controller('vxtContactsCtrl', [
-    '$scope', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiChannels', 'vxtApiUsers',
-    function ($scope, api, apiContacts, apiChannels, apiUsers) {
+    '$scope', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiChannels', 'vxtApiUsers', '$location', '$rootScope',
+    function ($scope, api, apiContacts, apiChannels, apiUsers, $location, $rootScope) {
         $scope.loading = true;
         $scope.contacts = [];
         $scope.errors = {err: false,mess:''};
@@ -10,6 +10,10 @@ angular.module('voxity.contacts').controller('vxtContactsCtrl', [
         $scope.init = function(){
             $scope.errors = {err: false,mess:''};
             $scope.loading = true;
+            if ($location.search()['search']) {
+                $rootScope.$broadcast('CORE:view.siglePage', {});
+                $scope.search.all = $location.search()['search'];
+            }
             if (!api.token){
                 return null;
             } else {
