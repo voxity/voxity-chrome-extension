@@ -413,10 +413,9 @@ function setUpContextMenu() {
     var contextType = "selection";
     chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
     chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
-    chrome.contextMenus.create({type:'separator'});
+    chrome.contextMenus.create({"type":"separator", "contexts":[contextType]});
     chrome.contextMenus.create({"title": "Ajouter un contact <%s>", "contexts":[contextType], "id": "context_add_contact"});  
-    chrome.contextMenus.create({"title": "Rechercher <%s> dans les contacts", "contexts":[contextType], "id": "context_find_contact"});  
-
+    chrome.contextMenus.create({"title": "Rechercher le contact <%s>", "contexts":[contextType], "id": "context_find_contact"});  
 }
 chrome.runtime.onInstalled.addListener(setUpContextMenu);
 chrome.runtime.onStartup.addListener(setUpContextMenu);
