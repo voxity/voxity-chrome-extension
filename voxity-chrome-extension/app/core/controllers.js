@@ -61,4 +61,33 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         }
         
     }
-])
+]);
+
+angular.module('voxity.core').controller('viewCtrl', ['$scope', function($scope){
+    var sideClass = "col-xs-2";
+    var mainBodyClass = "col-xs-10 col-xs-offset-2";
+    var bannerCallClass = "";
+    var containerClass = "";
+
+    function hideSidebar(){
+        sideClass = "hidden";
+        mainBodyClass = "col-xs-12";
+    }
+
+    function siglePage(){
+        hideSidebar();
+        containerClass = "siglePage"
+        bannerCallClass = 'hidden';
+    }
+
+
+
+    $scope.sideClass = function(){return sideClass};
+    $scope.mainBodyClass = function(){return mainBodyClass};
+    $scope.bannerCallClass = function(){return bannerCallClass}
+    $scope.containerClass = function(){return containerClass}
+
+    $scope.$on('CORE:view.hide-sidebare', hideSidebar);
+    $scope.$on('CORE:view.siglePage', siglePage);
+}]);
+

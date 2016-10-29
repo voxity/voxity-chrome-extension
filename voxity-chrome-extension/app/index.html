@@ -8,9 +8,9 @@
         <link rel="stylesheet" type="text/css" href="../libs/assets/animate.css/animate.min.css">
         <link rel="stylesheet" type="text/css" href="../css/app.css">
     </head>
-    <body>
-        <div class="container">
-            <form id="bannercall" ng-submit="call()" ng-controller="makeCallCtrl">
+    <body ng-controller="viewCtrl">
+        <div class="container" ng-class="containerClass()">
+            <form id="bannercall" ng-submit="call()" ng-controller="makeCallCtrl" ng-class="bannerCallClass()">
                 <div class="input-group form-group">
                     <input type="tel" class="form-control" placeholder="Numéro de téléphone" id="phonenumber" ng-model="phoneNumber" autofocus ng-disabled="callProcessing" ng-change="checkNumber()">
                     <span class="input-group-btn">
@@ -20,7 +20,7 @@
             </form>
             <div class="row">
                 <!-- sidebar -->
-                <div class="col-xs-2 sidebar" ng-controller="activeItemCtrl">
+                <div class="sidebar" ng-class="sideClass()" ng-controller="activeItemCtrl">
                     <ul class="nav nav-sidebar">
                         <li class="go-back"><a ng-if="goBackPage" href="{{goBackPage}}"><i class="fa fa-angle-left"></i></a></li>
 
@@ -37,8 +37,7 @@
                 <!-- /sidebar -->
 
                 <!-- main body -->
-                <div class="col-xs-10 col-xs-offset-2 main-body">
-                    <hr>
+                <div class="main-body" ng-class="mainBodyClass()">
                     <div ng-view class="container">
                         <h1 class="page-header">Chargement en cours <i class="fa fa-spinner fa-spin"></i></h1>
                     </div>

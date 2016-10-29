@@ -85,8 +85,8 @@ angular.module('voxity.contacts').controller('vxtContactCtrl', [
 ])
 
 angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
-    '$scope', '$routeParams', '$location', '$interval', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiUsers',
-    function ($scope, $routeParams, $location, $interval, api, apiContacts, apiUsers) {
+    '$scope', '$routeParams', '$location', '$interval', 'vxtCoreApi', 'vxtApiContacts', 'vxtApiUsers', '$rootScope',
+    function ($scope, $routeParams, $location, $interval, api, apiContacts, apiUsers, $rootScope) {
         $scope.loading = true;
         $scope.contact = null;
         $scope.errors = {err: false,mess:''};
@@ -165,6 +165,9 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
         $scope.init = function(){
             $scope.errors = {err: false,mess:''};
             $scope.loading = true;
+            if ($location.search()['phone_number']) {
+                $rootScope.$broadcast('CORE:view.siglePage', {})
+            }
             if (!api.token){
                 return null;
             } else {
@@ -186,7 +189,15 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                         }
                         $scope.loading = false;
                    })
-                } else {$scope.id = null;}
+                } else {
+                    $scope.id = null;
+                    if (!$scope.contact) {
+                        $scope.contact = {};
+                    }
+                    if ($location.search()['phone_number']) {
+                        $scope.contact.telephoneNumber = $location.search()['phone_number'];
+                    }
+                }
                 apiUsers.getUser(function(err, usr){
                     $scope.user = usr;
                     if(!usr.is_admin){

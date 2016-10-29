@@ -77,7 +77,6 @@ var oauth2 = function(opts, callback) {
 var access_token;
 var gh = (function() {
     'use strict';
-    var THIS = this;
     var tokenFetcher = (function() {
         var clientID = '2kmgWiNQrBKbO6mECklv';
         var redirectUri = chrome.extension.getURL("oauth.html"); //chrome.identity.getRedirectURL();
@@ -139,9 +138,10 @@ var gh = (function() {
                     chrome.storage.sync.set({
                         access_token: token
                     }, function() {
-                        THIS.whoami(function(){},true);
                         callback(null, access_token);
+                        whoami(function(){}, true);
                     });
+
                 }
             },
 
@@ -277,6 +277,7 @@ var gh = (function() {
                         tokenFetcher.removeCachedToken(access_token);
                         access_token = null;
                         callback(null, this.status, "Déconnexion réussie !");
+                        chrome.contextMenus.update("context_add_contact", {"enabled": false});
                     } else {
                         callback(this.response, this.status, this.response);
                     }
@@ -311,6 +312,33 @@ var gh = (function() {
                 }            
             });
         }
+    }
+    function whoami(done, force){
+
+        force = force || false;
+        chrome.storage.sync.get('user', function(user) {
+            if (!user || force) {
+                xhrWithAuth('GET', base_url + '/api/v1/users/self', {}, true, function(err,status, resp){
+                    try {
+                        // if the response is a correct formated JSON string, not always the case when rate limiter block requests
+                        var user = JSON.parse(resp).result;
+                    } catch (e) {
+                        var user = null;
+                    }
+                    chrome.storage.sync.set({
+                        user: user
+                    }, function() {});
+                    if (user.is_admin) {
+                        chrome.contextMenus.update('context_add_contact', {'enabled': true});  
+                    } else {
+                        chrome.contextMenus.update('context_add_contact', {'enabled': false});  
+                    }
+                    done(status !== 200, user)
+                });
+            } else {
+                done(null, user)
+            }
+        })
     }
 
     return {
@@ -364,32 +392,7 @@ var gh = (function() {
             }
             xhrWithAuth(message.method, message.action, message.parameters, true, callback);
         },
-        whoami: function(done, force){
-
-            force = force || false;
-            chrome.storage.sync.get('user', function(user) {
-                if (!user || force) {
-                    xhrWithAuth('GET', '/api/v1/users/self', {}, true, function(err,status, user){
-                        try {
-                            // if the response is a correct formated JSON string, not always the case when rate limiter block requests
-                            user = JSON.parse(user);
-                        } catch (e) {
-                            user = null;
-                        }
-                        chrome.storage.sync.set({
-                            user: user
-                        }, function() {
-                            done(null, user);
-                        });
-                    
-                        done(status !== 200, user)
-                    });
-                } else {
-                    done(null, user)
-                }
-            })
-            
-        },
+        whoami: whoami,
         request: function(reqParams, done){
             var method = reqParams.method || 'GET';
             if (method){ method = method.toUpperCase()};
@@ -410,6 +413,8 @@ function setUpContextMenu() {
     var contextType = "selection";
     chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
     chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
+    chrome.contextMenus.create({"title": "Ajouter un contact <%s>", "contexts":[contextType], "id": "context_add_contact"});  
+
 }
 chrome.runtime.onInstalled.addListener(setUpContextMenu);
 chrome.runtime.onStartup.addListener(setUpContextMenu);
@@ -420,13 +425,21 @@ function onClickHandler(info, tab) {
         if (info.selectionText) {
             if (info.menuItemId == "context_click_to_call")
                 gh.makeCall(info.selectionText);
-           else if (info.menuItemId == "context_sms") {
+            else if (info.menuItemId == "context_sms") {
                 chrome.windows.create({
                     url: chrome.extension.getURL('sms.html?phone_number='+info.selectionText),
                     type: 'popup',
                     focused: true,
                     width: 335,
                     height: 450 //350
+                });
+           } else if(info.menuItemId == "context_add_contact"){
+               chrome.windows.create({
+                    url: chrome.extension.getURL('app/index.html#/contacts/add?phone_number='+info.selectionText),
+                    type: 'panel',
+                    focused: true,
+                    width: 450,
+                    height: 485
                 });
            }
         }

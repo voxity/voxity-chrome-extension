@@ -1,13 +1,8 @@
 html {
-  height: 600px;
-  width: 500px;
-}
-body > .container{
-  min-height: 600px;
-  max-height: 600px;
-  height: 600px;
+  min-height: 410px;
+  min-width: 450px;
   overflow: auto;
-} 
+}
 
 .nav, .pagination, .carousel, .panel-title a, .pointer { cursor: pointer; }
 .sidebar {
@@ -27,6 +22,13 @@ body > .container{
   padding-bottom: 0;
 }
 
+.container {
+  padding-top: 15px;
+}
+
+.container.siglePage {
+  padding-top: 0px;
+}
 /* Sidebar navigation */
 .nav-sidebar {
   margin-right: -21px; /* 20px padding + 1px border */
