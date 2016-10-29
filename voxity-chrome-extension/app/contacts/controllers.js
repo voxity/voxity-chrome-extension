@@ -199,7 +199,12 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                         $scope.contact = {};
                     }
                     if ($location.search()['phone_number']) {
-                        $scope.contact.telephoneNumber = $location.search()['phone_number'];
+                        var value = $location.search()['phone_number'].trim();
+                        if (value.replace(/(\d|[+\\\/\-\ \(\)])*/g, '').trim() != '') {
+                            $scope.contact.cn = value;
+                        } else {
+                            $scope.contact.telephoneNumber = value.replace(/[+\\\/\-\ \(\)]*/g, '');
+                        }
                     }
                 }
                 apiUsers.getUser(function(err, usr){
