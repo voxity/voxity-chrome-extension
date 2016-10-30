@@ -1,11 +1,14 @@
 angular.module('voxity.sms').controller('vxtSmsCtrl', [
-    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiChannels', 'vxtApiContacts', '$rootScope', '$filter',
-    function ($scope, api, apiSms, apiChannels, apiContacts, $rootScope, $filter) {
-        $scope.sms = {};
+    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiChannels', 'vxtApiContacts', '$rootScope', '$filter', '$location',
+    function ($scope, api, apiSms, apiChannels, apiContacts, $rootScope, $filter, $location) {
+        $scope.sms = [];
         $scope.loading = true;
         $scope.errors = {};
         $scope.contacts = [];
 
+        $scope.switchToRecipient = function(num){
+            $location.path('/sms/'+num);
+        }
 
         $scope.findNumber = function(number){
             if(this.contacts.length === 0) return [];
@@ -25,7 +28,7 @@ angular.module('voxity.sms').controller('vxtSmsCtrl', [
         }
 
         $scope.init = function(){
-            $scope.sms = {};
+            $scope.sms = [];
             $scope.loading = true;
             $scope.errors = {};
 

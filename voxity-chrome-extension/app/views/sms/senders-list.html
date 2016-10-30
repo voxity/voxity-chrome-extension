@@ -19,11 +19,11 @@
     <div class="list-group-item" ng-repeat="(num, sms) in sms | filter:search.all | groupBy:'phone_number'">
         <div class="row">
             <div class="col-xs-10">
-                <h5 class="list-group-item-heading">{{c = findNumber(num); ""}}
-                    <span ng-if="c.length === 0">{{num | phoneNumber}}</span>
-                    <span ng-if="c.length === 1" uib-tooltip="{{num | phoneNumber}}">{{c[0].cn}}</span>
+                <h5 class="list-group-item-heading" style="margin-bottom: 0;">{{c = findNumber(num); ""}}
+                    <span ng-if="c.length === 0"  style="padding: 0" class="btn btn-link" ng-click="switchToRecipient(num)">{{num | phoneNumber}}</span>
+                    <span class="btn btn-link" style="padding: 0" ng-if="c.length === 1" uib-tooltip="{{num | phoneNumber}}" ng-click="switchToRecipient(num)">{{c[0].cn}}</span>
                     <span ng-if="c.length > 1">
-                        {{c[0].cn}}
+                        <span style="padding: 0" class="btn btn-link" ng-click="switchToRecipient(num)">{{c[0].cn}}</span>
                         <span class="text-muted" uib-dropdown>
                             <small class="text-muted pointer" uib-dropdown-toggle>
                                 <i class="fa fa-user"></i><sup><small>{{c.length -1}}</small></sup>
@@ -38,7 +38,9 @@
                 </h5>
             </div>
             <div class="col-xs-2 text-ritgh">
-                <i class="fa fa-angle-right"></i>
+                <span style="padding: 0" class="btn btn-link">
+                    <i class="fa fa-angle-right"></i>
+                </span> 
             </div>
         </div>
     </div>
