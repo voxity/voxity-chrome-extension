@@ -10,6 +10,7 @@ angular.module('voxity.sms').service('vxtApiSms', [
         sms.responses.lastUpdateData = null;
 
         var messages = {};
+        var responses = {};
         sms.baseUri = smsConf.startPath;
 
         function isResponse(sms){
@@ -25,7 +26,7 @@ angular.module('voxity.sms').service('vxtApiSms', [
         messages.expiredData = function(){
             if (!sms.messages.lastUpdateData){return true;}
             var now = new Date();
-            return (now - sms.messages.lastUpdateData ) > contactsConf.cacheDuration * 60000;
+            return (now - sms.messages.lastUpdateData ) > smsConf.cacheDuration * 60000;
         }
 
         messages.clean = function(sms){
@@ -40,6 +41,25 @@ angular.module('voxity.sms').service('vxtApiSms', [
             }
         }
 
+        /**
+         * Check if data is expired
+         * @return {Boolean}
+         */
+        responses.expiredData = function(){
+            if (!sms.messages.lastUpdateData){return true;}
+            var now = new Date();
+            return (now - sms.responses.lastUpdateData ) > smsConf.cacheDuration * 60000;
+        }
+
+        responses.clean = function(sms){
+            if (angular.isObject(sms)) {
+                sms.send_date = new Date(sms.send_date);
+                return sms;
+            } else {
+                return sms;
+            }
+        }
+
         sms.messages.get = function(done, force){
             if (sms.messages.data === {} || messages.expiredData() || force){
                 sms.messages.data = [];
@@ -47,17 +67,41 @@ angular.module('voxity.sms').service('vxtApiSms', [
                     url: sms.baseUri,
                 }).success(function(d, status){
                     if (status == 200 && d.result) {
+                        sms.messages.lastUpdateData = new Date();
                         angular.forEach(d.result, function(elt, index){
                             sms.messages.data.push(messages.clean(elt));
                         });
-                        sms.messages.data = $filter('orderBy')(sms.messages.data, 'send_date');
+                        sms.messages.data = $filter('orderBy')(sms.messages.data, '-send_date');
                         return done(null, sms.messages.data);
                     } else {
                         return done({'status': status, 'data':data})
                     }
                 })
             } else {
-                return done(err, this.data);
+                return done(null, sms.messages.data);
+            }
+        }
+
+        sms.responses.get = function(done, force){
+            if (sms.responses.data === {} || responses.expiredData() || force){
+                sms.responses.data = [];
+                api.request({
+                    url: sms.baseUri + '/responses',
+                }).success(function(d, status){
+
+                    if (status == 200 && d.result) {
+                        sms.responses.lastUpdateData = new Date();
+                        angular.forEach(d.result, function(elt, index){
+                            sms.responses.data.push(responses.clean(elt));
+                        });
+                        sms.responses.data = $filter('orderBy')(sms.responses.data, 'send_date');
+                        return done(null, sms.responses.data);
+                    } else {
+                        return done({'status': status, 'data':data})
+                    }
+                })
+            } else {
+                return done(err, sms.responses.data);
             }
         }
 

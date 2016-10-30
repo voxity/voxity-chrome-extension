@@ -64,6 +64,17 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
         $scope.loading = true;
         $scope.errors = {};
         $scope.recipientNames = [];
+        $scope.loadingResp = true;
+        $scope.responses = [];
+
+        $scope.getResponse = function(messageId){
+            if (this.responses.length > 0) {
+                return $filter('groupBy')(this.responses, 'id_sms_sent')[messageId] || [];
+            } else {
+                return [];
+            }
+        }
+
         $scope.findNumber = function(number){
             if(this.contacts.length === 0) return [];
 
@@ -98,12 +109,17 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
                             'message': "Une erreur est survenu lors du chargement des SMS envoyés"
                         }
                     } else {
-                        sms = $filter('groupBy')(sms, 'phone_number')
+                        sms = $filter('groupBy')(sms, 'phone_number');
                         if (sms[$scope.num]) {
                             $scope.sms = sms[$scope.num];
-                            // apiSms.responses.get(function(err, responses){
+                            apiSms.responses.get(function(err, responses){
+                                responses = $filter('groupBy')(responses, 'phone_number');
+                                if (responses[$scope.num]) {
+                                    $scope.responses = responses[$scope.num];
+                                }
+                                $scope.loadingResp = false;
 
-                            // })
+                            })
                         } else {
                             $scope.errors = {
                                 'err': true,

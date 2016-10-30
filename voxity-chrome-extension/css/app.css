@@ -96,7 +96,17 @@ html {
 }
 
 a,.btn-link,.text-info{color: #fd7341}
-.btn-link:hover{color: #ca400e}
+a:hover, .btn-link:hover{color: #ca400e}
+.panel-info {border-color: #fd7341}
+.bg-info{
+  background-color: #fd7341;
+  color:#fafafa;
+}
+
+.bg-muted {
+  background-color: #dedede;
+  color: #333;
+}
 
 .footer {
   background-color: #fafafa;
