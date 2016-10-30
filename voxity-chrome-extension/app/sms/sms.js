@@ -5,7 +5,7 @@ angular.module('voxity.sms', [
 angular.module('voxity.sms').config(['$routeProvider',
     function(rp) {
         rp.when('/sms', {
-            'templateUrl': 'views/sms/senders-list.html',
+            'templateUrl': 'views/sms/recipients-list.html',
             'controller': 'vxtSmsCtrl'
         })
     }
