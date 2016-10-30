@@ -2,11 +2,13 @@ angular.module('voxityChromeApp', [
     'ngRoute',
     'ui.bootstrap',
     'ui.bootstrap.tpls',
+    'angular.filter',
     'voxity.core',
     'voxity.users',
     'voxity.channels',
     'voxity.devices',
     'voxity.contacts',
+    'voxity.sms',
 ]);
 
 angular.module('voxityChromeApp').factory('authInterceptorService', [

@@ -1,6 +1,7 @@
 <p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
 <div class="row">
-    <a href="#/sms-send" class="btn btn-default" tooltip-placement="right" uib-tooltip="Nouveau SMS"><i class="fa fa-edit text-info"></i></a>
+    <div class="col-xs-3">
+        <a href="#/sms-send" class="btn btn-default" tooltip-placement="right" uib-tooltip="Nouveau SMS"><i class="fa fa-edit text-info"></i></a>
     </div>
     <div class="col-xs-9" ng-if="sms.length > 0 && !loading">
         <div class="input-group input-group-sm">
@@ -8,6 +9,37 @@
             <span class="input-group-addon">
                 <i class="fa fa-search"></i>
             </span>
+        </div>
+    </div>
+</div>
+
+<hr>
+
+<div class="list-group">
+    <div class="list-group-item" ng-repeat="(num, sms) in sms | filter:search.all | groupBy:'phone_number'">
+        <div class="row">
+            <div class="col-xs-10">
+                <h5 class="list-group-item-heading">{{c = findNumber(num); ""}}
+                    <span ng-if="c.length === 0">{{num | phoneNumber}}</span>
+                    <span ng-if="c.length === 1" uib-tooltip="{{num | phoneNumber}}">{{c[0].cn}}</span>
+                    <span ng-if="c.length > 1">
+                        {{c[0].cn}}
+                        <span class="text-muted" uib-dropdown>
+                            <small class="text-muted pointer" uib-dropdown-toggle>
+                                <i class="fa fa-user"></i><sup><small>{{c.length -1}}</small></sup>
+                            </small>
+                            <ul class="dropdown-menu" uib-dropdown-menu>
+                                <li ng-repeat="cc in c">
+                                  <a>{{cc.cn}}</a>
+                                </li>
+                            </ul>
+                        </span>
+                    </span>
+                </h5>
+            </div>
+            <div class="col-xs-2 text-ritgh">
+                <i class="fa fa-angle-right"></i>
+            </div>
         </div>
     </div>
 </div>

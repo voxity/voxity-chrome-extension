@@ -4,7 +4,7 @@ angular.module('voxity.sms', [
 
 angular.module('voxity.sms').config(['$routeProvider',
     function(rp) {
-        rp.when('/smss', {
+        rp.when('/sms', {
             'templateUrl': 'views/sms/senders-list.html',
             'controller': 'vxtSmsCtrl'
         })
@@ -43,7 +43,7 @@ angular.module('voxity.sms').provider('vxtSmsConf', [function () {
         settingsService.set(contactConf.getConf(), 'sms');
     }
 
-    this.startPath = '/contacts';
+    this.startPath = '/sms';
 
     this.$get = [function() {
         return {
