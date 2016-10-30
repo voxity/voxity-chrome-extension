@@ -1,0 +1,30 @@
+<h5 class="text-center">
+    <span ng-if="recipientNames.length === 0"  style="padding: 0" class="btn btn-link" ng-click="switchToRecipient(num)">{{num | phoneNumber}}</span>
+    <span class="btn btn-link" style="padding: 0" ng-if="recipientNames.length === 1" uib-tooltip="{{num | phoneNumber}}" tooltip-placement="bottom" ng-click="switchToRecipient(num)">{{recipientNames[0].cn}}</span>
+    <span ng-if="recipientNames.length > 1">
+        <span style="padding: 0" class="btn btn-link" ng-click="switchToRecipient(num)" uib-tooltip="{{num | phoneNumber}}" tooltip-placement="bottom">{{recipientNames[0].cn}}</span>
+        <span class="text-muted" uib-dropdown>
+            <small class="text-muted pointer" uib-dropdown-toggle>
+                <i class="fa fa-user"></i><sup><small>{{recipientNames.length -1}}</small></sup>
+            </small>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+                <li ng-repeat="cc in recipientNames">
+                  <a>{{cc.cn}}</a>
+                </li>
+            </ul>
+        </span>
+    </span>
+</h5>
+<hr>
+<div class="row" ng-repeat="s in sms">
+    <div class="col-xs-9">
+        <div class="panel panel-default" style="margin-bottom: 0;">
+            <div class="panel-body">
+                {{s.content}}
+            </div>
+        </div>
+        <p>
+            <small class="small text-danger" ng-if="s.code !== '0'"><i class="fa times-circle"></i> non délivré</small>
+        </p>
+    </div>
+</div>

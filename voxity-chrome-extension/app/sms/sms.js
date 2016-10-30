@@ -1,5 +1,6 @@
 angular.module('voxity.sms', [
     'voxity.core',
+    'angular.filter',
 ]);
 
 angular.module('voxity.sms').config(['$routeProvider',
@@ -7,6 +8,10 @@ angular.module('voxity.sms').config(['$routeProvider',
         rp.when('/sms', {
             'templateUrl': 'views/sms/recipients-list.html',
             'controller': 'vxtSmsCtrl'
+        })
+        rp.when('/sms/:smsPhoneNumber', {
+            'templateUrl': 'views/sms/chat.html',
+            'controller': 'vxtSmsChatCtrl'
         })
     }
 ]);

@@ -31,7 +31,9 @@ angular.module('voxity.sms').service('vxtApiSms', [
         messages.clean = function(sms){
             if (angular.isObject(sms)) {
                 sms.send_date = new Date(sms.send_date);
-                sms.delivery_date = new Date(sms.delivery_date);
+                if (sms.delivery_date) {
+                    sms.delivery_date = new Date(sms.delivery_date);
+                }
                 return sms;
             } else {
                 return sms;
@@ -48,7 +50,7 @@ angular.module('voxity.sms').service('vxtApiSms', [
                         angular.forEach(d.result, function(elt, index){
                             sms.messages.data.push(messages.clean(elt));
                         });
-                        sms.messages.data = $filter('orderBy')(sms.messages.data, '-send_date');
+                        sms.messages.data = $filter('orderBy')(sms.messages.data, 'send_date');
                         return done(null, sms.messages.data);
                     } else {
                         return done({'status': status, 'data':data})
