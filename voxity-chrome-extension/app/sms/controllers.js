@@ -194,6 +194,16 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
             loadContacts()
         };$scope.init();
 
+        $scope.send = function(){
+            apiSms.messages.post($scope.sms, function(err, sms){
+                if (err) {
+                    $scope.errors = {'message': "Une erreur est survenu, verifier votre formulaire. err"+err.status}
+                } else {
+                    $location.path('/sms/'+sms.phone_number)
+                }
+            })
+        }
+
         $scope.$on('api:TOKEN_SET', loadContacts);
     }]
 );

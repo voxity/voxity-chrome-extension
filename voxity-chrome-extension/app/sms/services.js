@@ -74,7 +74,7 @@ angular.module('voxity.sms').service('vxtApiSms', [
                         sms.messages.data = $filter('orderBy')(sms.messages.data, '-send_date');
                         return done(null, sms.messages.data);
                     } else {
-                        return done({'status': status, 'data':data})
+                        return done({'status': status, 'data':d})
                     }
                 })
             } else {
@@ -97,7 +97,7 @@ angular.module('voxity.sms').service('vxtApiSms', [
                         sms.responses.data = $filter('orderBy')(sms.responses.data, 'send_date');
                         return done(null, sms.responses.data);
                     } else {
-                        return done({'status': status, 'data':data})
+                        return done({'status': status, 'data':d})
                     }
                 })
             } else {
@@ -105,7 +105,34 @@ angular.module('voxity.sms').service('vxtApiSms', [
             }
         }
 
-        return sms;
+        /**
+         * Send text message
+         * @param  {Object}   sms  contains attr content, phone_number, emitter
+         * @param  {Function} done with 2 params : err, sms_result
+         */
+        sms.messages.post = function(mess, done){
+            if(!angular.isFunction(done)){
+                done = function(){};
+            }
+            api.request({
+                url: sms.baseUri,
+                data: mess,
+                method: 'POST'
+            }).success(function(d, status){
+                if (status == 200 && d.result) {
+                    if (!angular.isArray(sms.messages.data)) sms.messages.data = [];
 
+                    sms.messages.data.push(messages.clean(d.result));
+                    sms.messages.data = $filter('orderBy')(sms.messages.data, 'send_date');
+                    return done(null, messages.clean(d.result));
+                } else {
+                    return done({'status': status, 'data':d})
+                }
+            }).error(function(d, status) {
+                return done({'status': status, 'data':d})
+            });
+        }
+
+        return sms;
     }]
 )
