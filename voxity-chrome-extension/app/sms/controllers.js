@@ -230,7 +230,7 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
                 if (err) {
                     $scope.errors = {'message': "Une erreur est survenu, verifier votre formulaire. err"+err.status}
                 } else {
-                    $location.path('/sms/'+sms.phone_number)
+                    $location.path('/sms/chat/'+sms.phone_number)
                 }
             })
         }

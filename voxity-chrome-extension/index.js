@@ -428,11 +428,11 @@ function onClickHandler(info, tab) {
                 gh.makeCall(info.selectionText);
             else if (info.menuItemId == "context_sms") {
                 chrome.windows.create({
-                    url: chrome.extension.getURL('sms.html?phone_number='+info.selectionText),
+                    url: chrome.extension.getURL('app/index.html#/sms/send?sigleViewPage=true&phone_number='+info.selectionText),
                     type: 'popup',
                     focused: true,
-                    width: 335,
-                    height: 450 //350
+                    width: 450,
+                    height: 485
                 });
            } else if(info.menuItemId == "context_add_contact"){
                chrome.windows.create({
