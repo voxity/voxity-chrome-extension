@@ -5,6 +5,7 @@ angular.module('voxity.sms').controller('vxtSmsCtrl', [
         $scope.loading = true;
         $scope.errors = {};
         $scope.contacts = [];
+        $scope.search = {};
 
         $scope.switchToRecipient = function(num){
             $location.path('/sms/chat/'+num);
