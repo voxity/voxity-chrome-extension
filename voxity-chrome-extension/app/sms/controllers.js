@@ -156,6 +156,24 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
         $scope.contacts = [];
         $scope.contacstList = false;
 
+        $scope.findNumber = function(number){
+            if($scope.contacts.length === 0) return [];
+
+            num = $filter('phoneNumber')(number, false);
+            var res = $filter('filter')($scope.contacts, num)
+            if (res.length === 0){
+                if (num.substring(0,1) === '+') {
+                    res = $filter('filter')($scope.contacts, num.substring(3))
+                } else {
+                    res = $filter('filter')($scope.contacts, num.substring(1));
+                }
+                return res;
+            } else {
+                return res;
+            } 
+        }
+
+
         $scope.emitterDataChange = function(){
             this.sms.emitter = null;
             this.emitter = !this.emitter 
