@@ -4,7 +4,7 @@
     </button>
     <ul class="dropdown-menu" uib-dropdown-menu>
         <li class="pointer" ng-click="call(num)"><a><i class="fa fa-phone fa-fw"></i> Appeler <{{num|phoneNumber}}></a></li>
-        <li class="pointer" ng-click="reply(num)"><a><i class="fa fa-reply fa-fw"></i> Répondre</a></li>
+        <li class="pointer"><a href="#/sms/send?phone_number={{num}}"><i class="fa fa-reply fa-fw"></i> Répondre</a></li>
         <li class="divider"></li>
         <li class="pointer disabled"><a><i class="fa fa-trash-o fa-fw  text-danger"></i> Supprimer la conversation</a></li>
     </ul>

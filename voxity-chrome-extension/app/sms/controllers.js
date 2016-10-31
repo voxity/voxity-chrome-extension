@@ -1,13 +1,13 @@
 angular.module('voxity.sms').controller('vxtSmsCtrl', [
-    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiContacts', '$rootScope', '$filter', '$location',
-    function ($scope, api, apiSms, apiContacts, $rootScope, $filter, $location) {
+    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiContacts', 'vxtApiChannels', '$rootScope', '$filter', '$location',
+    function ($scope, api, apiSms, apiContacts, apiChannels, $rootScope, $filter, $location) {
         $scope.sms = [];
         $scope.loading = true;
         $scope.errors = {};
         $scope.contacts = [];
 
         $scope.switchToRecipient = function(num){
-            $location.path('/sms/'+num);
+            $location.path('/sms/chat/'+num);
         }
 
         $scope.findNumber = function(number){
@@ -25,6 +25,16 @@ angular.module('voxity.sms').controller('vxtSmsCtrl', [
             } else {
                 return res;
             } 
+        }
+
+        $scope.call = function(){
+            this.callProcessing = true;
+            apiChannels.post(this.phoneNumber, function(err, channel){
+                if(!err){
+                    $scope.phoneNumber = undefined;
+                }else {console.log(err,status)}
+                $scope.callProcessing = false;
+            })
         }
 
         $scope.init = function(){
@@ -164,6 +174,8 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
             if (res.length === 0){
                 if (num.substring(0,1) === '+') {
                     res = $filter('filter')($scope.contacts, num.substring(3))
+                } else if (num.substring(0,2) == '33'){
+                    res = $filter('filter')($scope.contacts, '0'+num.substring(2));
                 } else {
                     res = $filter('filter')($scope.contacts, num.substring(1));
                 }

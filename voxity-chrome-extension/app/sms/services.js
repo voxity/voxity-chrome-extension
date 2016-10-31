@@ -101,7 +101,7 @@ angular.module('voxity.sms').service('vxtApiSms', [
                     }
                 })
             } else {
-                return done(err, sms.responses.data);
+                return done(null, sms.responses.data);
             }
         }
 
