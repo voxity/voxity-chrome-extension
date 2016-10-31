@@ -63,7 +63,7 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
     }
 ]);
 
-angular.module('voxity.core').controller('viewCtrl', ['$scope', function($scope){
+angular.module('voxity.core').controller('viewCtrl', ['$scope', '$location', function($scope, $location){
     var sideClass = "col-xs-2";
     var mainBodyClass = "col-xs-10 col-xs-offset-2";
     var bannerCallClass = "";
@@ -80,7 +80,7 @@ angular.module('voxity.core').controller('viewCtrl', ['$scope', function($scope)
         bannerCallClass = 'hidden';
     }
 
-
+    if ($location.search()['sigleViewPage']) siglePage();
 
     $scope.sideClass = function(){return sideClass};
     $scope.mainBodyClass = function(){return mainBodyClass};
