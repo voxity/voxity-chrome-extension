@@ -67,6 +67,12 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
         $scope.loadingResp = true;
         $scope.responses = [];
 
+        $scope.call = function(num){
+            apiChannels.post(num, function(err, data){
+                
+            });
+        }
+
         $scope.getResponse = function(messageId){
             if (this.responses.length > 0) {
                 return $filter('groupBy')(this.responses, 'id_sms_sent')[messageId] || [];
