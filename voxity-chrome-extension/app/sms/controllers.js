@@ -69,7 +69,7 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
 
         $scope.call = function(num){
             apiChannels.post(num, function(err, data){
-                
+
             });
         }
 
@@ -143,5 +143,57 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
         };$scope.init();
 
         $scope.$on('api:TOKEN_SET', $scope.init);
+    }]
+);
+
+
+angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
+    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiContacts', '$rootScope', '$filter', '$location', '$routeParams',
+    function ($scope, api, apiSms, apiContacts, $rootScope, $filter, $location, $routeParams) {
+        $scope.sms = {};
+        $scope.emitter = false;
+        $scope.loadingContact = true;
+        $scope.contacts = [];
+        $scope.contacstList = false;
+
+        $scope.emitterDataChange = function(){
+            this.sms.emitter = null;
+            this.emitter = !this.emitter 
+        }
+
+        $scope.getPlaceholderDest = function(){
+            if (this.emitter) {
+                return "ex : SocieteName"
+            } else {return null;}
+        }
+        function loadContacts(){
+            if (api.token){
+                $scope.contacts = [];
+                apiContacts.get(function(err, contacts){
+                    $scope.contacts = contacts || [];
+                    $scope.loadingContact = false;
+                })
+            }
+        }
+        $scope.addNumber = function(num){
+            if (num && num.trim().length > 0) {
+                $scope.sms.phone_number = num;
+                $scope.contacstList = false;
+            }
+        }
+        $scope.isRecipients = function(num){
+            return num === $scope.sms.phone_number;
+        }
+        $scope.init = function(){
+            $scope.sms = {};
+            $scope.emitter = false;
+
+            if ($location.search()['phone_number']) {
+                $scope.sms.phone_number = $location.search()['phone_number'].trim();
+            };
+            loadContacts()
+        };$scope.init();
+
+        $scope.$on('api:TOKEN_SET', loadContacts);
     }]
 );

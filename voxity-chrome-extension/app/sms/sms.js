@@ -8,11 +8,15 @@ angular.module('voxity.sms').config(['$routeProvider',
         rp.when('/sms', {
             'templateUrl': 'views/sms/recipients-list.html',
             'controller': 'vxtSmsCtrl'
-        })
+        });
+         rp.when('/sms-send', {
+            'templateUrl': 'views/sms/form.html',
+            'controller': 'vxtSmsFormCtrl'
+        });
         rp.when('/sms/:smsPhoneNumber', {
             'templateUrl': 'views/sms/chat.html',
             'controller': 'vxtSmsChatCtrl'
-        })
+        });
     }
 ]);
 

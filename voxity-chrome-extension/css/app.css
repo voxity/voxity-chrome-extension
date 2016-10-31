@@ -4,6 +4,9 @@ html {
   overflow: auto;
 }
 
+textarea {
+  resize:vertical;
+}
 .nav, .pagination, .carousel, .panel-title a, .pointer { cursor: pointer; }
 .sidebar {
   position: fixed;

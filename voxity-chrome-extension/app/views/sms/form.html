@@ -1,0 +1,43 @@
+<div class="form-group">
+    <label class="control-label" for="dest">Déstinataire</label>
+    <div class="input-group">
+        <span class="input-group-btn" uib-dropdown auto-close="outsideClick" is-open="contacstList">
+            <button class="btn btn-default" type="button" ng-disabled="loadingContact || contacts.length == 0" uib-dropdown-toggle><i class="fa" ng-class="{'fa-address-book' : !loadingContact, 'fa-circle-o-notch fa-spin': loadingContact}"></i></button>
+            <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="split-button" style="max-height: 340px; width:300px; overflow: auto;padding-top:40px;">
+                <li style="position: absolute; top:0;left: 0;right: 0;">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="recherche" ng-model="search">
+                    </div>
+                </li>
+                <li ng-repeat="c in contacts | filter:search| orderBy:'cn'"><a>
+                    <i class="fa fa-address-card"></i> <strong>{{c.cn}}</strong><br>
+                    <div class="row">
+                        <div class="col-xs-6 pointer" ng-click="addNumber(c.telephoneNumber)" ng-class="{'text-success': isRecipients(c.telephoneNumber)}"><i class="fa fa-phone"></i> {{(c.telephoneNumber | phoneNumber) || 'N/A'}}</div>
+                        <div class="col-xs-6 pointer" ng-click="addNumber(c.mobile)" ng-class="{'text-success': isRecipients(c.mobile)}"><i class="fa fa-mobile"></i> {{(c.mobile | phoneNumber) || 'N/A'}}</div>
+                    </div>
+                </a></li>
+            </ul>
+        </span>
+        <input type="tel" class="form-control" placeholder="ex : 0611223344" id="dest" ng-model="sms.phone_number">
+    </div>
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="dest">Nom de l'émetteur</label>
+    <div class="input-group">
+        <span class="input-group-btn" ng-click="emitterDataChange()">
+            <button class="btn btn-default" type="button"><i class="fa" ng-class="{'fa-check-square-o': emitter, 'fa-square-o': !emitter}"></i></button>
+        </span>
+        <input type="tel" class="form-control" placeholder="{{getPlaceholderDest()}}" id="dest" ng-model="sms.emitter" ng-disabled="!emitter">
+    </div>
+    <span class="help-block small" ng-if="emitter">En ajoutant un nom d'émetteur, votre correspondant ne pourra pas vous répondre</span>
+</div>
+
+<div class="form-group">
+    <label class="control-label" for="dest">Message</label>
+    <textarea class="form-control" rows="5" ng-model="sms.content"></textarea>
+</div>
+
+<p class="text-center">
+    <button class="btn btn-success" uib-tooltip="Envoyer" tooltip-placement="bottom"><i class="fa fa-send"></i>&nbsp;</button>
+</p>
