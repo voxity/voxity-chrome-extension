@@ -71,6 +71,7 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
             },
             'emitterDataChange': function(){
                 $scope.conf.sms.defaultEmitter = !$scope.conf.sms.defaultEmitter;
+                $scope.conf.sms.defaultEmitterValue = null;
             },
             'valideEmitter': function(){
                 if ($scope.conf.sms.defaultEmitter) {
