@@ -133,6 +133,35 @@ angular.module('voxity.sms').service('vxtApiSms', [
             });
         }
 
+
+        sms.clean = {
+            'phoneNumber': function(num, space){
+                if (angular.isUndefined(space)) space = true;
+
+                if(num && angular.isString(num)) {
+                    if (num.substring(0,3) === "+33"){
+                        num = '0' + num.substring(3);
+                    }
+                    if (num.substring(0,2) === "33"){
+                        num = '0' + num.substring(2);
+                    }
+                    if(space){
+                        return num.replace(/[^\d]/g,'').trim()
+                    } else {
+                        return num.replace(/[^\d]/g,'').trim()
+                    }
+                }
+                return ''
+            },
+            'emitter': function(emitter){
+
+                if(emitter && angular.isString(emitter)) {
+                    return emitter.replace(/[^a-zA-Z]/g,'').trim()
+                }
+                return ''
+            }
+        }
+
         return sms;
     }]
 )

@@ -1,7 +1,7 @@
 <div class="alert alert-danger" ng-if="errors">
     {{errors.message || "Une internet c'est produite."}}
 </div>
-<div class="form-group">
+<div class="form-group" ng-class="{'has-error': !validePhoneNumber()}">
     <label class="control-label" for="dest">Déstinataire</label>
     <div class="input-group">
         <span class="input-group-btn" uib-dropdown auto-close="outsideClick" is-open="contacstList">
@@ -21,7 +21,7 @@
                 </a></li>
             </ul>
         </span>
-        <input type="tel" class="form-control" placeholder="ex : 0611223344" id="dest" ng-model="sms.phone_number">
+        <input type="tel" class="form-control" placeholder="ex : 0611223344" id="dest" ng-model="sms.phone_number" ng-change="cleanPhoneNumber()">
     </div>
     <span class="help-block small" ng-if="sms.phone_number">
         {{c = findNumber(sms.phone_number); ""}}
@@ -30,22 +30,22 @@
     </span>
 </div>
 
-<div class="form-group">
+<div class="form-group" ng-class="{'has-error': !valideEmitter()}">
     <label class="control-label" for="dest">Nom de l'émetteur</label>
     <div class="input-group">
         <span class="input-group-btn" ng-click="emitterDataChange()">
             <button class="btn btn-default" type="button"><i class="fa" ng-class="{'fa-check-square-o': emitter, 'fa-square-o': !emitter}"></i></button>
         </span>
-        <input type="tel" class="form-control" placeholder="{{getPlaceholderDest()}}" id="dest" ng-model="sms.emitter" ng-disabled="!emitter">
+        <input type="tel" class="form-control" placeholder="{{getPlaceholderDest()}}" id="dest" ng-model="sms.emitter" ng-disabled="!emitter" ng-change="cleanEmitter()">
     </div>
     <span class="help-block small" ng-if="emitter">En ajoutant un nom d'émetteur, votre correspondant ne pourra pas vous répondre</span>
 </div>
 
-<div class="form-group">
+<div class="form-group" ng-class="{'has-error': sms.content.length == 0}">
     <label class="control-label" for="dest">Message</label>
     <textarea class="form-control" rows="5" ng-model="sms.content"></textarea>
 </div>
 
 <p class="text-center">
-    <button class="btn btn-success" type="button" uib-tooltip="Envoyer" tooltip-placement="bottom" ng-click="send()"><i class="fa fa-send"></i>&nbsp;</button>
+    <button class="btn btn-success" type="button" uib-tooltip="Envoyer" tooltip-placement="bottom" ng-click="send()" ng-disabled="!isValidForm()"><i class="fa fa-send"></i>&nbsp;</button>
 </p>

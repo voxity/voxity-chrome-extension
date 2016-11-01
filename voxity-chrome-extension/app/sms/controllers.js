@@ -139,6 +139,29 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
 
         $scope.findNumber = apiContacts.findNumber;
 
+        $scope.validePhoneNumber = function(){
+            if (angular.isString($scope.sms.phone_number) && $scope.sms.phone_number.length > 0) {
+                return $scope.sms.phone_number.match(/^\d{10}$/);
+            } else {
+                return true
+            }
+        }
+
+        $scope.valideEmitter = function(){
+            if ($scope.emitter) {
+                if ($scope.sms.emitter) return $scope.sms.emitter.match(/^[a-zA-Z]{4,11}$/);
+                return false;
+            } else {
+                return true;
+            }
+        }
+
+        $scope.cleanPhoneNumber = function(){
+            $scope.sms.phone_number = apiSms.clean.phoneNumber($scope.sms.phone_number);
+        }
+        $scope.cleanEmitter = function(){
+            $scope.sms.emitter = apiSms.clean.emitter($scope.sms.emitter);
+        }
 
         $scope.emitterDataChange = function(){
             this.sms.emitter = null;
@@ -162,18 +185,21 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
         $scope.addNumber = function(num){
             if (num && num.trim().length > 0) {
                 $scope.sms.phone_number = num;
+                $scope.cleanPhoneNumber();
                 $scope.contacstList = false;
             }
         }
         $scope.isRecipients = function(num){
             return num === $scope.sms.phone_number;
         }
+
         $scope.init = function(){
             $scope.sms = {};
             $scope.emitter = false;
 
             if ($location.search()['phone_number']) {
                 $scope.sms.phone_number = $location.search()['phone_number'].trim();
+                $scope.cleanPhoneNumber();
             };
             loadContacts()
         };$scope.init();
@@ -186,6 +212,10 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
                     $location.path('/sms/chat/'+sms.phone_number)
                 }
             })
+        }
+
+        $scope.isValidForm = function(){
+            return this.valideEmitter() && $scope.validePhoneNumber() && $scope.sms.content && $scope.sms.content.length > 0;
         }
 
         $scope.$on('api:TOKEN_SET', loadContacts);
