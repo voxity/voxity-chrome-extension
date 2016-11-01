@@ -7,8 +7,8 @@
     </h4>
     <hr>
 
-    <h2><small>Téléphones</small></h2>
-    <div class="row">
+    <h2 class="pointer" ng-click="collapse.telephone = !collapse.telephone"><small>Téléphones <i class="pull-right fa" ng-class="{'fa-angle-down': collapse.telephone, 'fa-angle-up': !collapse.telephone}"></i></small></h2>
+    <div class="row" uib-collapse="collapse.telephone">
         <div class="col-xs-12">
             <label for="device-autoRefreshList">Actualisation des etat des téléphone</label>
             <button type="button" class="btn btn-block" ng-class="{'active btn-success': conf.device.autoRefreshList, 'btn-danger': !conf.device.autoRefreshList}" ng-model="conf.device.autoRefreshList" uib-btn-checkbox id="device-autoRefreshList">
@@ -24,8 +24,8 @@
         </div>
     </div>
         
-    <h2><small>Contact</small></h2>
-    <div>
+    <h2 class="pointer" ng-click="collapse.contacts = !collapse.contacts"><small>Contact <i class="pull-right fa" ng-class="{'fa-angle-down': collapse.contacts, 'fa-angle-up': !collapse.contacts}"></i></small></h2>
+    <div uib-collapse="collapse.contacts">
         <label class="control-label" for="contact-cacheDuration">Durée de validité des données</label>
         <div class="input-group">
             <input type="number" class="form-control" placeholder="ex : 10" for="contact-cacheDuration" ng-model="conf.contact.cacheDuration" id="contact-cacheDuration" min='2' ng-change="" aria-describedby="helpContactCache">
@@ -35,8 +35,8 @@
 
     </div>
     
-    <h2><small>SMS</small></h2>
-    <div>
+    <h2 class="pointer" ng-click="collapse.sms = !collapse.sms"><small>SMS <i class="pull-right fa" ng-class="{'fa-angle-down': collapse.sms, 'fa-angle-up': !collapse.sms}"></i></small></h2>
+    <div uib-collapse="collapse.sms">
         <div class="form-group" ng-class="{'has-error': !sms.valideEmitter()}">
             <label class="control-label" for="contact-cacheDuration">Nom de l'éméteur par défaut</label>
             <div class="input-group">

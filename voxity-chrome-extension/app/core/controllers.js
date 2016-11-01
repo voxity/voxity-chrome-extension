@@ -12,6 +12,12 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
             'sms': {},
         };
 
+        $scope.collapse = {
+            'telephone': false,
+            'contacts': false,
+            'sms': false,
+        }
+
         $scope.getConf = function(){
             return $scope.conf;
         }
