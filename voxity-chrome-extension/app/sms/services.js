@@ -168,8 +168,6 @@ angular.module('voxity.sms').service('vxtApiSms', [
              * @return {String}       clean value
              */
             'phoneNumber': function(num){
-                if (angular.isUndefined(space)) space = true;
-
                 if(num && angular.isString(num)) {
                     if (num.substring(0,3) === "+33"){
                         num = '0' + num.substring(3);
