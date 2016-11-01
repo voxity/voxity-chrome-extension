@@ -1,7 +1,8 @@
 angular.module('voxity.contacts').service('vxtApiContacts', [
-    '$filter', 'vxtContactsConf', 'vxtCoreApi', 
-    function($filter, contactsConf, api){
+    '$filter', 'vxtContactsConf', 'vxtCoreApi', '$filter',
+    function($filter, contactsConf, api, $filter){
         var contacts = {};
+        var id = null;
         var lastUpdateData = null;
         contacts.data = [];
 
@@ -194,6 +195,26 @@ angular.module('voxity.contacts').service('vxtApiContacts', [
                 updateLocalContact({}, d.result.uid, true);
                 return done(!d.result.uid, d.result.uid)
             }).error(function(d, status, head, config, statusText){return done({'data': d,'status': status,'head': head,'config': config,'statusText': statusText})})
+        }
+
+        contacts.findNumber = function(num){
+            if (!contacts.data || contacts.data.length === 0) {
+                return [];
+            } else {
+                var res = $filter('filter')(contacts.data, $filter('phoneNumber')(num, false))
+                if (res.length === 0){
+                    if (num.substring(0,1) === '+') {
+                        res = $filter('filter')(contacts.data, num.substring(3))
+                    } else if (num.substring(0,2) == '33'){
+                        res = $filter('filter')(contacts.data, '0'+num.substring(2));
+                    } else {
+                        res = $filter('filter')(contacts.data, num.substring(1));
+                    }
+                    return res;
+                } else {
+                    return res;
+                } 
+            }
         }
 
         return contacts;

@@ -11,22 +11,7 @@ angular.module('voxity.sms').controller('vxtSmsCtrl', [
             $location.path('/sms/chat/'+num);
         }
 
-        $scope.findNumber = function(number){
-            if(this.contacts.length === 0) return [];
-
-            num = $filter('phoneNumber')(number, false);
-            var res = $filter('filter')(this.contacts, num)
-            if (res.length === 0){
-                if (num.substring(0,1) === '+') {
-                    res = $filter('filter')(this.contacts, num.substring(3))
-                } else {
-                    res = $filter('filter')(this.contacts, num.substring(1));
-                }
-                return res;
-            } else {
-                return res;
-            } 
-        }
+        $scope.findNumber = apiContacts.findNumber;
 
         $scope.call = function(){
             this.callProcessing = true;
@@ -92,22 +77,7 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
             }
         }
 
-        $scope.findNumber = function(number){
-            if(this.contacts.length === 0) return [];
-
-            num = $filter('phoneNumber')(number, false);
-            var res = $filter('filter')(this.contacts, num)
-            if (res.length === 0){
-                if (num.substring(0,1) === '+') {
-                    res = $filter('filter')(this.contacts, num.substring(3))
-                } else {
-                    res = $filter('filter')(this.contacts, num.substring(1));
-                }
-                return res;
-            } else {
-                return res;
-            } 
-        }
+        $scope.findNumber = apiContacts.findNumber;
 
         $scope.init = function(){
             $scope.sms = [];
@@ -167,24 +137,7 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
         $scope.contacts = [];
         $scope.contacstList = false;
 
-        $scope.findNumber = function(number){
-            if($scope.contacts.length === 0) return [];
-
-            num = $filter('phoneNumber')(number, false);
-            var res = $filter('filter')($scope.contacts, num)
-            if (res.length === 0){
-                if (num.substring(0,1) === '+') {
-                    res = $filter('filter')($scope.contacts, num.substring(3))
-                } else if (num.substring(0,2) == '33'){
-                    res = $filter('filter')($scope.contacts, '0'+num.substring(2));
-                } else {
-                    res = $filter('filter')($scope.contacts, num.substring(1));
-                }
-                return res;
-            } else {
-                return res;
-            } 
-        }
+        $scope.findNumber = apiContacts.findNumber;
 
 
         $scope.emitterDataChange = function(){
