@@ -80,7 +80,6 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
         $scope.findNumber = apiContacts.findNumber;
 
         $scope.init = function(force){
-            console.log('init')
             $scope.sms = [];
             $scope.loading = true;
             $scope.loadingResp = true;

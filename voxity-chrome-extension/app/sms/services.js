@@ -13,6 +13,11 @@ angular.module('voxity.sms').service('vxtApiSms', [
         var responses = {};
         sms.baseUri = smsConf.startPath;
 
+        /**
+         * check if object is sms response or not
+         * @param  {Object}  sms Text Message object 
+         * @return {Boolean}     true if is response
+         */
         function isResponse(sms){
             if (angular.isObject(sms)) {
                 return new Boolean(sms.id_sms_sent)
@@ -29,6 +34,11 @@ angular.module('voxity.sms').service('vxtApiSms', [
             return (now - sms.messages.lastUpdateData ) > smsConf.cacheDuration * 60000;
         }
 
+        /**
+         * Clean message send object
+         * @param  {Object} sms Text Message to clean
+         * @return {Object}     cleaned object
+         */
         messages.clean = function(sms){
             if (angular.isObject(sms)) {
                 sms.send_date = new Date(sms.send_date);
@@ -51,6 +61,11 @@ angular.module('voxity.sms').service('vxtApiSms', [
             return (now - sms.responses.lastUpdateData ) > smsConf.cacheDuration * 60000;
         }
 
+        /**
+         * Clean message response object
+         * @param  {Object} sms Text Message to clean
+         * @return {Object}     cleaned object
+         */
         responses.clean = function(sms){
             if (angular.isObject(sms)) {
                 sms.send_date = new Date(sms.send_date);
@@ -60,6 +75,11 @@ angular.module('voxity.sms').service('vxtApiSms', [
             }
         }
 
+        /**
+         * Text message sended get from Voxity api
+         * @param  {Function} done  Callback with 2 params err(Object), data:(list of Message Object) 
+         * @param  {Book}   force   Force query to Api (ignore localCache);
+         */
         sms.messages.get = function(done, force){
             if (sms.messages.data === {} || messages.expiredData() || force){
                 sms.messages.data = [];
@@ -82,6 +102,11 @@ angular.module('voxity.sms').service('vxtApiSms', [
             }
         }
 
+        /**
+         * Text message response get from Voxity api
+         * @param  {Function} done  Callback with 2 params err(Object), data:(list of ResmonseMessage Object) 
+         * @param  {Book}   force   Force query to Api (ignore localCache);
+         */
         sms.responses.get = function(done, force){
             if (sms.responses.data === {} || responses.expiredData() || force){
                 sms.responses.data = [];
@@ -111,9 +136,8 @@ angular.module('voxity.sms').service('vxtApiSms', [
          * @param  {Function} done with 2 params : err, sms_result
          */
         sms.messages.post = function(mess, done){
-            if(!angular.isFunction(done)){
-                done = function(){};
-            }
+            if(!angular.isFunction(done))  done = function(){};
+
             api.request({
                 url: sms.baseUri,
                 data: mess,
@@ -133,9 +157,17 @@ angular.module('voxity.sms').service('vxtApiSms', [
             });
         }
 
-
+        /**
+         * clean attribut message
+         * @type {Object}
+         */
         sms.clean = {
-            'phoneNumber': function(num, space){
+            /**
+             * Clean PhoneNumber attribut of message *(pre send query for exemple)*. Remove all non integer char 
+             * @param  {String} num   Phone number to clean
+             * @return {String}       clean value
+             */
+            'phoneNumber': function(num){
                 if (angular.isUndefined(space)) space = true;
 
                 if(num && angular.isString(num)) {
@@ -145,14 +177,15 @@ angular.module('voxity.sms').service('vxtApiSms', [
                     if (num.substring(0,2) === "33"){
                         num = '0' + num.substring(2);
                     }
-                    if(space){
-                        return num.replace(/[^\d]/g,'').trim()
-                    } else {
-                        return num.replace(/[^\d]/g,'').trim()
-                    }
+                    return num.replace(/[^\d]/g,'').trim()
                 }
                 return ''
             },
+            /**
+             * Clean emitter attribut of message. remove aull non alphabet letter (A-Z) char 
+             * @param  {String} emitter emitter value to clean
+             * @return {String}         cleaned emitter value 
+             */
             'emitter': function(emitter){
 
                 if(emitter && angular.isString(emitter)) {
