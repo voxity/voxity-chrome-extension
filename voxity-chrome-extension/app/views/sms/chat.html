@@ -5,6 +5,7 @@
     <ul class="dropdown-menu" uib-dropdown-menu>
         <li class="pointer" ng-click="call(num)"><a><i class="fa fa-phone fa-fw"></i> Appeler &lt;{{num | phoneNumber}}&gt;</a></li>
         <li class="pointer"><a href="#/sms/send?phone_number={{num}}"><i class="fa fa-reply fa-fw"></i> Répondre</a></li>
+        <li class="pointer" ng-class="{'disabled':loading && loadingResp}" ng-click="init(true)"><a><i class="fa fa-refresh fa-fw" ng-class="{'fa-spin' : loading && loadingResp}"></i> Actualiser</a></li>
         <li class="divider"></li>
         <li class="pointer disabled"><a><i class="fa fa-trash-o fa-fw  text-danger"></i> Supprimer la conversation</a></li>
     </ul>

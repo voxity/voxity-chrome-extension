@@ -79,7 +79,8 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
 
         $scope.findNumber = apiContacts.findNumber;
 
-        $scope.init = function(){
+        $scope.init = function(force){
+            console.log('init')
             $scope.sms = [];
             $scope.loading = true;
             $scope.loadingResp = true;
@@ -106,7 +107,7 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
                                 }
                                 $scope.loadingResp = false;
 
-                            })
+                            }, force)
                         } else {
                             $scope.errors = {
                                 'err': true,
@@ -115,7 +116,7 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
                         }
                     }
                     $scope.loading = false;
-                });
+                }, force);
                 apiContacts.get(function(err, contacts){
                     $scope.contacts = contacts || [];
                     $scope.recipientNames = $scope.findNumber($scope.num);
