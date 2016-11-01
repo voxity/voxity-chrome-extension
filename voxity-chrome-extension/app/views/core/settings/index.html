@@ -35,6 +35,20 @@
 
     </div>
     
+    <h2><small>SMS</small></h2>
+    <div>
+        <div class="form-group" ng-class="{'has-error': !sms.valideEmitter()}">
+            <label class="control-label" for="contact-cacheDuration">Nom d'éméteur par défaut</label>
+            <div class="input-group">
+                <span class="input-group-btn" ng-click="sms.emitterDataChange()">
+                    <button class="btn btn-default" type="button"><i class="fa" ng-class="{'fa-check-square-o': conf.sms.defaultEmitter, 'fa-square-o': !conf.sms.defaultEmitter}"></i></button>
+                </span>
+                <input type="text" class="form-control" placeholder="{{sms.getPlaceholderDest()}}" id="dest" ng-model="conf.sms.defaultEmitterValue" ng-disabled="!conf.sms.defaultEmitter" ng-change="sms.cleanEmitter()">
+            </div>
+        </div>
+
+    </div>
+
     <hr>
 
     <div class="row">

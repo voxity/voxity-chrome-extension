@@ -129,8 +129,8 @@ angular.module('voxity.sms').controller('vxtSmsChatCtrl', [
 
 
 angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
-    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiContacts', '$rootScope', '$filter', '$location', '$routeParams',
-    function ($scope, api, apiSms, apiContacts, $rootScope, $filter, $location, $routeParams) {
+    '$scope', 'vxtCoreApi', 'vxtApiSms', 'vxtApiContacts', '$rootScope', '$filter', '$location', '$routeParams', 'vxtSmsConf',
+    function ($scope, api, apiSms, apiContacts, $rootScope, $filter, $location, $routeParams, smsConf) {
         $scope.sms = {};
         $scope.emitter = false;
         $scope.loadingContact = true;
@@ -195,7 +195,8 @@ angular.module('voxity.sms').controller('vxtSmsFormCtrl', [
 
         $scope.init = function(){
             $scope.sms = {};
-            $scope.emitter = false;
+            $scope.sms.emitter = smsConf.defaultEmitterValue;
+            $scope.emitter = smsConf.defaultEmitter;
 
             if ($location.search()['phone_number']) {
                 $scope.sms.phone_number = $location.search()['phone_number'].trim();

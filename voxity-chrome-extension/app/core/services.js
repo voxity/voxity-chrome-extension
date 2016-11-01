@@ -26,6 +26,14 @@ settingsService.defaults = {
             'min': 1,
             'max': null,
             'default': 3
+        },
+        'defaultEmitter': {
+            'type': 'boolean',
+            'default': false,
+        },
+        'defaultEmitterValue': {
+            'type': 'string',
+            'default': '',
         }
     }
 }
@@ -53,7 +61,12 @@ function getMainDefault(){
         'device': {
             'autoRefresh': settingsService.defaults.device.autoRefresh.default,
             'refreshListInterval': settingsService.defaults.device.refreshListInterval.default,
-        }
+        },
+        'sms':{
+            'cacheDuration': settingsService.defaults.sms.cacheDuration.default,
+            'defaultEmitter': settingsService.defaults.sms.defaultEmitter.default,
+            'defaultEmitterValue': settingsService.defaults.sms.defaultEmitterValue.default,
+        } 
     }
 }
 

@@ -1,6 +1,6 @@
 angular.module('voxity.core').controller('coreSettingsCtrl', [
-    '$scope', 'vxtCoreApi', 'settingsService', 'vxtApiUsers', '$window',
-    function ($scope, api, settingsService, apiUsers, $window) {
+    '$scope', 'vxtCoreApi', 'settingsService', 'vxtApiUsers', '$window', 'vxtApiSms',
+    function ($scope, api, settingsService, apiUsers, $window, apiSms) {
         $scope.isInit = -1;
         $scope.user = {};
         $scope.contact = {};
@@ -8,7 +8,8 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         $scope.updated = false;
         $scope.conf = {
             'device': {},
-            'contact': {}
+            'contact': {},
+            'sms': {},
         };
 
         $scope.getConf = function(){
@@ -32,8 +33,7 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
             if(api.token){
                 settingsService.get(function(err, conf){
                     $scope.conf = {}
-                    $scope.conf.device = conf.device;
-                    $scope.conf.contact = conf.contact;
+                    $scope.conf = conf;
                     $scope.isInit += 1;
                 })
                 apiUsers.getUser(function(err, usr){
@@ -60,6 +60,27 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
             }
         }
         
+        $scope.sms = {
+            'getPlaceholderDest': function(){
+                if ($scope.sms.emitter) {
+                    return "ex : SocieteName"
+                } else {return null;}
+            },
+            'cleanEmitter': function(){
+                $scope.conf.sms.defaultEmitterValue = apiSms.clean.emitter($scope.conf.sms.defaultEmitterValue);
+            },
+            'emitterDataChange': function(){
+                $scope.conf.sms.defaultEmitter = !$scope.conf.sms.defaultEmitter;
+            },
+            'valideEmitter': function(){
+                if ($scope.conf.sms.defaultEmitter) {
+                    if ($scope.conf.sms.defaultEmitterValue) return $scope.conf.sms.defaultEmitterValue.match(/^[a-zA-Z]{4,11}$/);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+        }
     }
 ]);
 
