@@ -27,7 +27,8 @@ module.exports = function(grunt) {
                     '<%= dirs.dest %>/index.min.js',
                     '<%= ngtemplates.contacts.dest %>',
                     '<%= ngtemplates.core.dest %>',
-                    '<%= ngtemplates.devices.dest %>'
+                    '<%= ngtemplates.devices.dest %>',
+                    '<%= ngtemplates.sms.dest %>'
                 ],
                 dest:'<%= dirs.dest %>/index.min.js'
             }
@@ -62,6 +63,16 @@ module.exports = function(grunt) {
                     prefix:'views/devices/',
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
+            },
+            'sms':{
+                cwd: '<%= dirs.srcAngApp %>/views/sms/',
+                src: '**.html',
+                dest: '<%= dirs.dstAngApp %>/sms.tpl.js',
+                options: {
+                    module: 'voxity.sms',
+                    prefix:'views/sms/',
+                    htmlmin: '<%= vars.htmlminOpt %>'
+                }
             }
         },
         clean: {
@@ -69,7 +80,7 @@ module.exports = function(grunt) {
             templates: ['<%= dirs.dstAngApp %>/*.tpl.js', '<%= dirs.dest %>/index.min.js']
         },
         useminPrepare: {
-            html: '<%= dirs.srcAngApp %>/index.html',
+            html: '<%= dirs.srcAngApp %>/index.html'
         },
         usemin: {
             html: ['<%= dirs.dstAngApp %>/index.html']
@@ -186,6 +197,14 @@ module.exports = function(grunt) {
                             'LICENSE.md'
                         ],
                         dest: '<%= dirs.dest %>/libs/assets/angular-bootstrap/'
+                    },{
+                        expand: true,
+                        cwd: '<%= dirs.src %>/libs/assets/angular-filter/',
+                        src: [
+                            'license.md',
+                            'dist/angular-filter.min.js'
+                        ],
+                        dest: '<%= dirs.dest %>/libs/assets/angular-filter/'
                     }
                 ]
             },
