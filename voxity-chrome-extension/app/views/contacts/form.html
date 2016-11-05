@@ -57,11 +57,15 @@
             </div>
         </div>
     </div>
-    <div class="col-xs-4" ng-class="id ? '' : 'col-xs-offset-4'">
-        <button class="btn btn-success btn-block" ng-disabled="processing  || errors.form" type="submit"><i ng-class="getSubmitClass()"></i></button>
+    <div class="col-xs-4">
+        <button class="btn btn-default btn-block" ng-disabled="processing" type="button" ng-click="init()" uib-tooltip="Réinitialiser" tooltip-placement="bottom"><i class="fa fa-undo"></i></button>
     </div>
 
-    <div class="col-xs-4 col-xs-offset-4" ng-if="id">
-        <button class="btn btn-danger btn-block" ng-dis="processing || errors.form" type="button" ng-click="delete()"><i class="fa fa-trash-o"></i></button>
+    <div class="col-xs-4 col-xs-offset-4" ng-class="">
+        <button class="btn btn-success btn-block" ng-disabled="processing  || errors.form" type="submit"><i ng-class="getSubmitClass()"></i></button>
+    </div>
+    <div class="col-xs-12 text-center" ng-if="id">
+        <hr>
+        <button class="btn btn-danger btn-xs" ng-dis="processing || errors.form" type="button" ng-click="delete()"><i class="fa fa-trash-o"></i> Supprimer le contact <u>{{name}}</u></button>
     </div>
 </form>

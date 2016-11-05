@@ -166,6 +166,21 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
 
         }
 
+        $scope.getSubmitClass = function(){
+            if(this.processing){
+                return 'fa fa-spin fa-circle-o-notch';
+            } else if(this.id){
+                return 'fa fa-check';
+            } else {
+                return 'fa fa-plus';
+            }
+        }
+
+        $scope.validate = function(){
+            if (!$scope.errors) $scope.errors = {};
+            $scope.errors.form = apiContacts.validate($scope.contact);
+        }
+
         $scope.init = function(){
             $scope.errors = {err: false,mess:''};
             $scope.loading = true;
@@ -190,6 +205,7 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                         } else {
                             $scope.name = contact.cn;
                             $scope.contact = contact;
+                            $scope.validate();
                         }
                         $scope.loading = false;
                    })
@@ -198,6 +214,7 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                     if (!$scope.contact) {
                         $scope.contact = {};
                     }
+                    $scope.validate();
                     if ($location.search()['phone_number']) {
                         var value = $location.search()['phone_number'].trim();
                         if (value.replace(/(\d|[+\\\/\-\ \(\)])*/g, '').trim() != '') {
@@ -216,23 +233,7 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
             }
         };$scope.init();
 
-        $scope.getSubmitClass = function(){
-            if(this.processing){
-                return 'fa fa-spin fa-circle-o-notch';
-            } else if(this.id){
-                return 'fa fa-check';
-            } else {
-                return 'fa fa-plus';
-            }
-        }
-
-        $scope.validate = function(){
-            if (!$scope.errors) $scope.errors = {};
-            $scope.errors.form = apiContacts.validate($scope.contact);
-        }
-
         $scope.$watch('contact', $scope.validate)
-
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
 ])
