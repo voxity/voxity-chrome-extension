@@ -3,7 +3,7 @@
 <div class="alert alert-danger small" ng-if="errors.err"><small>{{errors.mess}}</small></div>
 <form  ng-submit="save()" class="row">
     <div class="col-xs-12">
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': errors.form.cn && !errors.form.firstInit }">
             <label class="control-label" for="name">Nom</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
@@ -13,7 +13,7 @@
     </div>
 
     <div class="col-xs-8">
-        <div class="form-group">
+        <div class="form-group" ng-class="{'has-error': errors.form.telephoneNumber && !errors.form.firstInit }">
             <label class="control-label" for="phone">Téléphone</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>

@@ -223,6 +223,7 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
                             $scope.contact.telephoneNumber = value.replace(/[+\\\/\-\ \(\)]*/g, '');
                         }
                     }
+                    $scope.errors.form.firstInit = true
                 }
                 apiUsers.getUser(function(err, usr){
                     $scope.user = usr;
@@ -233,7 +234,8 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
             }
         };$scope.init();
 
-        $scope.$watch('contact', $scope.validate)
+        $scope.$watch('contact.cn', function(n,h){if (n != h) $scope.validate()})
+        $scope.$watch('contact.telephoneNu', function(n,h){if (n != h) $scope.validate()})
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
 ])
