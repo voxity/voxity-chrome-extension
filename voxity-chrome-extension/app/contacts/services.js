@@ -142,6 +142,9 @@ angular.module('voxity.contacts').service('vxtApiContacts', [
             if (contactObj.uid) {
                 return done({'data': {'errors': {'g': 'Le contact possède un identifiant, il faut le mettr à jour'}}})
             }
+            if (contacts.validate(contactObj) != null) {
+                return done({'data': {'errors': contacts.validate(contactObj)}});
+            }
             api.request({
                 method: 'POST',
                 url: contacts.base_uri,
@@ -166,6 +169,9 @@ angular.module('voxity.contacts').service('vxtApiContacts', [
             } 
             if (!contactObj.uid) {
                 return done({'data': {'errors': {'g': 'Aucun identifiant pour le contact, il faut le creer'}}});
+            }
+            if (contacts.validate(contactObj) != null) {
+                return done({'data': {'errors': contacts.validate(contactObj)}});
             }
             uid = contactObj.uid;
             delete contactObj.uid;
@@ -197,6 +203,11 @@ angular.module('voxity.contacts').service('vxtApiContacts', [
             }).error(function(d, status, head, config, statusText){return done({'data': d,'status': status,'head': head,'config': config,'statusText': statusText})})
         }
 
+        /**
+         * Find number in contact list.
+         * @param  {String} num The number to find in local data list
+         * @return {Array}     all contact have thi phoneNumber
+         */
         contacts.findNumber = function(num){
             if (!contacts.data || contacts.data.length === 0) {
                 return [];
@@ -215,6 +226,45 @@ angular.module('voxity.contacts').service('vxtApiContacts', [
                     return res;
                 } 
             }
+        }
+
+        /**
+         * Check mandatory attribut of contact
+         * @param  {Object} c Contact Object to check
+         * @return {Object|null}   return null if valid, containe Attribut key and list erros values,
+         */
+        contacts.validate = function(c){
+            function addError(section, message){
+                if(!errors[section]) errors[section] = [];
+                errors[section].push(message);
+            }
+            var errors = {};
+            var telReg = /^[+\d\(\)\.\ \-]+\d$/
+            c = clean(c)
+
+            if (!angular.isObject(c)) {
+                addError('generals', 'Not valid Contact object'); 
+                return errors;
+            }
+            // cn check, mandatory
+            if (!c.cn) {
+                addError('cn', 'Nom obligatoire'); 
+            } else {
+                if (!angular.isString(c.cn)) {
+                    addError('cn', 'Le nom doit être une chaine de caractères.'); 
+                } else{
+                    if (c.length < 1) addError('cn', 'Le nom doit être une chaine de caractères.'); 
+                }
+            }
+            // check telephoneNumber && mobile
+            if (!c.telephoneNumber && !c.mobile || c.telephoneNumber && c.telephoneNumber.length === 0 && c.telephoneNumber && c.mobile.length === 0) {
+                addError('telephoneNumber', 'Numéro de téléphone obligatoire');
+            } else {
+                if (c.telephoneNumber && !c.telephoneNumber.match(telReg)) addError('telephoneNumber', 'format invalide. [0-9+() -]');
+                if (c.mobile && !c.mobile.match(telReg)) addError('mobile', 'format invalide. [0-9+() -]');
+            }
+            if (Object.keys(errors).length === 0) return null;
+            return errors;
         }
 
         return contacts;

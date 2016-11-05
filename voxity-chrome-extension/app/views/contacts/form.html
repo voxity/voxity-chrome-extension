@@ -7,7 +7,7 @@
             <label class="control-label" for="name">Nom</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                <input type="text" class="form-control" id="name" ng-model="contact.cn">
+                <input type="text" class="form-control" id="name" ng-model="contact.cn" ng-blur="validate()">
             </div>
         </div>
     </div>
@@ -17,7 +17,7 @@
             <label class="control-label" for="phone">Téléphone</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
-                <input type="tel" class="form-control" id="phone" ng-model="contact.telephoneNumber">
+                <input type="tel" class="form-control" id="phone" ng-model="contact.telephoneNumber" ng-blur="validate()">
             </div>
         </div>
     </div>
@@ -35,7 +35,7 @@
             <label class="control-label" for="mobile">Mobile</label>
             <div class="input-group">
                 <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-                <input type="tel" class="form-control" id="mobile" ng-model="contact.mobile">
+                <input type="tel" class="form-control" id="mobile" ng-model="contact.mobile" ng-blur="validate()">
             </div>
         </div>
     </div>
@@ -58,9 +58,10 @@
         </div>
     </div>
     <div class="col-xs-4" ng-class="id ? '' : 'col-xs-offset-4'">
-        <button class="btn btn-success btn-block" ng-disabled="processing" type="submit"><i ng-class="getSubmitClass()"></i></button>
+        <button class="btn btn-success btn-block" ng-disabled="processing  || errors.form" type="submit"><i ng-class="getSubmitClass()"></i></button>
     </div>
+
     <div class="col-xs-4 col-xs-offset-4" ng-if="id">
-        <button class="btn btn-danger btn-block" ng-disabled="processing" type="button" ng-click="delete()"><i class="fa fa-trash-o"></i></button>
+        <button class="btn btn-danger btn-block" ng-dis="processing || errors.form" type="button" ng-click="delete()"><i class="fa fa-trash-o"></i></button>
     </div>
 </form>

@@ -216,14 +216,6 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
             }
         };$scope.init();
 
-        $scope.call = function(phoneNumber){
-            if(phoneNumber){
-                apiChannels.post(phoneNumber, function(err, data){
-
-                })
-            }
-        }
-
         $scope.getSubmitClass = function(){
             if(this.processing){
                 return 'fa fa-spin fa-circle-o-notch';
@@ -234,6 +226,12 @@ angular.module('voxity.contacts').controller('vxtContactFormCtrl', [
             }
         }
 
+        $scope.validate = function(){
+            if (!$scope.errors) $scope.errors = {};
+            $scope.errors.form = apiContacts.validate($scope.contact);
+        }
+
+        $scope.$watch('contact', $scope.validate)
 
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
