@@ -28,7 +28,7 @@ module.exports = function(grunt) {
                     '<%= ngtemplates.contacts.dest %>',
                     '<%= ngtemplates.core.dest %>',
                     '<%= ngtemplates.devices.dest %>',
-                    '<%= ngtemplates.sms.dest %>'
+                    // '<%= ngtemplates.sms.dest %>'
                 ],
                 dest:'<%= dirs.dest %>/index.min.js'
             }
@@ -63,17 +63,17 @@ module.exports = function(grunt) {
                     prefix:'views/devices/',
                     htmlmin: '<%= vars.htmlminOpt %>'
                 }
-            },
-            'sms':{
-                cwd: '<%= dirs.srcAngApp %>/views/sms/',
-                src: '**.html',
-                dest: '<%= dirs.dstAngApp %>/sms.tpl.js',
-                options: {
-                    module: 'voxity.sms',
-                    prefix:'views/sms/',
-                    htmlmin: '<%= vars.htmlminOpt %>'
-                }
-            }
+            }//,
+            // 'sms':{
+            //     cwd: '<%= dirs.srcAngApp %>/views/sms/',
+            //     src: '**.html',
+            //     dest: '<%= dirs.dstAngApp %>/sms.tpl.js',
+            //     options: {
+            //         module: 'voxity.sms',
+            //         prefix:'views/sms/',
+            //         htmlmin: '<%= vars.htmlminOpt %>'
+            //     }
+            // }
         },
         clean: {
             dist: ['<%= dirs.dest %>/*'],
