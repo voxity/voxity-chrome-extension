@@ -1,6 +1,6 @@
 angular.module('voxity.core').controller('coreSettingsCtrl', [
-    '$scope', 'vxtCoreApi', 'settingsService', 'vxtApiUsers', '$window', 'vxtApiSms',
-    function ($scope, api, settingsService, apiUsers, $window, apiSms) {
+    '$scope', 'vxtCoreApi', 'settingsService', 'vxtApiUsers', '$window',
+    function ($scope, api, settingsService, apiUsers, $window) {
         $scope.isInit = -1;
         $scope.user = {};
         $scope.contact = {};
@@ -9,13 +9,11 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         $scope.conf = {
             'device': {},
             'contact': {},
-            'sms': {},
         };
 
         $scope.collapse = {
             'telephone': false,
             'contacts': false,
-            'sms': false,
         }
 
         $scope.getConf = function(){
@@ -63,29 +61,6 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         $scope.checkDeviceInterval = function(){
             if ($scope.device.refreshListInterval < 5) {
                 $scope.device.refreshListInterval = 5;
-            }
-        }
-        
-        $scope.sms = {
-            'getPlaceholderDest': function(){
-                if ($scope.sms.emitter) {
-                    return "ex : SocieteName"
-                } else {return null;}
-            },
-            'cleanEmitter': function(){
-                $scope.conf.sms.defaultEmitterValue = apiSms.clean.emitter($scope.conf.sms.defaultEmitterValue);
-            },
-            'emitterDataChange': function(){
-                $scope.conf.sms.defaultEmitter = !$scope.conf.sms.defaultEmitter;
-                $scope.conf.sms.defaultEmitterValue = null;
-            },
-            'valideEmitter': function(){
-                if ($scope.conf.sms.defaultEmitter) {
-                    if ($scope.conf.sms.defaultEmitterValue) return $scope.conf.sms.defaultEmitterValue.match(/^[a-zA-Z]{4,11}$/);
-                    return false;
-                } else {
-                    return true;
-                }
             }
         }
     }
