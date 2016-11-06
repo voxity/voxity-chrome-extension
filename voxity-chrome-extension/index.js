@@ -411,11 +411,7 @@ var gh = (function() {
 // Adding context item
 function setUpContextMenu() {
     var contextType = "selection";
-    chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
-    chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
-    chrome.contextMenus.create({"type":"separator", "contexts":[contextType]});
-    chrome.contextMenus.create({"title": "Ajouter un contact <%s>", "contexts":[contextType], "id": "context_add_contact"});  
-    chrome.contextMenus.create({"title": "Rechercher le contact <%s>", "contexts":[contextType], "id": "context_find_contact"});  
+    chrome.contextMenus.create({"title": "Appeler le numéro", "contexts":[contextType], "id": "context_click_to_call"});  
 }
 chrome.runtime.onInstalled.addListener(setUpContextMenu);
 chrome.runtime.onStartup.addListener(setUpContextMenu);
@@ -426,31 +422,6 @@ function onClickHandler(info, tab) {
         if (info.selectionText) {
             if (info.menuItemId == "context_click_to_call")
                 gh.makeCall(info.selectionText);
-            else if (info.menuItemId == "context_sms") {
-                chrome.windows.create({
-                    url: chrome.extension.getURL('app/index.html#/sms/send?sigleViewPage=true&phone_number='+info.selectionText),
-                    type: 'popup',
-                    focused: true,
-                    width: 450,
-                    height: 485
-                });
-           } else if(info.menuItemId == "context_add_contact"){
-               chrome.windows.create({
-                    url: chrome.extension.getURL('app/index.html#/contacts/add?phone_number='+info.selectionText),
-                    type: 'panel',
-                    focused: true,
-                    width: 450,
-                    height: 485
-                });
-           } else if(info.menuItemId == "context_find_contact"){
-                chrome.windows.create({
-                    url: chrome.extension.getURL('app/index.html#/contacts?search='+info.selectionText),
-                    type: 'panel',
-                    focused: true,
-                    width: 450,
-                    height: 485
-                });
-           }
         }
     } catch(ex){
         console.log(ex);
