@@ -99,7 +99,8 @@ textarea {
 }
 
 a,.btn-link,.text-info{color: #fd7341}
-a:hover, .btn-link:hover{color: #ca400e}
+a:hover, a:focus, a:active,
+.btn-link:hover, .btn-link:focus, .btn-link:active{color: #ca400e}
 .panel-info {border-color: #fd7341}
 .bg-info{
   background-color: #fd7341;
@@ -119,4 +120,9 @@ a:hover, .btn-link:hover{color: #ca400e}
   width: 83.33333333%;
   z-index: 1000;
 }
+
+.list-group > .list-group-item > a.btn.btn-link.pull-right {
+  position:absolute;
+  right: 5px;
+  top: 28px;
 }

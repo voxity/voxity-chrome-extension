@@ -39,6 +39,10 @@ angular.module('voxity.contacts').controller('vxtContactsCtrl', [
             })
         }
 
+        $scope.switchTo = function(uid){
+            $location.path('/contact/'+uid)
+        }
+
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
 ])
