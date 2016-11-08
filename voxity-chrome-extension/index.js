@@ -40,21 +40,19 @@ var oauth_callback = null; // Global variable for being notified (by the oauth.h
 var oauth2 = function(opts, callback) {
     var interactive = (opts.interactive !== undefined)? opts.interactive : true;
     var url = opts.url || "";
+    var interactiveWindow = {
+        url: url,
+        type: 'popup',
+        focused: true,
+        width: 500,
+        height: 500
+    };
 
     //Active OAuth2 Implicit Grant
     oauth_callback = callback;
-    if (interactive) 
-    {
-        chrome.windows.create({
-            url: url,
-            type: 'popup',
-            focused: true,
-            width: 500,
-            height: 500
-        });
-    }
-    else 
-    {
+    if (interactive) {
+        chrome.windows.create(interactiveWindow);
+    } else  {
         // we cannot do a normal xmlHtpRequest because the script in the page wouldn't be 
         // loaded and we cannot access to the full response url parameters neither
         // It should be possible to inject an iframe in the background page in goal to avoid 
@@ -62,7 +60,7 @@ var oauth2 = function(opts, callback) {
         gh.isConnected.isSessionValid(function(err, isAuthenticated){
             // if the user session is not authenticated, there is no point to do a non-interactive 
             // sign-on since it won't be visible to the user
-            if (isAuthenticated)
+            if (isAuthenticated){
                 chrome.windows.create({ 
                     url: url,
                     type: 'popup',
@@ -70,7 +68,8 @@ var oauth2 = function(opts, callback) {
                     width: 1,
                     height: 1
                 });
-        })        
+            } else {chrome.windows.create(interactiveWindow);}
+        })
     }
 }
 

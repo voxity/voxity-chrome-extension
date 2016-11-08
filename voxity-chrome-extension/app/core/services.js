@@ -108,14 +108,19 @@ angular.module('voxity.core').service('vxtCoreApi', [
         api.versionPath = '/api/v1';
         api.refreshProcess = 0
 
+        function setToken(token){
+            api.token = token;
+            $http.defaults.headers.common.Authorization = 'Bearer ' + api.token;
+            $rootScope.$broadcast('api:TOKEN_SET', token);
+        }
         api.init = function(force){
             chrome.runtime.getBackgroundPage(function(bkg){
                 api.baseUrl = bkg.gh.baseUrl;
-                bkg.gh.tokenFetcher.getToken(true, function(err, token){
+                bkg.gh.tokenFetcher.getToken(false, function(err, token){
                     if (token){
-                        api.token = token;
-                        $http.defaults.headers.common.Authorization = 'Bearer ' + api.token;
-                        $rootScope.$broadcast('api:TOKEN_SET', token);
+                        setToken(token);
+                    } else {
+                        $rootScope.$broadcast('api:TOKEN_ERROR', null);
                     }
                     api.isInit += 1;
                 }, force);
