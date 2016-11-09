@@ -35,26 +35,6 @@
 
     </div>
     
-    <h2 class="pointer" ng-click="collapse.sms = !collapse.sms"><small>SMS <i class="pull-right fa" ng-class="{'fa-angle-down': collapse.sms, 'fa-angle-up': !collapse.sms}"></i></small></h2>
-    <div uib-collapse="collapse.sms">
-        <div class="form-group" ng-class="{'has-error': !sms.valideEmitter()}">
-            <label class="control-label" for="contact-cacheDuration">Nom de l'éméteur par défaut</label>
-            <div class="input-group">
-                <span class="input-group-btn" ng-click="sms.emitterDataChange()">
-                    <button class="btn btn-default" type="button"><i class="fa" ng-class="{'fa-check-square-o': conf.sms.defaultEmitter, 'fa-square-o': !conf.sms.defaultEmitter}"></i></button>
-                </span>
-                <input type="text" class="form-control" placeholder="{{sms.getPlaceholderDest()}}" id="dest" ng-model="conf.sms.defaultEmitterValue" ng-disabled="!conf.sms.defaultEmitter" ng-change="sms.cleanEmitter()">
-            </div>
-        </div>
-        <label class="control-label" for="sms-cacheDuration">Durée de validité des données</label>
-        <div class="input-group">
-            <input type="number" class="form-control" placeholder="ex : 10" for="sms-cacheDuration" ng-model="conf.sms.cacheDuration" id="sms-cacheDuration" min='1' aria-describedby="helpSmsCache">
-            <span class="input-group-addon">Minutes</span>
-        </div>
-        <span id="helpSmsCache" class="help-block">La liste des sms n'est pas mise à jour à chaque changement de page. Elle est stockée localement dans l'application lorsqu'elle est ouverte. À chaque ouverture de l'application, les données sont mises à jour.</span>
-
-    </div>
-
     <hr>
 
     <div class="row">

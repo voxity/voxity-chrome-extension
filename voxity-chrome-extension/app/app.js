@@ -8,7 +8,6 @@ angular.module('voxityChromeApp', [
     'voxity.channels',
     'voxity.devices',
     'voxity.contacts',
-    'voxity.sms',
 ]);
 
 angular.module('voxityChromeApp').factory('authInterceptorService', [

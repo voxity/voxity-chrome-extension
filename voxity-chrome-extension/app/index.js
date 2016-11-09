@@ -33,18 +33,6 @@ angular.module('voxity.contacts').config(['vxtContactsConfProvider',function(con
     });
 }]);
 
-angular.module('voxity.sms').config(['vxtSmsConfProvider',function(sms) {
-    settingsService.get(function(err, conf){
-        var conf = conf.sms;
-        if(angular.isObject(conf) && Object.keys(conf).length > 0){
-            sms.cacheDuration = conf.cacheDuration;
-            sms.defaultEmitter = conf.defaultEmitter;
-            sms.defaultEmitterValue = conf.defaultEmitterValue;
-            sms.checkValue()
-        } else {sms.initDefault();}
-    });
-}]);
-
 angular.module('voxityChromeApp').run([
     'vxtCoreApi', 'settingsService',
     function(CoreApi, settingsService){

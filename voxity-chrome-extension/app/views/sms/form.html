@@ -2,7 +2,7 @@
     {{errors.message || "Une internet c'est produite."}}
 </div>
 <div class="form-group" ng-class="{'has-error': !validePhoneNumber()}">
-    <label class="control-label" for="dest">Déstinataire</label>
+    <label class="control-label" for="dest">Destinataire</label>
     <div class="input-group">
         <span class="input-group-btn" uib-dropdown auto-close="outsideClick" is-open="contacstList">
             <button class="btn btn-default" type="button" ng-disabled="loadingContact || contacts.length == 0" uib-dropdown-toggle><i class="fa" ng-class="{'fa-address-book' : !loadingContact, 'fa-circle-o-notch fa-spin': loadingContact}"></i></button>

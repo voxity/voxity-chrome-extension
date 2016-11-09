@@ -40,21 +40,19 @@ var oauth_callback = null; // Global variable for being notified (by the oauth.h
 var oauth2 = function(opts, callback) {
     var interactive = (opts.interactive !== undefined)? opts.interactive : true;
     var url = opts.url || "";
+    var interactiveWindow = {
+        url: url,
+        type: 'popup',
+        focused: true,
+        width: 500,
+        height: 500
+    };
 
     //Active OAuth2 Implicit Grant
     oauth_callback = callback;
-    if (interactive) 
-    {
-        chrome.windows.create({
-            url: url,
-            type: 'popup',
-            focused: true,
-            width: 500,
-            height: 500
-        });
-    }
-    else 
-    {
+    if (interactive) {
+        chrome.windows.create(interactiveWindow);
+    } else  {
         // we cannot do a normal xmlHtpRequest because the script in the page wouldn't be 
         // loaded and we cannot access to the full response url parameters neither
         // It should be possible to inject an iframe in the background page in goal to avoid 
@@ -62,7 +60,7 @@ var oauth2 = function(opts, callback) {
         gh.isConnected.isSessionValid(function(err, isAuthenticated){
             // if the user session is not authenticated, there is no point to do a non-interactive 
             // sign-on since it won't be visible to the user
-            if (isAuthenticated)
+            if (isAuthenticated){
                 chrome.windows.create({ 
                     url: url,
                     type: 'popup',
@@ -70,7 +68,8 @@ var oauth2 = function(opts, callback) {
                     width: 1,
                     height: 1
                 });
-        })        
+            } else {chrome.windows.create(interactiveWindow);}
+        })
     }
 }
 
@@ -411,11 +410,7 @@ var gh = (function() {
 // Adding context item
 function setUpContextMenu() {
     var contextType = "selection";
-    chrome.contextMenus.create({"title": "Appeler le numéro <%s>", "contexts":[contextType], "id": "context_click_to_call"});  
-    chrome.contextMenus.create({"title": "Envoyer un SMS à <%s>", "contexts":[contextType], "id": "context_sms"});  
-    chrome.contextMenus.create({"type":"separator", "contexts":[contextType]});
-    chrome.contextMenus.create({"title": "Ajouter un contact <%s>", "contexts":[contextType], "id": "context_add_contact"});  
-    chrome.contextMenus.create({"title": "Rechercher le contact <%s>", "contexts":[contextType], "id": "context_find_contact"});  
+    chrome.contextMenus.create({"title": "Appeler le numéro", "contexts":[contextType], "id": "context_click_to_call"});  
 }
 chrome.runtime.onInstalled.addListener(setUpContextMenu);
 chrome.runtime.onStartup.addListener(setUpContextMenu);
@@ -426,31 +421,6 @@ function onClickHandler(info, tab) {
         if (info.selectionText) {
             if (info.menuItemId == "context_click_to_call")
                 gh.makeCall(info.selectionText);
-            else if (info.menuItemId == "context_sms") {
-                chrome.windows.create({
-                    url: chrome.extension.getURL('app/index.html#/sms/send?sigleViewPage=true&phone_number='+info.selectionText),
-                    type: 'popup',
-                    focused: true,
-                    width: 450,
-                    height: 485
-                });
-           } else if(info.menuItemId == "context_add_contact"){
-               chrome.windows.create({
-                    url: chrome.extension.getURL('app/index.html#/contacts/add?phone_number='+info.selectionText),
-                    type: 'panel',
-                    focused: true,
-                    width: 450,
-                    height: 485
-                });
-           } else if(info.menuItemId == "context_find_contact"){
-                chrome.windows.create({
-                    url: chrome.extension.getURL('app/index.html#/contacts?search='+info.selectionText),
-                    type: 'panel',
-                    focused: true,
-                    width: 450,
-                    height: 485
-                });
-           }
         }
     } catch(ex){
         console.log(ex);

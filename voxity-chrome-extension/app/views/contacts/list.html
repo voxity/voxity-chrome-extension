@@ -18,23 +18,24 @@
 </div>
 <div class="list-group">
     <div class="list-group-item" ng-repeat="c in contacts | filter:search.all | orderBy:'cn'">
-        <h5 class="list-group-item-heading">
+        <h5 class="list-group-item-heading pointer" ng-click="switchTo(c.uid)">
             {{c.cn}}
-            <a href="#/contact/{{c.uid}}/edit" class="btn-link pull-right" ng-if="user.is_admin"><i class="fa fa-edit"></i></a>
+            <a href="#/contact/{{c.uid}}" class="btn btn-link btn-xs pull-right"><i class="fa fa-chevron-right"></i></a>
         </h5>
-        <div class="list-group-item-text row">
-            <div class="col-xs-6 text-info pointer" ng-if="c.telephoneNumber" ng-click="call(c.telephoneNumber)">
-                <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{c.telephoneNumber | phoneNumber}}
-            </div>
-            <div class="col-xs-6 text-info pointer" ng-if="c.mobile" ng-click="call(c.mobile)">
+        <a href="#/contact/{{c.uid}}/edit" class="btn btn-link pull-right" ng-if="user.is_admin"><i class="fa fa-edit"></i></a>
+        <div class="list-group-item-text" style="padding-top: 5px;">
+            <span class="text-info pointer" ng-if="c.telephoneNumber" ng-click="call(c.telephoneNumber)">
+                <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{c.telephoneNumber | phoneNumber}}<br>
+            </span>
+            <span class="text-info pointer" ng-if="c.mobile" ng-click="call(c.mobile)">
                 <i class="glyphicon glyphicon-phone text-muted" style="margin-right:10px;"></i> 
-                {{c.mobile | phoneNumber}}
-            </div>
-            <div class="col-xs-12 text-center small text-muted">
-                {{c.mail}}
-                <a href="#/contact/{{c.uid}}" class="btn btn-link btn-xs pull-right"><i class="fa fa-chevron-right"></i></a>
-            </div>
-        </div>
+                {{c.mobile | phoneNumber}}<br>
+            </span>
+            <span ng-if="c.mail">
+                <i class="fa fa-envelope text-muted" style="margin-right:10px;"></i>
+                <a href="mailto:{{c.mail}}">{{c.mail}}</a><br>
+            </span>
+        </div>        
     </div>
     <div class="list-group-item list-group-item-info text-center" ng-if="search.all && contacts.length > 0 && (contacts | filter:search.all ).length == 0">
         Aucun contact trouver avec la recherche : <i>{{all}}</i>.
