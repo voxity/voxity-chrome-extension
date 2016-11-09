@@ -1,5 +1,5 @@
 html {
-  min-height: 410px;
+  min-height: 250px;
   min-width: 450px;
   overflow: auto;
 }
@@ -10,10 +10,10 @@ textarea {
 .nav, .pagination, .carousel, .panel-title a, .pointer { cursor: pointer; }
 .sidebar {
   position: fixed;
-  top: 34px;
+  top: 0; 
   bottom: 0;
   left: 0;
-  z-index: 1000;
+  z-index: 800;
   display: block;
   padding: 20px;
   overflow-x: hidden;
@@ -21,7 +21,7 @@ textarea {
   background-color: #fafafa;
   border-right: 1px solid #eee;
   display: block;
-  padding-top: 0;
+  padding-top: 34px;
   padding-bottom: 0;
 }
 
@@ -43,6 +43,8 @@ textarea {
   position: absolute;
   bottom: 0;
   margin-bottom: 0;
+  left: 0;
+  right: 0;
 }
 .nav-sidebar > li > a {
   padding-right: 20px;

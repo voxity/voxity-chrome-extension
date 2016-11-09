@@ -28,12 +28,23 @@ module.exports = function(grunt) {
                     '<%= ngtemplates.contacts.dest %>',
                     '<%= ngtemplates.core.dest %>',
                     '<%= ngtemplates.devices.dest %>',
+                    '<%= ngtemplates.app.dest %>',
                     // '<%= ngtemplates.sms.dest %>'
                 ],
                 dest:'<%= dirs.dest %>/index.min.js'
             }
         },
         ngtemplates:{
+            'app':{
+                cwd: '<%= dirs.srcAngApp %>/views/',
+                src: '*.html',
+                dest: '<%= dirs.dstAngApp %>/app.tpl.js',
+                options: {
+                    module: 'voxityChromeApp',
+                    prefix:'views/',
+                    htmlmin: '<%= vars.htmlminOpt %>'
+                }
+            },
             'contacts':{
                 cwd: '<%= dirs.srcAngApp %>/views/contacts/',
                 src: '**.html',

@@ -51,7 +51,9 @@ angular.module('voxity.users').service('vxtApiUsers', [
                 user.last_syc = new Date();
                 setUser(user)
                 chrome.storage.sync.set({'user': user});
-                if (angular.isFunction(done)) {done(null, user)}
+                console.log('emited api:users.userInitialised')
+                $rootScope.$broadcast('api:users.userInitialised', users.user)
+                if (angular.isFunction(done)) {done(null, users.user)}
             }).error(function(d, status){
                 console.log('Cant get user. err'+status)
             })
@@ -61,7 +63,10 @@ angular.module('voxity.users').service('vxtApiUsers', [
             chrome.runtime.getBackgroundPage(function(bkg){
                 bkg.gh.signOut(function(err, status, message){
                     if(!err){
+                        $rootScope.$broadcast('api:user.logout', users.user)
                         settings.set({});
+                        users.user = {};
+                        EXPIRED_USER_TIME = null;
                         done(null, message);
                     } else {
                         done({

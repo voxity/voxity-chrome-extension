@@ -119,6 +119,7 @@ angular.module('voxity.core').service('vxtCoreApi', [
                 bkg.gh.tokenFetcher.getToken(false, function(err, token){
                     if (token){
                         setToken(token);
+
                     } else {
                         $rootScope.$broadcast('api:TOKEN_ERROR', null);
                     }
