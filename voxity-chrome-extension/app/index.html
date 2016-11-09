@@ -12,7 +12,8 @@
         <div class="container" ng-class="containerClass()">
             <form id="bannercall" ng-submit="call()" ng-controller="makeCallCtrl" ng-class="bannerCallClass()">
                 <div class="input-group form-group">
-                    <input type="tel" class="form-control" placeholder="Numéro de téléphone" id="phonenumber" ng-model="phoneNumber" autofocus ng-disabled="callProcessing" ng-change="checkNumber()">
+                    <span class="input-group-addon"><i class="fa fa-th"></i></span>
+                    <input type="tel" class="form-control" placeholder="Composez un numéro" id="phonenumber" ng-model="phoneNumber" autofocus ng-disabled="callProcessing" ng-change="checkNumber()">
                     <span class="input-group-btn">
                         <button class="btn btn-success" ng-class="callProcessing ? 'active' : ''"  ng-disabled="callProcessing || !phoneNumber" type="submit"><i ng-class="callProcessing ? 'fa fa-spinner fa-pulse' : 'fa fa-volume-control-phone'"></i></button>
                     </span>

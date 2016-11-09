@@ -10,7 +10,7 @@ textarea {
 .nav, .pagination, .carousel, .panel-title a, .pointer { cursor: pointer; }
 .sidebar {
   position: fixed;
-  top: 0;
+  top: 34px;
   bottom: 0;
   left: 0;
   z-index: 1000;
@@ -64,10 +64,17 @@ textarea {
 #bannercall {
   position: fixed;
   display: inline-block;
-  left:15.666666667%;
+  left:-3px;
   right:-3px;
   top: -2px;
   z-index: 888;
+  margin: 0;
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,102,102,.6);
+}
+#bannercall > div {
+  margin: 0;
+  padding: 0;
+  opacity: .9;
 }
 
 #bannercall .form-control,
@@ -75,16 +82,23 @@ textarea {
   border-radius: 0
 }
 #bannercall .form-control,
-#bannercall .btn {
+#bannercall .btn, 
+#bannercall .input-group-addon {
   border-color: #666;
-  box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,102,102,.6);
+  box-shadow: none;
   botder-left:none;
   botder-right:none;
 }
 #bannercall input,
-#bannercall .btn {
+#bannercall .form-control{
+  z-index: 889 
+}
+#bannercall input,
+#bannercall .btn,
+#bannercall .input-group-addon  {
   border-right: none;
   border-left: none;
+  z-index: 890
 }
 
 /*
