@@ -87,7 +87,7 @@ angular.module('voxityChromeApp').controller('sideBarCtrl', [
 angular.module('voxityChromeApp').controller('viewCtrl', [
     '$scope', '$location', 'vxtApiUsers',
     function($scope, $location, apiUsers){
-    var sideClass = "col-xs-2";
+    var sideClass = "hidden";
     var mainBodyClass = "col-xs-10 col-xs-offset-2";
     var bannerCallClass = "";
     var containerClass = "";
