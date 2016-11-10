@@ -276,7 +276,6 @@ var gh = (function() {
                         tokenFetcher.removeCachedToken(access_token);
                         access_token = null;
                         callback(null, this.status, "Déconnexion réussie !");
-                        chrome.contextMenus.update("context_add_contact", {"enabled": false});
                     } else {
                         callback(this.response, this.status, this.response);
                     }
@@ -327,11 +326,6 @@ var gh = (function() {
                     chrome.storage.sync.set({
                         user: user
                     }, function() {});
-                    if (user.is_admin) {
-                        chrome.contextMenus.update('context_add_contact', {'enabled': true});  
-                    } else {
-                        chrome.contextMenus.update('context_add_contact', {'enabled': false});  
-                    }
                     done(status !== 200, user)
                 });
             } else {
