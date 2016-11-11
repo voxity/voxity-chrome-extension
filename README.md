@@ -6,33 +6,26 @@ Le plugin click2call Voxity vous permet de
 
 1. Surlignez le numéro dans le navigateur.
 2. Effectuez un clique droit sur le numéro surligné.
-3. Dans le menu contextuel, aller sur le menu 'Voxity click-2_call', appeler le numéro
-4. Votre poste va sonner, décrocher l'appel est en cours.
+3. Dans le menu contextuel cliquez sur **appeler le numéro**
+4. Votre poste va sonner, décrochez l'appel débutera seulement si vous décrochez.
 
-**Envoyer des SMS**
-
-1. Surlignez le numéro dans le navigateur.
-2. Effectuez un clique droit sur le numéro surligné.
-3. Dans le menu contextuel, aller sur le menu 'Voxity click-2_call', Envoyer un SMS
-4. Complétez le message, et envoyer
-
-**Gérez vos contact**
+**Gérez vos contacts**
 
 1. Cliquez sur l'icône avec le logo Voxity
-2. Dans le popup, qui s'affiche aller dans la section contact
+2. Dans le popup, qui s'affiche allez dans la section contacts
 3. Recherchez vos contacts.
 
 *Si Vous etes administrateur, vous pourrez creer/éditer/supprimer des contacts.*
 
 
-# install <small>(utilisateur)</small>
-Version non-disponible dans le chrome web store
+# installation <small>(utilisateur)</small>
+Version non-disponible dans le chrome web store.
 
 <!-- 1. Aller dans le [Chrome Web Store](https://chrome.google.com/webstore/detail/voxity-click-to-call/dclmglagehopkegbnobbpkdcbdoiijcg)
 2. *(si le plugin ne s'affiche pas)* rechercher **Voxity Click-to-call**
 3. Cliquer sur **Ajouter à Chrome** -->
 
-# install <small>(développement)</small>
+# installation <small>(développement)</small>
 
 ## Dépendance 
 * Google Chrome
