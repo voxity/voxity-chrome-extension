@@ -14,8 +14,8 @@
     </div>
     <div class="col-xs-4 text-right">{{contact.employeeNumber}}</div>
 
-    <div class="col-xs-12 text-muted">
+    <div class="col-xs-12 text-muted" ng-class="contact.mobile ? 'text-info pointer':'text-muted'">
         <i class="fa fa-envelope" style="margin-right:10px;"></i>
-        {{contact.mail}}
+        {{contact.mail || "N/A"}}
     </div>
 </div>
