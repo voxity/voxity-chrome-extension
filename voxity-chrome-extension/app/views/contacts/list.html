@@ -38,7 +38,7 @@
         </div>        
     </div>
     <div class="list-group-item list-group-item-info text-center" ng-if="search.all && contacts.length > 0 && (contacts | filter:search.all ).length == 0">
-        Aucun contact trouver avec la recherche : <i>{{all}}</i>.
+        Aucun contact trouvé avec la recherche : <i>{{search.all}}</i>.
     </div>
     <div class="list-group-item list-group-item-info text-center" ng-if="contacts.length === 0 && !loading">
         Aucun contact présent dans votre annuaire partagé
