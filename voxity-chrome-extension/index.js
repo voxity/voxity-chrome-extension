@@ -27,8 +27,6 @@
  *
  */
 var base_url = 'https://api.voxity.fr'; 
-// var base_url = 'http://localhost:3000'; 
-
 /**
  * Makes an Oauth2 Implicit grant authentication
  * It replaces chrome.identity.launchWebAuth() that uses a cookie that is not accessible from the BackgroundPage
