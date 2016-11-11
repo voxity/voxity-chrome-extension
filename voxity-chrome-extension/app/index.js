@@ -12,28 +12,14 @@ angular.module('voxityChromeApp').config(['$routeProvider',
 
 
 angular.module('voxity.devices').config(['vxtDeviceConfProvider',function(deviceConf) {
-    settingsService.get(function(err, conf){
-            if(angular.isObject(conf.device) && Object.keys(conf.device).length > 0){
-                deviceConf.refreshListInterval = conf.device.refreshListInterval;
-                deviceConf.autoRefreshList = conf.device.autoRefreshList;
-                deviceConf.checkValue()
-        } else {deviceConf.initDefault();}
-    })
 }]);
 
 angular.module('voxity.contacts').config(['vxtContactsConfProvider',function(contact) {
-    settingsService.get(function(err, conf){
-        var conf = conf.contact;
-        if(angular.isObject(conf) && Object.keys(conf).length > 0){
-            contact.cacheDuration = conf.cacheDuration;
-            contact.checkValue()
-        } else {contact.initDefault();}
-    });
 }]);
 
 angular.module('voxityChromeApp').run([
-    'vxtCoreApi', 'settingsService',
-    function(CoreApi, settingsService){
+    'vxtCoreApi',
+    function(CoreApi){
         CoreApi.init();
     }
 ]);

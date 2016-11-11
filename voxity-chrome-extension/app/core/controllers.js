@@ -1,6 +1,6 @@
 angular.module('voxity.core').controller('coreSettingsCtrl', [
-    '$scope', 'vxtCoreApi', 'settingsService', 'vxtApiUsers', '$window',
-    function ($scope, api, settingsService, apiUsers, $window) {
+    '$scope', 'vxtCoreApi', 'vxtApiUsers', '$window',
+    function ($scope, api, apiUsers, $window) {
         $scope.isInit = -1;
         $scope.user = {};
         $scope.contact = {};
@@ -34,21 +34,10 @@ angular.module('voxity.core').controller('coreSettingsCtrl', [
         }
 
         $scope.init = function(){
-            if(api.token){
-                settingsService.get(function(err, conf){
-                    $scope.conf = {}
-                    $scope.conf = conf;
-                    $scope.isInit += 1;
-                })
-                apiUsers.getUser(function(err, usr){
-                    $scope.user = usr;
-                    $scope.isInit += 1;
-                })
-            }
+            
         };$scope.init();
 
         $scope.save = function(){
-            settingsService.set($scope.conf)
             $scope.updated = true;
         }
 

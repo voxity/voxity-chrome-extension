@@ -25,34 +25,11 @@ angular.module('voxity.contacts').config(['$routeProvider',
 angular.module('voxity.contacts').provider('vxtContactsConf', [function () {
     
     var contactConf = this;
-    //Temps de stockage dans l'application en secondes
-    // par défaut 5 minutes
-    this.cacheDuration = 5 ; // minutes
-    this.getConf = function(){
-        return {
-            'cacheDuration': contactConf.cacheDuration
-        }
-    }
-    this.checkValue = function(){
-        var updatedValue = []
-        if (!settingsService.checkValue('contact', 'cacheDuration', this.cacheDuration)) {
-            updatedValue.push('cacheDuration');
-        }
-
-        if (updatedValue.length > 0) {
-            angular.forEach(updatedValue, function(i, attr){
-                contactConf.initDefault(i);
-            }, function(){
-                settingsService.set(contactConf.getConf(), 'contact');
-            });
-        }
-    }
-
-    this.initDefault = function(attribut){
-        if (!attribut || attribut == 'cacheDuration') {}
-        this.cacheDuration = settingsService.defaults.contact.cacheDuration.default;
-        settingsService.set(contactConf.getConf(), 'contact');
-    }
+    /**
+     * The time in minutes to cache contact list
+     * @type {Number}
+     */
+    this.cacheDuration = 5 ;
 
     this.startPath = '/contacts';
 

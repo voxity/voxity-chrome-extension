@@ -1,6 +1,6 @@
 angular.module('voxity.users').service('vxtApiUsers', [
-    'vxtCoreApi', '$rootScope', 'settingsService',
-    function(api, $rootScope, settings){
+    'vxtCoreApi', '$rootScope',
+    function(api, $rootScope){
         var EXPIRED_USER_TIME = 2 * 60 * 60 * 1000 
         var users = {};
         users.user = null;
@@ -51,7 +51,6 @@ angular.module('voxity.users').service('vxtApiUsers', [
                 user.last_syc = new Date();
                 setUser(user)
                 chrome.storage.sync.set({'user': user});
-                console.log('emited api:users.userInitialised')
                 $rootScope.$broadcast('api:users.userInitialised', users.user)
                 if (angular.isFunction(done)) {done(null, users.user)}
             }).error(function(d, status){
@@ -64,7 +63,6 @@ angular.module('voxity.users').service('vxtApiUsers', [
                 bkg.gh.signOut(function(err, status, message){
                     if(!err){
                         $rootScope.$broadcast('api:user.logout', users.user)
-                        settings.set({});
                         users.user = {};
                         EXPIRED_USER_TIME = null;
                         done(null, message);
