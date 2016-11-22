@@ -31,7 +31,7 @@
                 <i class="glyphicon glyphicon-phone text-muted" style="margin-right:10px;"></i> 
                 {{c.mobile | phoneNumber}}<br>
             </span>
-            <span ng-if="c.mail">
+            <span ng-if="c.mail" ng-click="mailTo(c.mail)">
                 <i class="fa fa-envelope text-muted" style="margin-right:10px;"></i>
                 <a href="mailto:{{c.mail}}">{{c.mail}}</a><br>
             </span>

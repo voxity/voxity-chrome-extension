@@ -33,9 +33,23 @@ angular.module('voxity.contacts').controller('vxtContactsCtrl', [
 
         };$scope.init();
 
+        $scope.mailTo = function(mail){
+            var windowMail = chrome.windows.create({
+                url: "mailto:"+ mail,
+                type: 'popup',
+                focused: false,
+                width: 1,
+                height: 1,
+            }, function(windowMail){
+                setTimeout(function() {
+                    chrome.windows.remove(windowMail.id);
+                }, 110);
+            })
+        }
+
         $scope.call = function(phoneNumber){
             apiChannels.post(phoneNumber, function(err, data){
-
+                
             })
         }
 
@@ -85,9 +99,21 @@ angular.module('voxity.contacts').controller('vxtContactCtrl', [
 
                 })
             }
+        };
+
+        $scope.mailTo = function(mail){
+            var windowMail = chrome.windows.create({
+                url: "mailto:"+ mail,
+                type: 'popup',
+                focused: false,
+                width: 1,
+                height: 1,
+            }, function(windowMail){
+                setTimeout(function() {
+                    chrome.windows.remove(windowMail.id);
+                }, 110);
+            })
         }
-
-
         $scope.$on('api:TOKEN_SET', $scope.init);
     }
 ])
