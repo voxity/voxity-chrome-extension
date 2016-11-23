@@ -148,7 +148,7 @@ angular.module('voxity.contacts').service('vxtApiContacts', [
             api.request({
                 method: 'POST',
                 url: contacts.base_uri,
-                data: contactObj
+                data: preSave(contactObj)
             }).success(function(d){
                 //return uid
                 updateLocalContact(contactObj, d.result.uid);
