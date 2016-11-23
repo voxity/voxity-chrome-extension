@@ -136,6 +136,7 @@ angular.module('voxityChromeApp').controller('viewCtrl', [
     $scope.$on('api:user.logout', siglePage);
     $scope.$on('api:users.userInitialised', openDashboard);
     $scope.$on('api:TOKEN_SET', function(){apiUsers.init(function(){})});
+    $scope.$on('api:TOKEN_ERROR', function(){apiUsers.init()});
 
 }]);
 
