@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Voxity Chrome extension</title>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <link href="libs/assets/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" type="text/css">
+  <link href="css/options.css" rel="stylesheet" type="text/css">
+</head>
+
+
+<body>
+  <div class="container">
+    <div class="row-fluid">
+      
+      <p class="bg-primary" id="status"></p>
+
+      <div class="panel panel-primary">
+        
+        <div class="panel-heading">
+            <div class="btn-group pull-right">
+              <a id="send-sms" class="btn btn-default btn-xs">Envoyer</a>
+            </div>
+          <h3 class="panel-title pull-left">Envoyer un SMS</h3>
+          <div class="clearfix"></div>
+        </div>
+
+        <div class="panel-body" >
+          <div class="form-group">
+            <label for="sms-phone-number">Tél:</label>
+            <input type="text" class="form-control" id="sms-phone-number">
+          </div>
+          
+          <div class="form-group">
+            <label for="sms-emitter">Émetteur:</label>
+            <input type="text" class="form-control" id="sms-emitter" placeholder="Optionnel">
+          </div>
+
+          <div class="form-group">
+            <label for="sms-content">Contenu:</label>
+            <textarea class="form-control" rows="5" id="sms-content"></textarea>
+          </div>
+        </div>
+      </div>
+      
+      <div id="loading" style="display:none;" > <img src="libs/assets/icons/loading.gif"/> </div>
+      
+      <div class="alert alert-success" role="alert" style="display:none;" id="status-success">
+        Votre message à été envoyé avec succès !
+      </div>
+      
+      <div class="alert alert-danger" role="alert" style="display:none;" id="status-error">
+        <ul id="list-errors">
+        </ul>
+      </div>
+    </div>
+  </div>
+  
+
+  <script src="sms.js"></script>
+</body>
+</html>

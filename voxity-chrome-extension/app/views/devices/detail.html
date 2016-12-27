@@ -1,0 +1,23 @@
+<div class="alert alert-danger text-center" ng-if="errors.notFound">Équipement non trouvé</div>
+
+<div ng-if="device">
+    <h2><i class="fa-fw" ng-class="getClass(device.state)"></i> &nbsp; {{device.extension}}</h2>
+    <table class="table table-striped table-condenced">
+        <tr>
+            <th>Nom</th>
+            <td>{{getName(device.callerid)}}</td>
+        </tr>
+        <tr>
+            <th>Etat</th>
+            <td>{{getDescription(device.state_desc)}}</td>
+        </tr>
+        <tr>
+            <th>Ip d'enregistrement</th>
+            <td>{{device.ipaddr}} <span class="text-muted">({{device.lastms}} ms)</span></td>
+        </tr>
+        <tr>
+            <th>Poste</th>
+            <td>{{device.useragent}}</td>
+        </tr>
+    </table>
+</div>

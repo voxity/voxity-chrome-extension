@@ -1,0 +1,61 @@
+
+<p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
+<div ng-if="isInit">
+    <h4>
+        <i class="fa fa-user-circle-o fa-fw"></i> {{getUser().name}}
+        <button class="btn-link pull-right" ng-click="logout()" ng-disabled="logOutProcess"><i class="fa fa-power-off text-danger"></i></button>
+    </h4>
+    <hr>
+
+    <h2 class="pointer" ng-click="collapse.telephone = !collapse.telephone"><small>Téléphones <i class="pull-right fa" ng-class="{'fa-angle-down': collapse.telephone, 'fa-angle-up': !collapse.telephone}"></i></small></h2>
+    <div class="row" uib-collapse="collapse.telephone">
+        <div class="col-xs-12">
+            <label for="device-autoRefreshList">Actualisation des etat des téléphone</label>
+            <button type="button" class="btn btn-block" ng-class="{'active btn-success': conf.device.autoRefreshList, 'btn-danger': !conf.device.autoRefreshList}" ng-model="conf.device.autoRefreshList" uib-btn-checkbox id="device-autoRefreshList">
+                <i class="fa" ng-class="{'fa-square-o': !conf.device.autoRefreshList, 'fa-check-square-o': conf.device.autoRefreshList}"></i>
+            </button>
+        </div>
+        <div class="col-xs-12 form-group " ng-if="conf.device.autoRefreshList">
+            <label class="control-label" for="device-autoRefreshList">Intervale</label>
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="ex : 10" for="device-refreshListInterval" ng-model="conf.device.refreshListInterval" id="device-refreshListInterval" min='5' ng-change="checkDeviceInterval()">
+                <span class="input-group-addon">Secondes</span>
+            </div>
+        </div>
+    </div>
+        
+    <h2 class="pointer" ng-click="collapse.contacts = !collapse.contacts"><small>Contact <i class="pull-right fa" ng-class="{'fa-angle-down': collapse.contacts, 'fa-angle-up': !collapse.contacts}"></i></small></h2>
+    <div uib-collapse="collapse.contacts">
+        <label class="control-label" for="contact-cacheDuration">Durée de validité des données</label>
+        <div class="input-group">
+            <input type="number" class="form-control" placeholder="ex : 10" for="contact-cacheDuration" ng-model="conf.contact.cacheDuration" id="contact-cacheDuration" min='2' ng-change="" aria-describedby="helpContactCache">
+            <span class="input-group-addon">Minutes</span>
+        </div>
+        <span id="helpContactCache" class="help-block">La liste des contacts n'est pas mise à jour à chaque fois, elle est stockée localement dans l'application lorsqu'elle est ouverte.</span>
+
+    </div>
+    
+    <hr>
+
+    <div class="row">
+        <div class="col-xs-3 col-xs-offset-4">
+            <button class="btn btn-success btn-block" ng-click="save()" uib-tooltip="Enregistrer" tooltip-placement="top"><i class="fa fa-save"></i></button>
+        </div>
+    </div>
+</div>
+<br>
+<p class="small text-muted text-center" ng-if="updated">
+    Les modifications seront prise en compte lors du prochain lancement de l'application
+</p>
+<div class="row footer small">
+    <div class="col-xs-4">
+        <a href="https://voxity.fr" class="btn btn-link" target="_NEW" tooltip-placement="top" uib-tooltip="Voxity"><img src="/libs/assets/icons/icon48.png" alt="Voxity-icon" style="margin-right:5px; height: 42px;"></a>
+    </div>
+    <div class="col-xs-4 text-center">
+        <a href="#/about/" class="btn btn-sm btn-link">À propos</a><br>
+        <small class="text-muted">Version 2.0.0</small>
+    </div>
+    <div class="col-xs-4 text-right">
+        <a href="https://github.com/voxity" class="btn btn-link" target="_NEW" tooltip-placement="top" uib-tooltip="GitHub"><i class="fa fa-github fa-3x"></i></a>
+    </div>
+</div>

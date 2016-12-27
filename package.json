@@ -1,0 +1,38 @@
+{
+  "name": "voxity-chrome-extension",
+  "version": "2.0.0",
+  "description": "Extension Voxity pour google Chrome. Gérer vos contact, générer des appels, ...",
+  "main": "Gruntfile.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thivolle-cazat-cedric/voxity-chrome-extension.git"
+  },
+  "keywords": [
+    "voxity",
+    "click2call",
+    "chrome",
+    "plugin"
+  ],
+  "author": "THIVOLLE-CAZAT Cédric",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/thivolle-cazat-cedric/voxity-chrome-extension/issues"
+  },
+  "homepage": "https://github.com/thivolle-cazat-cedric/voxity-chrome-extension#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-angular-templates": "^1.1.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^1.0.2",
+    "grunt-contrib-htmlmin": "^2.0.0",
+    "grunt-contrib-uglify": "^2.0.0",
+    "grunt-filerev": "^2.3.1",
+    "grunt-usemin": "^3.1.1"
+  }
+}

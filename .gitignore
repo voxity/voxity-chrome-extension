@@ -1,0 +1,4 @@
+voxity-chrome-extension/libs/assets/
+node_modules/*
+dist/*
+.tmp/*

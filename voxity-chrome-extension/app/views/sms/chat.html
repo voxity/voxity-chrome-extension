@@ -1,0 +1,62 @@
+<div uib-dropdown class="pull-right">
+    <button class="btn btn-link" uib-dropdown-toggle>
+        <i class="fa fa-chevron-down text-muted"></i>
+    </button>
+    <ul class="dropdown-menu" uib-dropdown-menu>
+        <li class="pointer" ng-click="call(num)"><a><i class="fa fa-phone fa-fw"></i> Appeler &lt;{{num | phoneNumber}}&gt;</a></li>
+        <li class="pointer"><a href="#/sms/send?phone_number={{num}}"><i class="fa fa-reply fa-fw"></i> Répondre</a></li>
+        <li class="pointer" ng-class="{'disabled':loading && loadingResp}" ng-click="init(true)"><a><i class="fa fa-refresh fa-fw" ng-class="{'fa-spin' : loading && loadingResp}"></i> Actualiser</a></li>
+        <li class="divider"></li>
+        <li class="pointer disabled"><a><i class="fa fa-trash-o fa-fw  text-danger"></i> Supprimer la conversation</a></li>
+    </ul>
+</div>
+<h5 class="text-center">
+    <span ng-if="recipientNames.length === 0"  style="padding: 0" class="text-muted" ng-click="switchToRecipient(num)">{{num | phoneNumber}}</span>
+    <span class="text-muted" style="padding: 0" ng-if="recipientNames.length === 1" uib-tooltip="{{num | phoneNumber}}" tooltip-placement="bottom" ng-click="switchToRecipient(num)">{{recipientNames[0].cn}}</span>
+    <span ng-if="recipientNames.length > 1">
+        <span style="padding: 0" class="text-muted" ng-click="switchToRecipient(num)" uib-tooltip="{{num | phoneNumber}}" tooltip-placement="bottom">{{recipientNames[0].cn}}</span>
+        <span class="text-muted" uib-dropdown>
+            <small class="text-muted pointer" uib-dropdown-toggle>
+                <i class="fa fa-user"></i><sup><small>{{recipientNames.length -1}}</small></sup>
+            </small>
+            <ul class="dropdown-menu" uib-dropdown-menu>
+                <li ng-repeat="cc in recipientNames">
+                  <a>{{cc.cn}}</a>
+                </li>
+            </ul>
+        </span>
+    </span>
+</h5>
+<hr>
+<p ng-if="loading" class="text-center text-muted"><i class="fa fa-circle-o-notch fa-spin fa-2x text-info"></i></p>
+<p ng-if="loadingResp" class="text-center text-muted small"><small class="small">Chargement des réponses <i class="fa fa-circle-o-notch fa-spin text-muted"></i></small></p>
+<div class="row" ng-repeat="s in sms">
+    <div class="col-xs-3">
+        <small class="text-muted small"> <small class="small">{{s.send_date | date:'dd MMM yy HH:mm'}}</small></small>
+    </div>
+    <div class="col-xs-9">
+        <div class="panel panel-info" style="margin-bottom: 0;">
+            <div class="panel-body small bg-info">
+                {{s.content}}
+            </div>
+        </div>
+        <p class="text-right small">
+            <small class="small text-danger" ng-if="s.code !== '0'"><i class="fa times-circle"></i> non délivré</small>
+        </p>
+    </div>
+    <div class="col-xs-12">
+        <div class="row" ng-repeat="resp in getResponse(s.id)">
+            <div class="col-xs-9">
+                <div class="panel panel-default">
+                    <div class="panel-body text-muted small bg-muted">
+                        {{resp.content}}
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-3">
+                <small class="text-muted small"><small class="small">{{resp.send_date | date:'dd MMM yy HH:mm'}}</small></small>
+            </div>
+        </div>
+    </div>
+        
+</div>

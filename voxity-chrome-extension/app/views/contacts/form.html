@@ -1,0 +1,71 @@
+<small class="text-muted small" ng-if="id"><span ng-if="!loading">Édition de </span> {{name || 'Chargement en cours'}}</small>
+<div class="alert alert-success small" ng-if="changeSave"><small>Contact mis à jour</small></div>
+<div class="alert alert-danger small" ng-if="errors.err"><small>{{errors.mess}}</small></div>
+<form  ng-submit="save()" class="row">
+    <div class="col-xs-12">
+        <div class="form-group" ng-class="{'has-error': errors.form.cn && !errors.form.firstInit }">
+            <label class="control-label" for="name">Nom</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                <input type="text" class="form-control" id="name" ng-model="contact.cn" ng-blur="validate()">
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-8">
+        <div class="form-group" ng-class="{'has-error': errors.form.telephoneNumber && !errors.form.firstInit }">
+            <label class="control-label" for="phone">Téléphone</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-phone-alt"></i></span>
+                <input type="tel" class="form-control" id="phone" ng-model="contact.telephoneNumber" ng-blur="validate()">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+            <label class="control-label" for="phone-shortcut">Raccourci</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th"></i></span>
+                <input type="tel" class="form-control" id="phone-shortcut" ng-model="contact.phoneNumberRaccourci" ng-change="contact.phoneNumberRaccourci = checkSortCut(contact.phoneNumberRaccourci)">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <div class="form-group">
+            <label class="control-label" for="mobile">Mobile</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
+                <input type="tel" class="form-control" id="mobile" ng-model="contact.mobile" ng-blur="validate()">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <div class="form-group">
+            <label class="control-label" for="mobile-shortcut">Raccourci</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-th"></i></span>
+                <input type="tel" class="form-control" id="mobile-shortcut" ng-model="contact.employeeNumber" ng-change="contact.employeeNumber = checkSortCut(contact.employeeNumber)">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-12">
+        <div class="form-group">
+            <label class="control-label" for="mail">Mail</label>
+            <div class="input-group">
+                <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                <input type="mail" class="form-control" id="mail" ng-model="contact.mail">
+            </div>
+        </div>
+    </div>
+    <div class="col-xs-4">
+        <button class="btn btn-default btn-block" ng-disabled="processing" type="button" ng-click="init()" uib-tooltip="Réinitialiser" tooltip-placement="bottom"><i class="fa fa-undo"></i></button>
+    </div>
+
+    <div class="col-xs-4 col-xs-offset-4" ng-class="">
+        <button class="btn btn-success btn-block" ng-disabled="processing  || errors.form" type="submit"><i ng-class="getSubmitClass()"></i></button>
+    </div>
+    <div class="col-xs-12 text-center" ng-if="id">
+        <hr>
+        <button class="btn btn-danger btn-xs" ng-dis="processing || errors.form" type="button" ng-click="delete()"><i class="fa fa-trash-o"></i> Supprimer le contact <u>{{name}}</u></button>
+    </div>
+</form>

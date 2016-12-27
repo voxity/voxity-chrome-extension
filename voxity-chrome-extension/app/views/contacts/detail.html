@@ -1,0 +1,21 @@
+<h4>
+    <i class="fa fa-address-card-o fa-fw"></i> &nbsp; {{contact.cn}}
+    <a href="#/contact/{{contact.uid}}/edit" class="btn-link pull-right" ng-if="user.is_admin"><i class="fa fa-edit"></i></a>
+</h4>
+<hr>
+<div class="row">
+    <div class="col-xs-8 pointer" ng-click="call(contact.telephoneNumber)" ng-class="contact.telephoneNumber ? 'text-info':'text-muted'">
+        <i class="glyphicon glyphicon-phone-alt text-muted" style="margin-right:10px;"></i> {{(contact.telephoneNumber | phoneNumber) || "N/A"}}
+    </div>
+    <div class="col-xs-4 text-right">{{contact.phoneNumberRaccourci}}</div>
+    <div class="col-xs-8" ng-click="call(contact.mobile)" ng-class="contact.mobile ? 'text-info pointer':'text-muted'">
+        <i class="glyphicon glyphicon-phone text-muted" style="margin-right:10px;"></i> 
+        {{(contact.mobile | phoneNumber) || "N/A"}}
+    </div>
+    <div class="col-xs-4 text-right">{{contact.employeeNumber}}</div>
+
+    <div class="col-xs-12 text-muted" ng-class="contact.mobile ? 'text-info pointer':'text-muted'">
+        <i class="fa fa-envelope" style="margin-right:10px;"></i>
+        {{contact.mail || "N/A"}}
+    </div>
+</div>

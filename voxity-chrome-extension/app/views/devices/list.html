@@ -1,0 +1,39 @@
+<div class="panel row" ng-repeat="d in devices | filter:{extension: user.internalExtension}" ng-if="user">
+    <div class="col-xs-1">
+        <i ng-class="getClass(d.state)" tooltip-placement="right" uib-tooltip="{{getDescription(d.state_desc)}}"></i>
+    </div>
+    <div class="col-xs-9">
+       <small class="text-muted" style="margin-right: 10px;">{{d.extension}}</small> <span class="text-muted">{{getName(d.callerid)}}</span>
+    </div>
+    <div class="col-xs-1 text-right">
+        <a ng-href="#/devices/{{d.id}}" class="btn btn-link btn-xs" ng-if="d.id"><i class="fa fa-chevron-right"></i></a>
+    </div>
+</div>
+
+
+<div class="row">
+    <div class="col-xs-9 col-xs-offset-3">
+        <div class="input-group input-group-sm">
+            <input type="text" class="form-control" placeholder="Recherche" ng-model="search.all">
+            <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+            </span>
+        </div>
+    </div>
+</div>
+<br>
+<div class="list-group" ng-if="!loading">
+    <div class="list-group-item" ng-repeat="d in devices | filter:search.all | orderBy:'extension'" ng-class="{'disabled': !d.id && user.is_admin}" ng-if="d.extension != user.internalExtension">
+        <div class="row">
+            <div class="col-xs-1">
+                <i ng-class="getClass(d.state)" ng-if="user.is_admin" tooltip-placement="right" uib-tooltip="{{getDescription(d.state_desc)}}"></i>
+            </div>
+            <div class="col-xs-9 pointer" ng-click="call(d.extension)">
+               <small class="text-muted" style="margin-right: 10px;">{{d.extension}}</small> <span class="text-info">{{getName(d.callerid)}}</span>
+            </div>
+            <div class="col-xs-1 text-right">
+                <a ng-href="#/devices/{{d.id}}" class="btn btn-link btn-xs" ng-if="d.id"><i class="fa fa-chevron-right"></i></a>
+            </div>
+        </div>
+    </div>
+</div>
