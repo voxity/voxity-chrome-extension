@@ -460,7 +460,7 @@ function notify(event, data) {
 
     var opts = {
         type: 'basic', 
-        iconUrl: data.iconUrl || 'libs/assets/icons/icon128.png',
+        iconUrl: data.iconUrl || 'libs/icons/icon128.png',
         title: data.title || "", 
         message: data.message || "",
         contextMessage: data.context || "",
