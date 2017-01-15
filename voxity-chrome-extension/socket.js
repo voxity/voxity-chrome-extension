@@ -39,15 +39,15 @@ function socketClient(){
 
             socket.on('calls.ringing', function(data){
                 if (data.calleridname !== 'Click-to-call')
-                    notify('calls.ringing', {title: "Appel entrant", iconUrl:'libs/assets/icons/ringing.png', message: data.connectedlinename, context: data.connectedlinenum});
+                    notify('calls.ringing', {title: "Appel entrant", iconUrl:'libs/icons/ringing.png', message: data.connectedlinename, context: data.connectedlinenum});
             })
 
             socket.on('calls.bridged', function(data){
-                notify('calls.bridged', {title: "Communication établie entre", iconUrl:'libs/assets/icons/bridged.png', message: data.callerid1, context: data.callerid2});
+                notify('calls.bridged', {title: "Communication établie entre", iconUrl:'libs/icons/bridged.png', message: data.callerid1, context: data.callerid2});
             })
 
             socket.on('calls.hangup', function(data){
-                notify('calls.hangup', {title: "Raccroché", iconUrl:'libs/assets/icons/hangup.png', message: data.connectedlinename, context:data.connectedlinenum});
+                notify('calls.hangup', {title: "Raccroché", iconUrl:'libs/icons/hangup.png', message: data.connectedlinename, context:data.connectedlinenum});
             })
 
             socket.on('sms.response', function(data){
