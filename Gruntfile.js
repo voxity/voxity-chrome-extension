@@ -116,9 +116,9 @@ module.exports = function(grunt) {
             main:{
                 files: [
                     {
-                        cwd:'<%= dirs.src %>/libs/assets/icons',
+                        cwd:'<%= dirs.src %>/libs/icons',
                         src: ['*.*',],
-                        dest: '<%= dirs.dest %>/libs/assets/icons',
+                        dest: '<%= dirs.dest %>/libs/icons',
                         expand: true
                     },
                     {
